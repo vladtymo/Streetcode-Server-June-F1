@@ -87,7 +87,7 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
             newsDTOWithUrls.NextNewsUrl = nextNewsLink;
             newsDTOWithUrls.PrevNewsUrl = prevNewsLink;
 
-            if (newsDTOWithUrls == null)
+            if (!newsDTOWithUrls.Equals(newsDTOWithUrls.News))
             {
                 string errorMsg = $"No news by entered Url - {url}";
                 _logger.LogError(request, errorMsg);
