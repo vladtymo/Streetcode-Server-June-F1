@@ -1,4 +1,5 @@
 using System.Text;
+using System.Data.SqlClient;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -52,9 +53,16 @@ public static class ServiceCollectionExtensions
 
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
+        var connectionString = configuration.GetSection(environment).GetConnectionString("DefaultConnection")
+                              ?? configuration.GetConnectionString("DefaultConnection")
+                              ?? throw new InvalidOperationException($"'{environment}.DefaultConnection' not found!");
+
         var emailConfig = configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
-        services.AddSingleton(emailConfig);
+        if(emailConfig != null)
+        {
+            services.AddSingleton(emailConfig);
+        }
 
         services.AddDbContext<StreetcodeDbContext>(options =>
         {
