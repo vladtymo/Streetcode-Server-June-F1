@@ -28,7 +28,7 @@ namespace Streetcode.BLL.MediatR.Newss.Delete
                 return Result.Fail(errorMsg);
             }
 
-            if (news.Image is not null)
+            if (news.Image != null)
             {
                 _repositoryWrapper.ImageRepository.Delete(news.Image);
             }

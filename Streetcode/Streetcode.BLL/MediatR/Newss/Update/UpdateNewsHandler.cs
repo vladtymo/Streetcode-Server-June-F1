@@ -26,7 +26,7 @@ namespace Streetcode.BLL.MediatR.Newss.Update
         public async Task<Result<NewsDTO>> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
             var news = _mapper.Map<News>(request.news);
-            if (news is null)
+            if (news == null)
             {
                 const string errorMsg = $"Cannot convert null to news";
                 _logger.LogError(request, errorMsg);
@@ -35,7 +35,7 @@ namespace Streetcode.BLL.MediatR.Newss.Update
 
             var response = _mapper.Map<NewsDTO>(news);
 
-            if (news.Image is not null)
+            if (news.Image != null)
             {
                 response.Image.Base64 = _blobSevice.FindFileInStorageAsBase64(response.Image.BlobName);
             }
