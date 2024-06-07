@@ -29,7 +29,7 @@ namespace Streetcode.BLL.MediatR.Newss.SortedByDateTime
         {
             var news = await _repositoryWrapper.NewsRepository.GetAllAsync(
                 include: cat => cat.Include(img => img.Image));
-            if (news == null)
+            if (news is null)
             {
                 const string errorMsg = "There are no news in the database";
                 _logger.LogError(request, errorMsg);
@@ -40,7 +40,7 @@ namespace Streetcode.BLL.MediatR.Newss.SortedByDateTime
 
             foreach (var dto in newsDTOs)
             {
-                if (dto.Image != null)
+                if (dto.Image is not null)
                 {
                     dto.Image.Base64 = _blobService.FindFileInStorageAsBase64(dto.Image.BlobName);
                 }
