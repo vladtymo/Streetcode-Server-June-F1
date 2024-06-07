@@ -23,7 +23,7 @@ namespace Streetcode.BLL.MediatR.Newss.Create
         public async Task<Result<NewsDTO>> Handle(CreateNewsCommand request, CancellationToken cancellationToken)
         {
             var newNews = _mapper.Map<News>(request.newNews);
-            if (newNews is null)
+            if (newNews == null)
             {
                 const string errorMsg = "Cannot convert null to news";
                 _logger.LogError(request, errorMsg);

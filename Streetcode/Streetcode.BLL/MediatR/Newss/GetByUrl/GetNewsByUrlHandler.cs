@@ -31,14 +31,14 @@ namespace Streetcode.BLL.MediatR.Newss.GetByUrl
                 predicate: sc => sc.URL == url,
                 include: scl => scl
                     .Include(sc => sc.Image)));
-            if(newsDTO is null)
+            if(newsDTO == null)
             {
                 string errorMsg = $"No news by entered Url - {url}";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
 
-            if (newsDTO.Image is not null)
+            if (newsDTO.Image != null)
             {
                 newsDTO.Image.Base64 = _blobService.FindFileInStorageAsBase64(newsDTO.Image.BlobName);
             }
