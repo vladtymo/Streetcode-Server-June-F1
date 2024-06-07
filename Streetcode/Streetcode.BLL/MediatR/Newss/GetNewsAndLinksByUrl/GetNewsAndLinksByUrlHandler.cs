@@ -32,14 +32,14 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
                 include: scl => scl
                     .Include(sc => sc.Image)));
 
-            if (newsDTO == null)
+            if (newsDTO is null)
             {
                 string errorMsg = $"No news by entered Url - {url}";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
 
-            if (newsDTO.Image != null)
+            if (newsDTO.Image is not null)
             {
                 newsDTO.Image.Base64 = _blobService.FindFileInStorageAsBase64(newsDTO.Image.BlobName);
             }
@@ -87,7 +87,7 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
             newsDTOWithUrls.NextNewsUrl = nextNewsLink;
             newsDTOWithUrls.PrevNewsUrl = prevNewsLink;
 
-            if (newsDTOWithUrls.News == null)
+            if (newsDTOWithUrls.News is null)
             {
                 string errorMsg = $"No news by entered Url - {url}";
                 _logger.LogError(request, errorMsg);
