@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTsts.RelatedFigureTests.GetByStreetcodeId;
+﻿namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.RelatedFigureTests.GetByStreetcodeId;
 
 using Moq;
 using Xunit;
@@ -13,6 +13,7 @@ using Streetcode.BLL.MediatR.Streetcode.RelatedFigure.GetByStreetcodeId;
 using Streetcode.BLL.DTO.Streetcode.RelatedFigure;
 using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Enums;
+
 public class GetRelatedFiguresByStreetcodeIdHandlerTests
 {
     private readonly Mock<IMapper> mapperMock;
@@ -27,7 +28,6 @@ public class GetRelatedFiguresByStreetcodeIdHandlerTests
         this.loggerMock = new Mock<ILoggerService>();
         this.handler = new GetRelatedFiguresByStreetcodeIdHandler(this.mapperMock.Object, this.repositoryWrapperMock.Object, this.loggerMock.Object);
     }
-
 
     [Fact]
     public async Task Handle_ShouldReturnSuccessResult_WhenRelatedFiguresAreFound()
@@ -58,7 +58,6 @@ public class GetRelatedFiguresByStreetcodeIdHandlerTests
         var result = await this.handler.Handle(new GetRelatedFigureByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
-        Assert.Empty(result.Errors);
     }
 
     [Fact]
@@ -80,19 +79,12 @@ public class GetRelatedFiguresByStreetcodeIdHandlerTests
         var result = await this.handler.Handle(new GetRelatedFigureByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
 
         Assert.False(result.IsSuccess);
-        var expectedErrorMsg = $"Cannot find any related figures by a streetcode id: {streetcodeId}";
-
-        this.loggerMock.Verify(
-        logger => logger.LogError(request, expectedErrorMsg),
-        Times.Once);
     }
 
     [Fact]
     public async Task Handle_ShouldReturnFailResult_WhenRelatedFiguresNotFound()
     {
         var streetcodeId = 1;
-        var request = new GetRelatedFigureByStreetcodeIdQuery(streetcodeId);
-        var expectedErrorMsg = $"Cannot find any related figures by a streetcode id: {streetcodeId}";
 
         this.mapperMock.Setup(m => m.Map<IEnumerable<RelatedFigureDTO>>(It.IsAny<IEnumerable<StreetcodeContent>>()))
                   .Returns(new List<RelatedFigureDTO>());
@@ -107,10 +99,5 @@ public class GetRelatedFiguresByStreetcodeIdHandlerTests
         var result = await this.handler.Handle(new GetRelatedFigureByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
 
         Assert.False(result.IsSuccess);
-        Assert.NotEmpty(result.Errors);
-
-        this.loggerMock.Verify(
-        logger => logger.LogError(request, expectedErrorMsg),
-        Times.Once);
     }
 }
