@@ -30,7 +30,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
             this.mockRepositoryWrapper = new Mock<IRepositoryWrapper>();
             this.mockMapper = new Mock<IMapper>();
             this.mockLogger = new Mock<ILoggerService>();
-            this.facts = new List<Fact> { new Fact { Id = 1, Title = "Test Title", FactContent = "Test Content" } };
+            this.facts = new List<Fact> { new Fact { Id = 1, Title = "Test Title", FactContent = "Test Content", StreetcodeId = 1 } };
             this.mappedFacts = new List<FactDto>() { new FactDto { Id = 1, Title = "Test Title", FactContent = "Test Content" } };
         }
 
@@ -46,7 +46,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
                 this.mockLogger.Object);
 
             // Act
-            var result = await handler.Handle(new GetFactByStreetcodeIdQuery(this.facts[0].Id), CancellationToken.None);
+            var result = await handler.Handle(new GetFactByStreetcodeIdQuery(this.facts[0].StreetcodeId), CancellationToken.None);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -67,10 +67,10 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
                 this.mockLogger.Object);
 
             // Act
-            var result = await handler.Handle(new GetFactByStreetcodeIdQuery(this.facts[0].Id), CancellationToken.None);
+            var result = await handler.Handle(new GetFactByStreetcodeIdQuery(this.facts[0].StreetcodeId), CancellationToken.None);
 
             // Assert
-            Assert.Equal(this.mappedFacts[0].Id, result.Value.ToArray()[0].Id);
+            Assert.Equal(this.mappedFacts, result.Value);
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
 
             // Act
             var result = await handler.Handle(
-                new GetFactByStreetcodeIdQuery(this.facts[0].Id),
+                new GetFactByStreetcodeIdQuery(this.facts[0].StreetcodeId),
                 CancellationToken.None);
 
             // Assert
@@ -112,11 +112,11 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
 
             // Act
             var result = await handler.Handle(
-                new GetFactByStreetcodeIdQuery(this.facts[0].Id),
+                new GetFactByStreetcodeIdQuery(this.facts[0].StreetcodeId),
                 CancellationToken.None);
 
             // Assert
-            Assert.Equal($"{ERRORMESSAGE}{this.facts[0].Id}", result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal($"{ERRORMESSAGE}{this.facts[0].StreetcodeId}", result.Errors.FirstOrDefault()?.Message);
         }
     }
 }
