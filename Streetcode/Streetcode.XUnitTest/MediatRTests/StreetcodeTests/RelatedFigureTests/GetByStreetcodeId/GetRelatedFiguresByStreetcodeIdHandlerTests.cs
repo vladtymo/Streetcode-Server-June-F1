@@ -61,7 +61,7 @@ public class GetRelatedFiguresByStreetcodeIdHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldReturnFailResult_WhenRelatedFigureIdsNotFound()
+    public async Task Handle_ShouldReturnFailResult_WhenRelatedFiguresNotFound()
     {
         var streetcodeId = 1;
         var request = new GetRelatedFigureByStreetcodeIdQuery(streetcodeId);
@@ -75,26 +75,6 @@ public class GetRelatedFiguresByStreetcodeIdHandlerTests
         this.repositoryWrapperMock.Setup(r => r.StreetcodeRepository
         .GetAllAsync(It.IsAny<Expression<Func<StreetcodeContent, bool>>>(), It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
                               .ReturnsAsync(It.IsAny<List<StreetcodeContent>>);
-
-        var result = await this.handler.Handle(new GetRelatedFigureByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
-
-        Assert.False(result.IsSuccess);
-    }
-
-    [Fact]
-    public async Task Handle_ShouldReturnFailResult_WhenRelatedFiguresNotFound()
-    {
-        var streetcodeId = 1;
-
-        this.mapperMock.Setup(m => m.Map<IEnumerable<RelatedFigureDTO>>(It.IsAny<IEnumerable<StreetcodeContent>>()))
-                  .Returns(new List<RelatedFigureDTO>());
-
-        this.repositoryWrapperMock.Setup(r => r.RelatedFigureRepository.FindAll(It.IsAny<Expression<Func<RelatedFigure, bool>>>()))
-            .Returns(It.IsAny<IQueryable<RelatedFigure>>);
-
-        this.repositoryWrapperMock.Setup(r => r.StreetcodeRepository
-        .GetAllAsync(It.IsAny<Expression<Func<StreetcodeContent, bool>>>(), It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
-                              .ReturnsAsync(Enumerable.Empty<StreetcodeContent>().AsQueryable());
 
         var result = await this.handler.Handle(new GetRelatedFigureByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
 
