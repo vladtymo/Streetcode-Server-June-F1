@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Streetcode.XUnitTest.MediatRTests.Term_Testing.MapperConfigure
+namespace Streetcode.XUnitTest.MediatRTests.MapperConfigure
 {
     public static class Mapper_Configurator
     {
