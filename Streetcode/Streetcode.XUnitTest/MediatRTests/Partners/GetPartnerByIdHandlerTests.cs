@@ -29,7 +29,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         }
 
         [Fact]
-        public async Task GetPartnerByIdHandler_Handler_ReturnSuccess()
+        public async Task Handle_Should_ReturnEqualTrue_WhenPartnerEqualToExpected()
         {
             // Arrange
             var expectedId = 2;
@@ -49,7 +49,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         }
 
         [Fact]
-        public async Task GetPartnerByIdHandler_Handler_ReturnFailed()
+        public async Task Handle_Should_ReturnEqualFalse_WhenPartnerNotEqualToExpected()
         {
             // Arrange
             var expectedId = 3;
