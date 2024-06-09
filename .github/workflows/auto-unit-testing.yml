@@ -1,4 +1,6 @@
-# This workflow will build a .NET project
+# 1) This workflow will build a .NET project
+# 2) After build testing is going to start
+# 3) After testing results will be printed using dotnet-trx reporter and phoenix-actions/test-reporting@v8
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
 name: Atomation_Testing_on_Push_Pull_Request
