@@ -47,8 +47,4 @@
 		<ProjectReference Include="..\Streetcode.DAL\Streetcode.DAL.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="MediatRTests\Term_Testing\GetTermById\" />
-	</ItemGroup>
-
 </Project>

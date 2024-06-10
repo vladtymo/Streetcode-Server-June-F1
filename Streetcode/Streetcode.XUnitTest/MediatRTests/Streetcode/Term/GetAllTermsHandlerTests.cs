@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+﻿namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Term;
+
+using AutoMapper;
 using FluentResults;
 using Moq;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Mapping.Streetcode.TextContent;
 using Streetcode.BLL.MediatR.Streetcode.Term.GetAll;
@@ -11,12 +12,11 @@ using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
 using Streetcode.XUnitTest.MediatRTests.MapperConfigure;
 using Xunit;
 
-namespace Streetcode.XUnitTest.MediatRTests.Term_Testing.GetAllTerms
-{
-    public class GetAllTerms_Handler_Testing
+
+public class GetAllTermsHandlerTests
     {
         private static IEnumerable<Term> Terms = new List<Term>()
-        { 
+        {
             new Term(){ Id = 1},
             new Term(){ Id = 2},
             new Term(){ Id = 3},
@@ -26,20 +26,20 @@ namespace Streetcode.XUnitTest.MediatRTests.Term_Testing.GetAllTerms
 
         private readonly Mock<ILoggerService> m_loggerMock;
 
-        public GetAllTerms_Handler_Testing()
+        public GetAllTermsHandlerTests()
         {
             m_Mapper = Mapper_Configurator.Create<TermProfile>();
 
-            m_loggerMock = new Mock<ILoggerService>();            
+            m_loggerMock = new Mock<ILoggerService>();
         }
 
         [Fact]
         public async Task GetAllTerms_ShouldReturn_A_Collection_Of_Terms()
         {
             //Assign
-                                   
+
             GetAllTermsQuery querry = new GetAllTermsQuery();
-          
+
             Mock<ITermRepository> term_Rep_Mock = new Mock<ITermRepository>();
             term_Rep_Mock.Setup(trm => trm.GetAllAsync(default, default)).
                 ReturnsAsync(Terms);
@@ -56,7 +56,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Term_Testing.GetAllTerms
             var Result = await handler.Handle(querry, CancellationToken.None);
 
             //Assert
-            
+
             Assert.True(Result.Value.Count() == Terms.Count());
         }
 
@@ -64,14 +64,14 @@ namespace Streetcode.XUnitTest.MediatRTests.Term_Testing.GetAllTerms
         public async Task GetAllTerms_CollectionIsEmpty_ShouldReturnEmptyCollection()
         {
             //Assign
-            
+
             GetAllTermsQuery querry = new GetAllTermsQuery();
-            
+
             m_loggerMock.Setup(l => l.LogError(querry, "Cannot find any term!"));
 
             Mock<ITermRepository> term_Rep_Mock = new Mock<ITermRepository>();
             term_Rep_Mock.Setup(trm => trm.GetAllAsync(default, default)).
-                ReturnsAsync(new List<Term> ());
+                ReturnsAsync(new List<Term>());
 
             Mock<IRepositoryWrapper> wrapperMock = new Mock<IRepositoryWrapper>();
             wrapperMock.Setup(w => w.TermRepository).Returns(term_Rep_Mock.Object);
@@ -93,7 +93,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Term_Testing.GetAllTerms
             //Assign            
 
             GetAllTermsQuery querry = new GetAllTermsQuery();
-            
+
             m_loggerMock.Setup(l => l.LogError(querry, "Cannot find any term!"));
 
             Mock<ITermRepository> term_Rep_Mock = new Mock<ITermRepository>();
@@ -114,4 +114,4 @@ namespace Streetcode.XUnitTest.MediatRTests.Term_Testing.GetAllTerms
             Assert.True(Result.IsFailed);
         }
     }
-}
+
