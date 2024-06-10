@@ -54,7 +54,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         }
 
         [Fact]
-        public async Task GetAllPartnersHandler_Handle_InsertTrue_ReturnTrue()
+        public async Task Handle_Should_ReturnEqualTrue_WhenGetTruePartner()
         {
             // Arrange
             this._mapperMock.Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<object>>())).Returns(this.partnersDTO);
@@ -69,7 +69,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         }
 
         [Fact]
-        public async Task GetAllPartnersHandler_Handle_InsertFalse_ReturnFalse()
+        public async Task Handle_Should_ReturnEmpty_WhenGetEmptyPartner()
         {
             // Arrange
             this._mapperMock.Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<PartnerDTO>>())).Returns(new List<PartnerDTO>());
