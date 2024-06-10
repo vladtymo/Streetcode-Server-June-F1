@@ -11,18 +11,51 @@ using Xunit;
 
 namespace Streetcode.XUnitTest.MediatRTests.Team
 {
-
     /// <summary>
     /// Testing Team GetAll.
     /// </summary>
     public class GetAllTeamHandlerTests
     {
+        private const string errorMsg = "Cannot find any team";
+
         private readonly Mock<IMapper> mockMapper;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<ILoggerService> mockLogger;
         private readonly GetAllTeamHandler handler;
 
-        private const string ERROR_MSG = "Cannot find any team";
+        private readonly List<TeamMemberDTO> membersDTO =
+           new()
+           {
+                new TeamMemberDTO
+                {
+                    Id = 1, FirstName = "Test", LastName = "Test_Last",
+                    Description = "Test_desc", IsMain = true,
+                    ImageId = 1,
+                },
+                new TeamMemberDTO
+                {
+                    Id = 2, FirstName = "Test", LastName = "Test_Last",
+                    Description = "Test_desc", IsMain = false,
+                    ImageId = 2,
+                },
+           };
+
+        private readonly List<TeamMember> members =
+            new()
+            {
+                new TeamMember
+                {
+                    Id = 1, FirstName = "Test", LastName = "Test_last",
+                    Description = "Test_desc", IsMain = true,
+                    ImageId = 1,
+                },
+                new TeamMember
+                {
+                    Id = 2, FirstName = "Test", LastName = "Test_last",
+                    Description = "Test_desc", IsMain = false,
+                    ImageId = 2,
+                },
+            };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetAllTeamHandlerTests"/> class.
@@ -130,43 +163,9 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            mockLogger.Verify(l => l.LogError(query, ERROR_MSG), Times.Once);
-            Assert.Contains(result.Reasons, m => m.Message == ERROR_MSG);
+            mockLogger.Verify(l => l.LogError(query, errorMsg), Times.Once);
+            Assert.Contains(result.Reasons, m => m.Message == errorMsg);
         }
-
-        private readonly List<TeamMemberDTO> membersDTO =
-            new ()
-            {
-                new TeamMemberDTO
-                {
-                    Id = 1, FirstName = "Test", LastName = "Test_Last",
-                    Description = "Test_desc", IsMain = true,
-                    ImageId = 1,
-                },
-                new TeamMemberDTO
-                {
-                    Id = 2, FirstName = "Test", LastName = "Test_Last",
-                    Description = "Test_desc", IsMain = false,
-                    ImageId = 2,
-                },
-            };
-
-        private readonly List<TeamMember> members =
-            new ()
-            {
-                new TeamMember
-                {
-                    Id = 1, FirstName = "Test", LastName = "Test_last",
-                    Description = "Test_desc", IsMain = true,
-                    ImageId = 1,
-                },
-                new TeamMember
-                {
-                    Id = 2, FirstName = "Test", LastName = "Test_last",
-                    Description = "Test_desc", IsMain = false,
-                    ImageId = 2,
-                },
-            };
 
         private void ArrangeMockWrapper(List<TeamMember> memb = null)
         {
