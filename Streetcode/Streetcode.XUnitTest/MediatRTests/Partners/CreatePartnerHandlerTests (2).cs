@@ -53,22 +53,22 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
 
         public CreatePartnerHandlerTests()
         {
-            this._mapperMock = new Mock<IMapper>();
-            this._wrapperMock = new Mock<IRepositoryWrapper>();
-            this._loggerMock = new Mock<ILoggerService>();
+            _mapperMock = new Mock<IMapper>();
+            _wrapperMock = new Mock<IRepositoryWrapper>();
+            _loggerMock = new Mock<ILoggerService>();
         }
 
         [Fact]
         public async Task Handle_Should_ReturnEqualTrue_WhenInputNewPartner()
         {
             // Arrange
-            this._mapperMock.Setup(obj => obj.Map<PartnerDTO>(It.IsAny<object>())).Returns(this._partnerDTO);
-            this._mapperMock.Setup(obj => obj.Map<Partner>(It.IsAny<object>())).Returns(this._partner);
-            this._wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(this._partner)).ReturnsAsync(this._partner);
-            this._wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(this._streetcodes);
+            _mapperMock.Setup(obj => obj.Map<PartnerDTO>(It.IsAny<object>())).Returns(_partnerDTO);
+            _mapperMock.Setup(obj => obj.Map<Partner>(It.IsAny<object>())).Returns(_partner);
+            _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(_partner);
+            _wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(_streetcodes);
 
-            CreatePartnerQuery request = new CreatePartnerQuery(this._createPartnerDTO);
-            CreatePartnerHandler handler = new CreatePartnerHandler(this._wrapperMock.Object, this._mapperMock.Object, this._loggerMock.Object);
+            CreatePartnerQuery request = new CreatePartnerQuery(_createPartnerDTO);
+            CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = handler.Handle(request, CancellationToken.None);
@@ -81,13 +81,13 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         public async Task Handle_Should_ReturnFailed_WhenInputEmptyPartner()
         {
             // Arrange
-            this._mapperMock.Setup(obj => obj.Map<PartnerDTO>(It.IsAny<object>())).Returns(new PartnerDTO());
-            this._mapperMock.Setup(obj => obj.Map<Partner>(It.IsAny<object>())).Returns(new Partner());
-            this._wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(this._partner)).ReturnsAsync(new Partner());
-            this._wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(new List<StreetcodeContent>());
+            _mapperMock.Setup(obj => obj.Map<PartnerDTO>(It.IsAny<object>())).Returns(new PartnerDTO());
+            _mapperMock.Setup(obj => obj.Map<Partner>(It.IsAny<object>())).Returns(new Partner());
+            _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(new Partner());
+            _wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(new List<StreetcodeContent>());
 
-            CreatePartnerQuery request = new CreatePartnerQuery(this._createPartnerDTO);
-            CreatePartnerHandler handler = new CreatePartnerHandler(this._wrapperMock.Object, this._mapperMock.Object, this._loggerMock.Object);
+            CreatePartnerQuery request = new CreatePartnerQuery(_createPartnerDTO);
+            CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = handler.Handle(request, CancellationToken.None);
