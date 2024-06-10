@@ -16,9 +16,9 @@ public class GetAllTermsHandlerTests
     {
         private static IEnumerable<Term> m_Terms = new List<Term>()
         {
-            new Term(){ Id = 1},
-            new Term(){ Id = 2},
-            new Term(){ Id = 3},
+            new Term() { Id = 1 },
+            new Term() { Id = 2 },
+            new Term() { Id = 3 },
         };
 
         private readonly IMapper? m_Mapper;
