@@ -76,7 +76,7 @@ public class GetRelatedFiguresByStreetcodeIdHandlerTests
         .GetAllAsync(It.IsAny<Expression<Func<StreetcodeContent, bool>>>(), It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
                               .ReturnsAsync(It.IsAny<List<StreetcodeContent>>);
 
-        var result = await this.handler.Handle(new GetRelatedFigureByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
+        var result = await this.handler.Handle(request, CancellationToken.None);
 
         Assert.False(result.IsSuccess);
     }
