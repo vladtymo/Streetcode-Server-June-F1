@@ -127,4 +127,3 @@ public class DeleteRelatedTermHandlerTests
             .Returns(returnNull ? null! : new RelatedTermDTO { Word = word });
     }
 }
-
