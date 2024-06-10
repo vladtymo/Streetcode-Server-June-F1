@@ -1,24 +1,23 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Moq;
-using NLog.Targets;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
 using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using System.Linq.Expressions;
 using Xunit;
+using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
-namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerms
+namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerm
 {
-    public class DeleteRelatedTermCommandHandlerTests
+    public class DeleteRelatedTermHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> _mockRepository;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<ILoggerService> _mockLogger;
 
-        public DeleteRelatedTermCommandHandlerTests()
+        public DeleteRelatedTermHandlerTests()
         {
             _mockRepository = new Mock<IRepositoryWrapper>();
             _mockMapper = new Mock<IMapper>();
@@ -64,8 +63,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerms
 
             // Assert
             Assert.True(result.IsSuccess);
-            _mockRepository.Verify(x => x.RelatedTermRepository.Delete(It.IsAny<RelatedTerm>()), Times.Once);
-            _mockMapper.Verify(x => x.Map<RelatedTermDTO>(It.IsAny<RelatedTerm>()), Times.Once);
+            _mockRepository.Verify(x => x.RelatedTermRepository.Delete(It.IsAny<Entity>()), Times.Once);
+            _mockMapper.Verify(x => x.Map<RelatedTermDTO>(It.IsAny<Entity>()), Times.Once);
             _mockRepository.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
 
@@ -118,13 +117,13 @@ namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerms
         {
             _mockRepository.Setup(x => x.RelatedTermRepository
                 .GetFirstOrDefaultAsync(
-                It.IsAny<Expression<Func<RelatedTerm, bool>>>(), null))
-                .ReturnsAsync(returnNull ? null! : new RelatedTerm { Word = word });
+                It.IsAny<Expression<Func<Entity, bool>>>(), null))
+                .ReturnsAsync(returnNull ? null! : new Entity { Word = word });
         }
 
         private void MockMapperSetup(bool returnNull, string word = "")
         {
-            _mockMapper.Setup(x => x.Map<RelatedTermDTO>(It.IsAny<RelatedTerm>()))
+            _mockMapper.Setup(x => x.Map<RelatedTermDTO>(It.IsAny<Entity>()))
                 .Returns(returnNull ? null! : new RelatedTermDTO { Word = word });
         }
     }
