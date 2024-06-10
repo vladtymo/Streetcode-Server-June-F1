@@ -21,7 +21,7 @@ namespace Streetcode.BLL.MediatR.Newss.Delete
         {
             int id = request.id;
             var news = await _repositoryWrapper.NewsRepository.GetFirstOrDefaultAsync(n => n.Id == id);
-            if (news == null)
+            if (news is null)
             {
                 string errorMsg = $"No news found by entered Id - {id}";
                 _logger.LogError(request, errorMsg);
