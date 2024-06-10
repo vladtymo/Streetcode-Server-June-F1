@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
@@ -6,18 +7,18 @@ using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
 using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using System.Linq.Expressions;
 using Xunit;
+using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
-namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerms
+namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerm
 {
-    public class GetAllRelatedTermsByTermIdTests
+    public class GetAllRelatedTermsByTermIdHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> _mockRepository;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<ILoggerService> _mockLogger;
 
-        public GetAllRelatedTermsByTermIdTests()
+        public GetAllRelatedTermsByTermIdHandlerTests()
         {
             _mockRepository = new Mock<IRepositoryWrapper>();
             _mockMapper = new Mock<IMapper>();
@@ -101,7 +102,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerms
 
             // Assert
             _mockMapper.Verify(
-                m => m.Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<RelatedTerm>>()),
+                m => m.Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<Entity>>()),
                 Times.Once);
         }
 
@@ -110,16 +111,16 @@ namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerms
             return new List<RelatedTermDTO> { };
         }
 
-        private static IEnumerable<RelatedTerm> GetRelatedTerms()
+        private static IEnumerable<Entity> GetRelatedTerms()
         {
-            return new List<RelatedTerm> { };
+            return new List<Entity> { };
         }
 
         private void MockMapperSetup(bool returnNull)
         {
             _mockMapper
                 .Setup(x => x
-                .Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<RelatedTerm>>()))
+                .Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<Entity>>()))
                 .Returns(returnNull ? null! : GetRelatedTermDTOs());
         }
 
@@ -127,8 +128,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerms
         {
             _mockRepository.Setup(x => x.RelatedTermRepository
                 .GetAllAsync(
-                   It.IsAny<Expression<Func<RelatedTerm, bool>>>(),
-                   It.IsAny<Func<IQueryable<RelatedTerm>, IIncludableQueryable<RelatedTerm, object>>>()))
+                   It.IsAny<Expression<Func<Entity, bool>>>(),
+                   It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
                 .ReturnsAsync(returnNull ? null! : GetRelatedTerms());
         }
     }
