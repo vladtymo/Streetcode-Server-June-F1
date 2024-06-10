@@ -34,7 +34,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
         }
 
         [Fact]
-        public async Task Handle_ReturnError_WhenRepositoryReturnsNull()
+        public async Task Handle_Should_ReturnErrorMessage_WhenRepositoryReturnsNull()
         {
             // Arrange
             this.mockRepositoryWrapper
@@ -46,42 +46,13 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
             var result = await handler.Handle(new GetAllFactsQuery(), CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
+            Assert.Multiple(
+                () => Assert.True(result.IsFailed),
+                () => Assert.Equal(ERRORMESSAGE, result.Errors.FirstOrDefault()?.Message));
         }
 
         [Fact]
-        public async Task Handle_ReturnErrorMessage_WhenRepositoryReturnsNull()
-        {
-            // Arrange
-            this.mockRepositoryWrapper
-                .Setup(repo => repo.FactRepository.GetAllAsync(default, default))
-                .ReturnsAsync((IEnumerable<Fact>)null!);
-            var handler = new GetAllFactsHandler(this.mockRepositoryWrapper.Object, this.mockMapper.Object, this.mockLogger.Object);
-
-            // Act
-            var result = await handler.Handle(new GetAllFactsQuery(), CancellationToken.None);
-
-            // Assert
-            Assert.Equal(ERRORMESSAGE, result.Errors.FirstOrDefault()?.Message);
-        }
-
-        [Fact]
-        public async Task Handle_Success_WhenRepositoryReturnsList()
-        {
-            // Arrange
-            this.mockRepositoryWrapper.
-                Setup(repo => repo.FactRepository.GetAllAsync(default, default)).ReturnsAsync(this.facts);
-            var handler = new GetAllFactsHandler(this.mockRepositoryWrapper.Object, this.mockMapper.Object, this.mockLogger.Object);
-
-            // Act
-            var result = await handler.Handle(new GetAllFactsQuery(), CancellationToken.None);
-
-            // Assert
-            Assert.True(result.IsSuccess);
-        }
-
-        [Fact]
-        public async Task Handle_ReturnsMappedFacts_WhenRepositoryReturnsData()
+        public async Task Handle_Should_ReturnsMappedFacts_WhenRepositoryReturnsData()
         {
             // Arrange
             this.mockRepositoryWrapper.
@@ -95,7 +66,9 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
             var result = await handler.Handle(new GetAllFactsQuery(), CancellationToken.None);
 
             // Assert
-            Assert.Equal(this.mappedFacts, result.Value);
+            Assert.Multiple(
+                () => Assert.True(result.IsSuccess),
+                () => Assert.Equal(this.mappedFacts, result.Value));
         }
     }
 }
