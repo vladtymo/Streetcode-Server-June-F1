@@ -44,37 +44,37 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
 
         public GetAllPartnersHandlerTests()
         {
-            this.partners = new List<Partner>();
-            this.partnersDTO = new List<PartnerDTO>();
-            this.partners.Add(this._partner);
-            this.partnersDTO.Add(this._partnerDTO);
-            this._wrapperMock = new Mock<IRepositoryWrapper>();
-            this._mapperMock = new Mock<IMapper>();
-            this._loggerMock = new Mock<ILoggerService>();
+            partners = new List<Partner>();
+            partnersDTO = new List<PartnerDTO>();
+            partners.Add(_partner);
+            partnersDTO.Add(_partnerDTO);
+            _wrapperMock = new Mock<IRepositoryWrapper>();
+            _mapperMock = new Mock<IMapper>();
+            _loggerMock = new Mock<ILoggerService>();
         }
 
         [Fact]
         public async Task Handle_Should_ReturnEqualTrue_WhenGetTruePartner()
         {
             // Arrange
-            this._mapperMock.Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<object>>())).Returns(this.partnersDTO);
-            this._wrapperMock.Setup(repo => repo.PartnersRepository.GetAllAsync(default, default)).ReturnsAsync(this.partners);
-            var handlerObj = new GetAllPartnersHandler(this._wrapperMock.Object, this._mapperMock.Object, this._loggerMock.Object);
+            _mapperMock.Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<object>>())).Returns(partnersDTO);
+            _wrapperMock.Setup(repo => repo.PartnersRepository.GetAllAsync(default, default)).ReturnsAsync(partners);
+            var handlerObj = new GetAllPartnersHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = await handlerObj.Handle(new GetAllPartnersQuery(), default);
 
             // Assert
-            Assert.Equal(this.partners.Count(), result.Value.Count());
+            Assert.Equal(partners.Count(), result.Value.Count());
         }
 
         [Fact]
         public async Task Handle_Should_ReturnEmpty_WhenGetEmptyPartner()
         {
             // Arrange
-            this._mapperMock.Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<PartnerDTO>>())).Returns(new List<PartnerDTO>());
-            this._wrapperMock.Setup(obj => obj.PartnersRepository.GetAllAsync(default, default)).ReturnsAsync(new List<Partner>());
-            var handlerObj = new GetAllPartnersHandler(this._wrapperMock.Object, this._mapperMock.Object, this._loggerMock.Object);
+            _mapperMock.Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<PartnerDTO>>())).Returns(new List<PartnerDTO>());
+            _wrapperMock.Setup(obj => obj.PartnersRepository.GetAllAsync(default, default)).ReturnsAsync(new List<Partner>());
+            var handlerObj = new GetAllPartnersHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = await handlerObj.Handle(new GetAllPartnersQuery(), default);
