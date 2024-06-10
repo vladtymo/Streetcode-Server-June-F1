@@ -14,7 +14,7 @@ using Xunit;
 
 public class GetAllTermsHandlerTests
     {
-        private static IEnumerable<Term> Terms = new List<Term>()
+        private static IEnumerable<Term> m_Terms = new List<Term>()
         {
             new Term(){ Id = 1},
             new Term(){ Id = 2},
@@ -40,7 +40,7 @@ public class GetAllTermsHandlerTests
 
             Mock<ITermRepository> term_Rep_Mock = new Mock<ITermRepository>();
             term_Rep_Mock.Setup(trm => trm.GetAllAsync(default, default)).
-                ReturnsAsync(Terms);
+                ReturnsAsync(m_Terms);
 
             Mock<IRepositoryWrapper> wrapperMock = new Mock<IRepositoryWrapper>();
             wrapperMock.Setup(w => w.TermRepository).Returns(term_Rep_Mock.Object);
@@ -53,7 +53,7 @@ public class GetAllTermsHandlerTests
             var result = await handler.Handle(querry, CancellationToken.None);
 
             // Assert
-            Assert.True(result.Value.Count() == Terms.Count());
+            Assert.True(result.Value.Count() == m_Terms.Count());
         }
 
         [Fact]
