@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
-using Streetcode.BLL.Interfaces.Logging;
+using BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Xunit;
@@ -20,18 +20,18 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
         public CreateRelatedTermHandlerTests()
         {
-            this._mockRepositoryWrapper = new Mock<IRepositoryWrapper>();
-            this._mockLogger = new Mock<ILoggerService>();
-            this._mockMapper = new Mock<IMapper>();
+            _mockRepositoryWrapper = new Mock<IRepositoryWrapper>();
+            _mockLogger = new Mock<ILoggerService>();
+            _mockMapper = new Mock<IMapper>();
         }
 
         [Fact]
         public async Task Handle_Should_ReturnFailureResult_WhenRelatedTermIsNull()
         {
             // Arrange
-            this.MockRepositorySetupNullOrEmptyArrOffIds();
+            MockRepositorySetupNullOrEmptyArrOffIds();
             var command = new CreateRelatedTermCommand(null!);
-            var handler = new CreateRelatedTermHandler(this._mockRepositoryWrapper.Object, this._mockMapper.Object, this._mockLogger.Object);
+            var handler = new CreateRelatedTermHandler(_mockRepositoryWrapper.Object, _mockMapper.Object, _mockLogger.Object);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -44,9 +44,9 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
         public async Task Handle_Should_ReturnFailureResult_WhenRelatedTermAlreadyExists()
         {
             // Arrange
-            var request = this.GetValidCreateRelatedTermRequest();
-            this.SetupMockForExistingTerm(request);
-            var handler = this.CreateHandler();
+            var request = GetValidCreateRelatedTermRequest();
+            SetupMockForExistingTerm(request);
+            var handler = CreateHandler();
             var command = new CreateRelatedTermCommand(request);
 
             // Act
@@ -60,9 +60,9 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
         public async Task Handle_Should_ReturnFailureResult_WhenSaveChangesFails()
         {
             // Arrange
-            var request = this.GetValidCreateRelatedTermRequest();
-            this.SetupMockForSaveChangesFail(request);
-            var handler = this.CreateHandler();
+            var request = GetValidCreateRelatedTermRequest();
+            SetupMockForSaveChangesFail(request);
+            var handler = CreateHandler();
             var command = new CreateRelatedTermCommand(request);
 
             // Act
@@ -76,9 +76,9 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
         public async Task Handle_Should_ReturnFailureResult_WhenMappingFails()
         {
             // Arrange
-            var request = this.GetValidCreateRelatedTermRequest();
-            this.SetupMockForMappingFail(request);
-            var handler = this.CreateHandler();
+            var request = GetValidCreateRelatedTermRequest();
+            SetupMockForMappingFail(request);
+            var handler = CreateHandler();
             var command = new CreateRelatedTermCommand(request);
 
             // Act
@@ -92,9 +92,9 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
         public async Task Handle_Should_ReturnSuccessResult_WhenOperationIsSuccessful()
         {
             // Arrange
-            var request = this.GetValidCreateRelatedTermRequest();
-            this.SetupMockForSuccess(request);
-            var handler = this.CreateHandler();
+            var request = GetValidCreateRelatedTermRequest();
+            SetupMockForSuccess(request);
+            var handler = CreateHandler();
             var command = new CreateRelatedTermCommand(request);
 
             // Act
@@ -104,29 +104,28 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
             result.Value.Should().BeEquivalentTo(request);
         }
 
-
         private CreateRelatedTermHandler CreateHandler()
         {
             return new CreateRelatedTermHandler(
-                repository: this._mockRepositoryWrapper.Object,
-                mapper: this._mockMapper.Object,
-                logger: this._mockLogger.Object);
+                repository: _mockRepositoryWrapper.Object,
+                mapper: _mockMapper.Object,
+                logger: _mockLogger.Object);
         }
 
         private void MockRepositorySetupNullOrEmptyArrOffIds()
         {
-            this._mockRepositoryWrapper.Setup(x => x.RelatedTermRepository
+            _mockRepositoryWrapper.Setup(x => x.RelatedTermRepository
                     .GetAllAsync(
                         It.IsAny<Expression<Func<Entity, bool>>>(),
-                        It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))!
+                        It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>())) !
                 .ReturnsAsync((IEnumerable<Entity>?)null);
         }
 
         private void SetupMockForExistingTerm(RelatedTermDTO request)
         {
-            this._mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
 
-            this._mockRepositoryWrapper.Setup(x => x.RelatedTermRepository
+            _mockRepositoryWrapper.Setup(x => x.RelatedTermRepository
                     .GetAllAsync(
                         It.Is<Expression<Func<Entity, bool>>>(predicate =>
                             predicate.Compile().Invoke(new Entity { TermId = request.TermId, Word = request.Word })),
@@ -144,30 +143,30 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
         private void SetupMockForSaveChangesFail(RelatedTermDTO request)
         {
-            this._mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
 
-            this._mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
+            _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
                     .GetAllAsync(It.IsAny<Expression<Func<Entity, bool>>>(), It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
                 .ReturnsAsync(new List<Entity>());
 
-            this._mockRepositoryWrapper.Setup(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()));
+            _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()));
 
-            this._mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(0);
+            _mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(0);
         }
 
         private void SetupMockForMappingFail(RelatedTermDTO request)
         {
-            this._mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
 
-            this._mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
+            _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
                     .GetAllAsync(It.IsAny<Expression<Func<Entity, bool>>>(), It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
                 .ReturnsAsync(new List<Entity>());
 
-            this._mockRepositoryWrapper.Setup(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()));
+            _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()));
 
-            this._mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
+            _mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
 
-            this._mockMapper.Setup(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>())).Returns((RelatedTermDTO)null!);
+            _mockMapper.Setup(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>())).Returns((RelatedTermDTO)null!);
         }
 
         private void SetupMockForSuccess(RelatedTermDTO request)
@@ -179,17 +178,17 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
                 Word = request.Word,
             };
 
-            this._mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(relatedTermEntity);
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(relatedTermEntity);
 
-            this._mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
+            _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
                     .GetAllAsync(It.IsAny<Expression<Func<Entity, bool>>>(), It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
                 .ReturnsAsync(new List<Entity>());
 
-            this._mockRepositoryWrapper.Setup(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()));
+            _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()));
 
-            this._mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
+            _mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
 
-            this._mockMapper.Setup(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>())).Returns(request);
+            _mockMapper.Setup(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>())).Returns(request);
         }
 
         private RelatedTermDTO GetValidCreateRelatedTermRequest()
