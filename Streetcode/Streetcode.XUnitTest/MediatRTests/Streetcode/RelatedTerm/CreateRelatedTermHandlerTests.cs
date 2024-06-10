@@ -142,8 +142,6 @@ namespace Streetcode.XUnitTest.MediatRTests.Streetcode.RelatedTerm
                 });
         }
 
-
-
         private void SetupMockForSaveChangesFail(RelatedTermDTO request)
         {
             this._mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
