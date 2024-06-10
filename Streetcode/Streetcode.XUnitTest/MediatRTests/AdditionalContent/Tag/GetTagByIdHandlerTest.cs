@@ -26,10 +26,10 @@
 
         public GetTagByIdHandlerTest()
         {
-            this.repositoryMock = new Mock<IRepositoryWrapper>();
-            this.mapperMock = new Mock<IMapper>();
-            this.loggerMock = new Mock<ILoggerService>();
-            this.handler = new GetTagByIdHandler(this.repositoryMock.Object, this.mapperMock.Object, this.loggerMock.Object);
+            repositoryMock = new Mock<IRepositoryWrapper>();
+            mapperMock = new Mock<IMapper>();
+            loggerMock = new Mock<ILoggerService>();
+            handler = new GetTagByIdHandler(repositoryMock.Object, mapperMock.Object, loggerMock.Object);
 
         }
 
@@ -39,10 +39,10 @@
             // Arrange
             var tag = new Tag();
             var query = new GetTagByIdQuery (1);
-            this.repositoryMock.Setup(repo => repo.TagRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Tag, bool>>>(), default)).ReturnsAsync(tag);
+            repositoryMock.Setup(repo => repo.TagRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Tag, bool>>>(), default)).ReturnsAsync(tag);
 
             // Act
-            var result = await this.handler.Handle(query, CancellationToken.None);
+            var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
             Assert.True(result.IsSuccess);
@@ -54,10 +54,10 @@
             // Arrange
             var request = new GetTagByIdQuery(1);
 
-            this.repositoryMock.Setup(repo => repo.TagRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Tag, bool>>>(), default)).ReturnsAsync((Tag)null!);
+            repositoryMock.Setup(repo => repo.TagRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Tag, bool>>>(), default)).ReturnsAsync((Tag)null!);
 
             // Act
-            var result = await this.handler.Handle(request, CancellationToken.None);
+            var result = await handler.Handle(request, CancellationToken.None);
 
             // Assert
             Assert.False(result.IsSuccess);
