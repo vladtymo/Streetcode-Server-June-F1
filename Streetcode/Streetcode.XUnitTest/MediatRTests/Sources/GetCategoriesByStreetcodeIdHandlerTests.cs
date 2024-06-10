@@ -26,6 +26,8 @@ public class GetCategoriesByStreetcodeIdHandlerTests
     private readonly Mock<IBlobService> blobServiceMock;
     private readonly Mock<ILoggerService> loggerMock;
     private readonly GetCategoriesByStreetcodeIdHandler handler;
+    private readonly List<SourceLinkCategory> listSourceCategories;
+    private readonly List<SourceLinkCategoryDTO> listSourceCategoryDTO;
 
     public GetCategoriesByStreetcodeIdHandlerTests()
     {
@@ -34,6 +36,28 @@ public class GetCategoriesByStreetcodeIdHandlerTests
         this.blobServiceMock = new Mock<IBlobService>();
         this.loggerMock = new Mock<ILoggerService>();
         this.handler = new GetCategoriesByStreetcodeIdHandler(this.repositoryWrapperMock.Object, this.mapperMock.Object, this.blobServiceMock.Object, this.loggerMock.Object);
+        this.listSourceCategories = new List<SourceLinkCategory>
+        {
+            new ()
+            {
+                Id = 1,
+                Title = "Test1",
+                ImageId = 1,
+                Image = new () { BlobName = "blob1", Base64 = string.Empty },
+                Streetcodes = new () { new StreetcodeContent() { Id = 1 }, },
+            },
+        };
+
+        this.listSourceCategoryDTO = new List<SourceLinkCategoryDTO>
+        {
+            new ()
+            {
+                Id = 1,
+                Title = "Test1",
+                ImageId = 1,
+                Image = new ImageDTO { BlobName = "blob1", Base64 = string.Empty },
+            },
+        };
     }
 
     [Fact]
@@ -60,43 +84,21 @@ public class GetCategoriesByStreetcodeIdHandlerTests
     {
         // Arrange
         string base64 = "base64-encoded-string-1";
-        var categories = new List<SourceLinkCategory>
-        {
-            new ()
-            {
-                Id = 1,
-                Title = "Test1",
-                ImageId = 1,
-                Image = new () { BlobName = "blob1", Base64 = string.Empty },
-                Streetcodes = new () { new StreetcodeContent() { Id = 1 }, },
-            },
-        };
-
-        var categoryDTOs = new List<SourceLinkCategoryDTO>
-        {
-            new ()
-            {
-                Id = 1,
-                Title = "Test1",
-                ImageId = 1,
-                Image = new ImageDTO { BlobName = "blob1", Base64 = string.Empty },
-            },
-        };
 
         this.repositoryWrapperMock.Setup(repo => repo.SourceCategoryRepository.GetAllAsync(
              It.IsAny<Expression<Func<SourceLinkCategory, bool>>>(),
              It.IsAny<Func<IQueryable<SourceLinkCategory>, IIncludableQueryable<SourceLinkCategory, object>>>()))
-            .ReturnsAsync(categories);
+            .ReturnsAsync(this.listSourceCategories);
 
         this.blobServiceMock.Setup(blobService => blobService.FindFileInStorageAsBase64("blob1")).Returns(base64);
 
-        this.mapperMock.Setup(mapper => mapper.Map<IEnumerable<SourceLinkCategoryDTO>>(categories))
-            .Returns(categoryDTOs);
+        this.mapperMock.Setup(mapper => mapper.Map<IEnumerable<SourceLinkCategoryDTO>>(this.listSourceCategories))
+            .Returns(this.listSourceCategoryDTO);
 
         // Act
         await this.handler.Handle(new GetCategoriesByStreetcodeIdQuery(1), CancellationToken.None);
 
         // Assert
-        Assert.Equal(categoryDTOs[0].Image?.Base64, base64);
+        Assert.Equal(this.listSourceCategoryDTO[0].Image?.Base64, base64);
     }
 }
