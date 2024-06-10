@@ -16,7 +16,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
     /// </summary>
     public class GetAllTeamHandlerTests
     {
-        private const string errorMsg = "Cannot find any team";
+        private const string ErrorMsg = "Cannot find any team";
 
         private readonly Mock<IMapper> mockMapper;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
@@ -163,8 +163,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            mockLogger.Verify(l => l.LogError(query, errorMsg), Times.Once);
-            Assert.Contains(result.Reasons, m => m.Message == errorMsg);
+            mockLogger.Verify(l => l.LogError(query, ErrorMsg), Times.Once);
+            Assert.Contains(result.Reasons, m => m.Message == ErrorMsg);
         }
 
         private void ArrangeMockWrapper(List<TeamMember> memb = null)
