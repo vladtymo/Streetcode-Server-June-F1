@@ -1,9 +1,10 @@
-﻿using DbUp;
+﻿namespace Streetcode.DbUpdate;
+using DbUp;
 using Microsoft.Extensions.Configuration;
 
 public class Program
 {
-    static int Main(string[] args)
+    private static int Main(string[] args)
     {
         string migrationPath = Path.Combine(Directory.GetCurrentDirectory(),
             "Streetcode.DAL", "Persistence", "ScriptsMigration");
@@ -25,7 +26,7 @@ public class Program
         pathToScript = Console.ReadLine();
 
         pathToScript = migrationPath;
-        
+
         var upgrader =
             DeployChanges.To
                 .SqlDatabase(connectionString)
