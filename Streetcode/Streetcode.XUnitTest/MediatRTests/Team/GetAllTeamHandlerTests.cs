@@ -115,7 +115,6 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
         /// Checks Handle to fail if no teams.
         /// </summary> 
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
-
         [Fact]
         public async Task Handle_Should_ReturnFailResult_WhenTeamIsNull()
         {
@@ -167,7 +166,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
             Assert.Contains(result.Reasons, m => m.Message == ErrorMsg);
         }
 
-        private void ArrangeMockWrapper(List<TeamMember> memb = null)
+        private void ArrangeMockWrapper(List<TeamMember> memb = null!)
         {
             mockRepositoryWrapper
             .Setup(r => r.TeamRepository.GetAllAsync(
