@@ -135,7 +135,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
         }
 
         private readonly List<TeamMemberDTO> membersDTO =
-            new()
+            new ()
             {
                 new TeamMemberDTO
                 {
@@ -152,7 +152,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
             };
 
         private readonly List<TeamMember> members =
-            new()
+            new ()
             {
                 new TeamMember
                 {
