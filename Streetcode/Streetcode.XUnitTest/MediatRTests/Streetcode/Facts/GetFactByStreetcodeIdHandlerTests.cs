@@ -4,6 +4,7 @@
 
 namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
 {
+    using System.Linq.Expressions;
     using AutoMapper;
     using Moq;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
@@ -11,7 +12,6 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
     using Streetcode.BLL.MediatR.Streetcode.Fact.GetByStreetcodeId;
     using Streetcode.DAL.Entities.Streetcode.TextContent;
     using Streetcode.DAL.Repositories.Interfaces.Base;
-    using System.Linq.Expressions;
     using Xunit;
 
     public class GetFactByStreetcodeIdHandlerTests
@@ -50,11 +50,8 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
             Fact fact1 = _facts[1];
             Fact otherFact = _facts[2];
 
-            _mockRepositoryWrapper.
-                 Setup(repo => repo.FactRepository.GetAllAsync(default, default)).ReturnsAsync(_facts);
+            MockingWrapperAndMapperWithValue();
 
-            _mockMapper.Setup(mapper => mapper.Map<IEnumerable<FactDto>>(It.IsAny<IEnumerable<Fact>>()))
-                .Returns(_mappedFacts);
             var handler = new GetFactByStreetcodeIdHandler(
                 _mockRepositoryWrapper.Object,
                 _mockMapper.Object,
@@ -81,11 +78,8 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
         public async Task Handle_Should_ReturnsMappedFacts_WhenRepositoryReturnsData()
         {
             // Arrange
-            _mockRepositoryWrapper.
-                 Setup(repo => repo.FactRepository.GetAllAsync(default, default)).ReturnsAsync(_facts);
+            MockingWrapperAndMapperWithValue();
 
-            _mockMapper.Setup(mapper => mapper.Map<IEnumerable<FactDto>>(It.IsAny<IEnumerable<Fact>>()))
-                .Returns(_mappedFacts);
             var handler = new GetFactByStreetcodeIdHandler(
                 _mockRepositoryWrapper.Object,
                 _mockMapper.Object,
@@ -125,6 +119,15 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
             Assert.Multiple(
                 () => Assert.True(result.IsFailed),
                 () => Assert.Equal($"{ERRORMESSAGE}{fact.StreetcodeId}", result.Errors.FirstOrDefault()?.Message));
+        }
+
+        private void MockingWrapperAndMapperWithValue()
+        {
+            _mockRepositoryWrapper.
+                 Setup(repo => repo.FactRepository.GetAllAsync(default, default)).ReturnsAsync(_facts);
+
+            _mockMapper.Setup(mapper => mapper.Map<IEnumerable<FactDto>>(It.IsAny<IEnumerable<Fact>>()))
+                .Returns(_mappedFacts);
         }
     }
 }
