@@ -4,10 +4,10 @@ using AutoMapper;
 using FluentResults;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
-using Streetcode.BLL.DTO.Media.Images;
+using BLL.DTO.Media.Images;
 using Streetcode.BLL.DTO.Sources;
-using Streetcode.BLL.Interfaces.BlobStorage;
-using Streetcode.BLL.Interfaces.Logging;
+using BLL.Interfaces.BlobStorage;
+using BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Sources.SourceLink.GetCategoriesByStreetcodeId;
 using Streetcode.DAL.Entities.Sources;
 using Streetcode.DAL.Entities.Streetcode;
@@ -21,22 +21,21 @@ using Xunit;
 
 public class GetCategoriesByStreetcodeIdHandlerTests
 {
-    private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
-    private readonly Mock<IMapper> mapperMock;
-    private readonly Mock<IBlobService> blobServiceMock;
-    private readonly Mock<ILoggerService> loggerMock;
-    private readonly GetCategoriesByStreetcodeIdHandler handler;
-    private readonly List<SourceLinkCategory> listSourceCategories;
-    private readonly List<SourceLinkCategoryDTO> listSourceCategoryDTO;
+    private readonly Mock<IRepositoryWrapper> _repositoryWrapperMock;
+    private readonly Mock<IMapper> _mapperMock;
+    private readonly Mock<IBlobService> _blobServiceMock;
+    private readonly GetCategoriesByStreetcodeIdHandler _handler;
+    private readonly List<SourceLinkCategory> _listSourceCategories;
+    private readonly List<SourceLinkCategoryDTO> _listSourceCategoryDto;
 
     public GetCategoriesByStreetcodeIdHandlerTests()
     {
-        this.repositoryWrapperMock = new Mock<IRepositoryWrapper>();
-        this.mapperMock = new Mock<IMapper>();
-        this.blobServiceMock = new Mock<IBlobService>();
-        this.loggerMock = new Mock<ILoggerService>();
-        this.handler = new GetCategoriesByStreetcodeIdHandler(this.repositoryWrapperMock.Object, this.mapperMock.Object, this.blobServiceMock.Object, this.loggerMock.Object);
-        this.listSourceCategories = new List<SourceLinkCategory>
+        _repositoryWrapperMock = new Mock<IRepositoryWrapper>();
+        _mapperMock = new Mock<IMapper>();
+        _blobServiceMock = new Mock<IBlobService>();
+        Mock<ILoggerService> loggerMock = new();
+        _handler = new GetCategoriesByStreetcodeIdHandler(_repositoryWrapperMock.Object, _mapperMock.Object, _blobServiceMock.Object, loggerMock.Object);
+        _listSourceCategories = new List<SourceLinkCategory>
         {
             new ()
             {
@@ -48,7 +47,7 @@ public class GetCategoriesByStreetcodeIdHandlerTests
             },
         };
 
-        this.listSourceCategoryDTO = new List<SourceLinkCategoryDTO>
+        _listSourceCategoryDto = new List<SourceLinkCategoryDTO>
         {
             new ()
             {
@@ -67,13 +66,13 @@ public class GetCategoriesByStreetcodeIdHandlerTests
         var request = new GetCategoriesByStreetcodeIdQuery(1);
         IError error = new Error($"Cant find any source category with the streetcode id {request.StreetcodeId}");
 
-        this.repositoryWrapperMock.Setup(repo => repo.SourceCategoryRepository.GetAllAsync(
+        _repositoryWrapperMock.Setup(repo => repo.SourceCategoryRepository.GetAllAsync(
             It.IsAny<Expression<Func<SourceLinkCategory, bool>>>(),
             It.IsAny<Func<IQueryable<SourceLinkCategory>, IIncludableQueryable<SourceLinkCategory, object>>>()))
             .ReturnsAsync((IEnumerable<SourceLinkCategory>)null!);
 
         // Act
-        var result = await this.handler.Handle(request, CancellationToken.None);
+        var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
         Assert.True(result.Errors?.Exists(e => e.Message == error.Message));
@@ -85,20 +84,20 @@ public class GetCategoriesByStreetcodeIdHandlerTests
         // Arrange
         string base64 = "base64-encoded-string-1";
 
-        this.repositoryWrapperMock.Setup(repo => repo.SourceCategoryRepository.GetAllAsync(
+        _repositoryWrapperMock.Setup(repo => repo.SourceCategoryRepository.GetAllAsync(
              It.IsAny<Expression<Func<SourceLinkCategory, bool>>>(),
              It.IsAny<Func<IQueryable<SourceLinkCategory>, IIncludableQueryable<SourceLinkCategory, object>>>()))
-            .ReturnsAsync(this.listSourceCategories);
+            .ReturnsAsync(_listSourceCategories);
 
-        this.blobServiceMock.Setup(blobService => blobService.FindFileInStorageAsBase64("blob1")).Returns(base64);
+        _blobServiceMock.Setup(blobService => blobService.FindFileInStorageAsBase64("blob1")).Returns(base64);
 
-        this.mapperMock.Setup(mapper => mapper.Map<IEnumerable<SourceLinkCategoryDTO>>(this.listSourceCategories))
-            .Returns(this.listSourceCategoryDTO);
+        _mapperMock.Setup(mapper => mapper.Map<IEnumerable<SourceLinkCategoryDTO>>(_listSourceCategories))
+            .Returns(_listSourceCategoryDto);
 
         // Act
-        await this.handler.Handle(new GetCategoriesByStreetcodeIdQuery(1), CancellationToken.None);
+        await _handler.Handle(new GetCategoriesByStreetcodeIdQuery(1), CancellationToken.None);
 
         // Assert
-        Assert.Equal(this.listSourceCategoryDTO[0].Image?.Base64, base64);
+        Assert.Equal(_listSourceCategoryDto[0].Image?.Base64, base64);
     }
 }
