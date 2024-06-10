@@ -12,7 +12,6 @@ using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
 using Streetcode.XUnitTest.MediatRTests.MapperConfigure;
 using Xunit;
 
-
 public class GetAllTermsHandlerTests
     {
         private static IEnumerable<Term> Terms = new List<Term>()
@@ -36,8 +35,7 @@ public class GetAllTermsHandlerTests
         [Fact]
         public async Task GetAllTerms_ShouldReturn_A_Collection_Of_Terms()
         {
-            //Assign
-
+            // Assign
             GetAllTermsQuery querry = new GetAllTermsQuery();
 
             Mock<ITermRepository> term_Rep_Mock = new Mock<ITermRepository>();
@@ -51,20 +49,17 @@ public class GetAllTermsHandlerTests
 
             GetAllTermsHandler handler = new GetAllTermsHandler(wrapperMock.Object, m_Mapper, m_loggerMock.Object);
 
-            //Act
+            // Act
+            var result = await handler.Handle(querry, CancellationToken.None);
 
-            var Result = await handler.Handle(querry, CancellationToken.None);
-
-            //Assert
-
-            Assert.True(Result.Value.Count() == Terms.Count());
+            // Assert
+            Assert.True(result.Value.Count() == Terms.Count());
         }
 
         [Fact]
         public async Task GetAllTerms_CollectionIsEmpty_ShouldReturnEmptyCollection()
         {
-            //Assign
-
+            // Assign
             GetAllTermsQuery querry = new GetAllTermsQuery();
 
             m_loggerMock.Setup(l => l.LogError(querry, "Cannot find any term!"));
@@ -78,20 +73,17 @@ public class GetAllTermsHandlerTests
 
             GetAllTermsHandler handler = new GetAllTermsHandler(wrapperMock.Object, m_Mapper, m_loggerMock.Object);
 
-            //Act
+            // Act
+            var result = await handler.Handle(querry, CancellationToken.None);
 
-            var Result = await handler.Handle(querry, CancellationToken.None);
-
-            //Assert
-
-            Assert.True(Result.Value.Count() == 0);
+            // Assert
+            Assert.True(result.Value.Count() == 0);
         }
 
         [Fact]
         public async Task GetAllTerms_CollectionIsNull_ShouldReturnError()
         {
-            //Assign            
-
+            // Assign
             GetAllTermsQuery querry = new GetAllTermsQuery();
 
             m_loggerMock.Setup(l => l.LogError(querry, "Cannot find any term!"));
@@ -105,13 +97,10 @@ public class GetAllTermsHandlerTests
 
             GetAllTermsHandler handler = new GetAllTermsHandler(wrapperMock.Object, m_Mapper, m_loggerMock.Object);
 
-            //Act
+            // Act
+            var result = await handler.Handle(querry, CancellationToken.None);
 
-            var Result = await handler.Handle(querry, CancellationToken.None);
-
-            //Assert
-
-            Assert.True(Result.IsFailed);
+            // Assert
+            Assert.True(result.IsFailed);
         }
     }
-
