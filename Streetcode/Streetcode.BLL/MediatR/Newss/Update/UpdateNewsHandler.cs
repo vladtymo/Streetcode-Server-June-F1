@@ -42,7 +42,7 @@ namespace Streetcode.BLL.MediatR.Newss.Update
             else
             {
                 var img = await _repositoryWrapper.ImageRepository.GetFirstOrDefaultAsync(x => x.Id == response.ImageId);
-                if (img != null)
+                if (img is not null)
                 {
                     _repositoryWrapper.ImageRepository.Delete(img);
                 }

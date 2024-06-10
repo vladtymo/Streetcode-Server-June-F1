@@ -6,7 +6,6 @@ using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
-
 namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 {
     public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand, Result<RelatedTermDTO>>
@@ -39,7 +38,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 
             if (existingTerms is null || existingTerms.Any())
             {
-                const string errorMsg = "Слово з цим визначенням уже існує";
+                const string errorMsg = "Word already exists for this term!";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
