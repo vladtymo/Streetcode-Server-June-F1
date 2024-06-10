@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.RelatedTerm
+﻿namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.RelatedTerm;
 
 using System.Linq.Expressions;
 using AutoMapper;
