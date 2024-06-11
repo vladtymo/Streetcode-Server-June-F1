@@ -47,7 +47,7 @@ public class GetTermByIdHandlerTests
     [InlineData(1)]
     [InlineData(2)]
     [InlineData(3)]
-    public async Task GetTermById_ReturnTermDTO_RepIsNotNUll(int id)
+    public async Task Handler_ShouldReturn_TermDTO_When_TermRepoIsNotEmpty(int id)
     {
         // Assign
         m_RepWrapperMock.Setup(x => x.TermRepository
@@ -70,7 +70,7 @@ public class GetTermByIdHandlerTests
     }
 
     [Fact]
-    public async Task GetTermById_ReturnError_IdIsIncorrect()
+    public async Task Handler_ShouldReturn_Error_When_ThereIsNoTermwithSuchId()
     {
         // Assign
         m_RepWrapperMock.Setup(rw => rw.TermRepository
@@ -91,7 +91,7 @@ public class GetTermByIdHandlerTests
     }
 
     [Fact]
-    public async Task GetTermById_ReturnError_Rep_IsNull()
+    public async Task Handler_ReturnError_WhenRepoIsNull()
     {
         // Assign
         m_RepWrapperMock.Setup(rw => rw.TermRepository
