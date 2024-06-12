@@ -76,6 +76,9 @@ public class StreetcodeDbContext : DbContext
 
         modelBuilder.UseCollation("SQL_Ukrainian_CP1251_CI_AS");
 
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(StreetcodeDbContext).Assembly);
+
         modelBuilder.Entity<StatisticRecord>()
               .HasOne(x => x.StreetcodeCoordinate)
               .WithOne(x => x.StatisticRecord)
