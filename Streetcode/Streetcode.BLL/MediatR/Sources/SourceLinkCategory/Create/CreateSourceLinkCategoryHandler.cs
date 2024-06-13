@@ -35,6 +35,7 @@ public class CreateSourceLinkCategoryHandler : IRequestHandler<CreateSourceLinkC
             }
 
             newCategory = await _repositoryWrapper.SourceCategoryRepository.CreateAsync(newCategory);
+            _repositoryWrapper.SaveChanges();
 
             return Result.Ok(_mapper.Map<SourceLinkCategoryDTO>(newCategory));
         }
