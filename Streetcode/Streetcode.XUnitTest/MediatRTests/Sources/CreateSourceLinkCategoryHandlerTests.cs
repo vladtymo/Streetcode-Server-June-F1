@@ -4,7 +4,6 @@ using Streetcode.BLL.DTO.Sources;
 using Streetcode.BLL.DTO.Sources.Create;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Sources.SourceLinkCategory.Create;
-using Streetcode.BLL.MediatR.Streetcode.RelatedFigure.Create;
 using Streetcode.DAL.Entities.Sources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Xunit;

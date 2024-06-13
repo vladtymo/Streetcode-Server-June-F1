@@ -3,11 +3,9 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Sources;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Sources.SourceLinkCategory.Create;
-using Streetcode.DAL.Entities.Sources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedFigure.Create;
+namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.Create;
 
 public class CreateSourceLinkCategoryHandler : IRequestHandler<CreateSourceLinkCategoryCommand, Result<SourceLinkCategoryDTO>>
 {
@@ -24,7 +22,7 @@ public class CreateSourceLinkCategoryHandler : IRequestHandler<CreateSourceLinkC
 
     public async Task<Result<SourceLinkCategoryDTO>> Handle(CreateSourceLinkCategoryCommand request, CancellationToken cancellationToken)
     {
-        var newCategory = _mapper.Map<SourceLinkCategory>(request.newCategory);
+        var newCategory = _mapper.Map<DAL.Entities.Sources.SourceLinkCategory>(request.newCategory);
         try
         {
             if (newCategory.Title is null)
