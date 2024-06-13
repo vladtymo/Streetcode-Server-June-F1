@@ -16,7 +16,8 @@ namespace Streetcode.DAL.Persistence.Configurations.Streetcode.TextContent
                    .ValueGeneratedOnAdd();
 
             builder.Property(rt => rt.Word)
-                   .IsRequired().HasMaxLength(50);
+                   .IsRequired()
+                   .HasMaxLength(50);
         }
     }
 }

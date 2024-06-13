@@ -70,6 +70,14 @@ public class StreetcodeDbContext : DbContext
     public DbSet<StreetcodePartner> StreetcodePartners { get; set; }
     public DbSet<TeamMemberPositions> TeamMemberPosition { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StreetcodeDB;Integrated Security=True;");
+        }
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -78,11 +86,6 @@ public class StreetcodeDbContext : DbContext
 
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(StreetcodeDbContext).Assembly);
-
-        modelBuilder.Entity<StatisticRecord>()
-              .HasOne(x => x.StreetcodeCoordinate)
-              .WithOne(x => x.StatisticRecord)
-              .HasForeignKey<StatisticRecord>(x => x.StreetcodeCoordinateId);
 
         modelBuilder.Entity<News>()
             .HasOne(x => x.Image)
@@ -108,21 +111,6 @@ public class StreetcodeDbContext : DbContext
 
         modelBuilder.Entity<TeamMemberPositions>()
             .HasKey(nameof(TeamMemberPositions.TeamMemberId), nameof(TeamMemberPositions.PositionsId));
-
-        modelBuilder.Entity<Tag>()
-            .HasMany(t => t.Streetcodes)
-            .WithMany(s => s.Tags)
-            .UsingEntity<StreetcodeTagIndex>(
-            sp => sp.HasOne(x => x.Streetcode).WithMany(x => x.StreetcodeTagIndices).HasForeignKey(x => x.StreetcodeId),
-            sp => sp.HasOne(x => x.Tag).WithMany(x => x.StreetcodeTagIndices).HasForeignKey(x => x.TagId));
-
-        modelBuilder.Entity<StreetcodeTagIndex>()
-           .HasKey(nameof(StreetcodeTagIndex.StreetcodeId), nameof(StreetcodeTagIndex.TagId));
-
-        modelBuilder.Entity<Toponym>()
-            .HasOne(d => d.Coordinate)
-            .WithOne(p => p.Toponym)
-            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Partner>(entity =>
         {
@@ -180,21 +168,6 @@ public class StreetcodeDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
-        modelBuilder.Entity<RelatedFigure>(entity =>
-        {
-            entity.HasKey(d => new { d.ObserverId, d.TargetId });
-
-            entity.HasOne(d => d.Observer)
-                .WithMany(d => d.Observers)
-                .HasForeignKey(d => d.ObserverId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(d => d.Target)
-                .WithMany(d => d.Targets)
-                .HasForeignKey(d => d.TargetId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
         modelBuilder.Entity<StreetcodeArt>(entity =>
         {
             entity.HasKey(d => new { d.ArtId, d.StreetcodeId });
@@ -216,99 +189,5 @@ public class StreetcodeDbContext : DbContext
                 .HasIndex(d => new { d.ArtId, d.StreetcodeId })
                 .IsUnique(false);
         });
-
-        modelBuilder.Entity<StreetcodeContent>(entity =>
-        {
-            entity.Property(s => s.CreatedAt)
-                .HasDefaultValueSql("GETDATE()");
-
-            entity.Property(s => s.UpdatedAt)
-                .HasDefaultValueSql("GETDATE()");
-
-            entity.Property(s => s.ViewCount)
-                .HasDefaultValue(0);
-
-            entity.HasDiscriminator<string>(StreetcodeTypeDiscriminators.DiscriminatorName)
-                .HasValue<StreetcodeContent>(StreetcodeTypeDiscriminators.StreetcodeBaseType)
-                .HasValue<PersonStreetcode>(StreetcodeTypeDiscriminators.StreetcodePersonType)
-                .HasValue<EventStreetcode>(StreetcodeTypeDiscriminators.StreetcodeEventType);
-
-            entity.Property<string>("StreetcodeType").Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Save);
-
-            entity.HasMany(d => d.Coordinates)
-                .WithOne(c => c.Streetcode)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasMany(d => d.Facts)
-                .WithOne(f => f.Streetcode)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasMany(d => d.Images)
-                .WithMany(i => i.Streetcodes)
-                .UsingEntity<StreetcodeImage>(
-                    si => si.HasOne(i => i.Image).WithMany().HasForeignKey(i => i.ImageId),
-                    si => si.HasOne(i => i.Streetcode).WithMany().HasForeignKey(i => i.StreetcodeId))
-                .ToTable("streetcode_image", "streetcode");
-
-            entity.HasMany(d => d.TimelineItems)
-                .WithOne(t => t.Streetcode)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasMany(d => d.Toponyms)
-                .WithMany(t => t.Streetcodes)
-                .UsingEntity<StreetcodeToponym>(
-                    st => st.HasOne(s => s.Toponym).WithMany().HasForeignKey(x => x.ToponymId),
-                    st => st.HasOne(s => s.Streetcode).WithMany().HasForeignKey(x => x.StreetcodeId))
-                .ToTable("streetcode_toponym", "streetcode");
-
-            entity.HasMany(d => d.SourceLinkCategories)
-                    .WithMany(c => c.Streetcodes)
-                    .UsingEntity<StreetcodeCategoryContent>(
-                        scat => scat.HasOne(i => i.SourceLinkCategory).WithMany(s => s.StreetcodeCategoryContents).HasForeignKey(i => i.SourceLinkCategoryId),
-                        scat => scat.HasOne(i => i.Streetcode).WithMany(s => s.StreetcodeCategoryContents).HasForeignKey(i => i.StreetcodeId))
-                    .ToTable("streetcode_source_link_categories", "sources");
-
-            entity.HasMany(d => d.Partners)
-                    .WithMany(p => p.Streetcodes)
-                    .UsingEntity<StreetcodePartner>(
-                        sp => sp.HasOne(i => i.Partner).WithMany().HasForeignKey(x => x.PartnerId),
-                        sp => sp.HasOne(i => i.Streetcode).WithMany().HasForeignKey(x => x.StreetcodeId))
-                   .ToTable("streetcode_partners", "streetcode");
-
-            entity.HasMany(d => d.Videos)
-                    .WithOne(p => p.Streetcode)
-                    .HasForeignKey(d => d.StreetcodeId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.Audio)
-                    .WithOne(p => p.Streetcode)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.Text)
-                    .WithOne(p => p.Streetcode)
-                    .HasForeignKey<Text>(d => d.StreetcodeId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.TransactionLink)
-                    .WithOne(p => p.Streetcode)
-                    .HasForeignKey<TransactionLink>(d => d.StreetcodeId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasMany(d => d.StatisticRecords)
-                    .WithOne(t => t.Streetcode)
-                    .HasForeignKey(t => t.StreetcodeId)
-                    .OnDelete(DeleteBehavior.NoAction);
-        });
-
-        modelBuilder.Entity<RelatedTerm>()
-            .HasOne(rt => rt.Term)
-            .WithMany(t => t.RelatedTerms)
-            .HasForeignKey(rt => rt.TermId);
-
-        modelBuilder.Entity<Coordinate>()
-            .HasDiscriminator<string>("CoordinateType")
-            .HasValue<Coordinate>("coordinate_base")
-            .HasValue<StreetcodeCoordinate>("coordinate_streetcode")
-            .HasValue<ToponymCoordinate>("coordinate_toponym");
     }
 }

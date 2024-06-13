@@ -8,11 +8,19 @@ namespace Streetcode.DAL.Persistence.Configurations.Streetcode.TextContent
     {
         public void Configure(EntityTypeBuilder<Term> builder)
         {
+            builder.ToTable("terms", "streetcode");
+
             builder.HasKey(t => t.Id);
 
             builder.Property(t => t.Id).ValueGeneratedOnAdd();
 
-            // TODO
+            builder.Property(t => t.Title)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            builder.Property(t => t.Description)
+                .IsRequired()
+                .HasMaxLength(500);
 
             builder.HasMany(t => t.RelatedTerms)
                 .WithOne(rt => rt.Term)

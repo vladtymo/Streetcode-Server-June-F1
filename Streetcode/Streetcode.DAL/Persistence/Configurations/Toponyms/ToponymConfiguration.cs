@@ -41,7 +41,8 @@ namespace Streetcode.DAL.Persistence.Configurations.Toponyms
 
             builder.HasOne(t => t.Coordinate)
                 .WithOne(tc => tc.Toponym)
-                .HasForeignKey<ToponymCoordinate>(tc => tc.ToponymId);
+                .HasForeignKey<ToponymCoordinate>(tc => tc.ToponymId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
