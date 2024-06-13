@@ -1,5 +1,20 @@
 using System.Transactions;
 using Repositories.Interfaces;
+using Streetcode.DAL.Entities.AdditionalContent;
+using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
+using Streetcode.DAL.Entities.Analytics;
+using Streetcode.DAL.Entities.Media;
+using Streetcode.DAL.Entities.Media.Images;
+using Streetcode.DAL.Entities.News;
+using Streetcode.DAL.Entities.Partners;
+using Streetcode.DAL.Entities.Sources;
+using Streetcode.DAL.Entities.Streetcode;
+using Streetcode.DAL.Entities.Streetcode.TextContent;
+using Streetcode.DAL.Entities.Team;
+using Streetcode.DAL.Entities.Timeline;
+using Streetcode.DAL.Entities.Toponyms;
+using Streetcode.DAL.Entities.Transactions;
+using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
 using Streetcode.DAL.Repositories.Interfaces.Analytics;
@@ -111,449 +126,158 @@ public class RepositoryWrapper : IRepositoryWrapper
         _streetcodeDbContext = streetcodeDbContext;
     }
 
-    public INewsRepository NewsRepository
+    public INewsRepository NewsRepository =>
+          GetRepository<NewsRepository, News>(
+      (NewsRepository)_newsRepository);
+
+    public IFactRepository FactRepository =>
+          GetRepository<FactRepository, Fact>(
+      (FactRepository)_factRepository);
+
+    public IImageRepository ImageRepository =>
+          GetRepository<ImageRepository, Image>(
+      (ImageRepository)_imageRepository);
+
+    public ITeamRepository TeamRepository =>
+          GetRepository<TeamRepository, TeamMember>(
+      (TeamRepository)_teamRepository);
+
+    public ITeamPositionRepository TeamPositionRepository =>
+          GetRepository<TeamPositionRepository, TeamMemberPositions>(
+      (TeamPositionRepository)_teamPositionRepository);
+
+    public IAudioRepository AudioRepository =>
+          GetRepository<AudioRepository, Audio>(
+      (AudioRepository)_audioRepository);
+
+    public IStreetcodeCoordinateRepository StreetcodeCoordinateRepository =>
+          GetRepository<StreetcodeCoordinateRepository, StreetcodeCoordinate>(
+      (StreetcodeCoordinateRepository)_streetcodeCoordinateRepository);
+
+    public IVideoRepository VideoRepository =>
+          GetRepository<VideoRepository, Video>(
+      (VideoRepository)_videoRepository);
+
+    public IArtRepository ArtRepository =>
+          GetRepository<ArtRepository, Art>(
+      (ArtRepository)_artRepository);
+
+    public IStreetcodeArtRepository StreetcodeArtRepository =>
+          GetRepository<StreetcodeArtRepository, StreetcodeArt>(
+      (StreetcodeArtRepository)_streetcodeArtRepository);
+
+    public IPartnersRepository PartnersRepository =>
+          GetRepository<PartnersRepository, Partner>(
+      (PartnersRepository)_partnersRepository);
+
+    public ISourceCategoryRepository SourceCategoryRepository =>
+          GetRepository<SourceCategoryRepository, SourceLinkCategory>(
+      (SourceCategoryRepository)_sourceCategoryRepository);
+
+    public IStreetcodeCategoryContentRepository StreetcodeCategoryContentRepository =>
+          GetRepository<StreetcodeCategoryContentRepository, StreetcodeCategoryContent>(
+      (StreetcodeCategoryContentRepository)_streetcodeCategoryContentRepository);
+
+    public IRelatedFigureRepository RelatedFigureRepository =>
+          GetRepository<RelatedFigureRepository, RelatedFigure>(
+      (RelatedFigureRepository)_relatedFigureRepository);
+
+    public IStreetcodeRepository StreetcodeRepository =>
+          GetRepository<StreetcodeRepository, StreetcodeContent>(
+      (StreetcodeRepository)_streetcodeRepository);
+
+    public ISubtitleRepository SubtitleRepository =>
+          GetRepository<SubtitleRepository, Subtitle>(
+      (SubtitleRepository)_subtitleRepository);
+
+    public IStatisticRecordRepository StatisticRecordRepository =>
+          GetRepository<StatisticRecordsRepository, StatisticRecord>(
+      (StatisticRecordsRepository)_statisticRecordRepository);
+
+    public ITagRepository TagRepository =>
+          GetRepository<TagRepository, Tag>(
+      (TagRepository)_tagRepository);
+
+    public ITermRepository TermRepository =>
+          GetRepository<TermRepository, Term>(
+      (TermRepository)_termRepository);
+
+    public ITextRepository TextRepository =>
+          GetRepository<TextRepository, Text>(
+      (TextRepository)_textRepository);
+
+    public ITimelineRepository TimelineRepository =>
+          GetRepository<TimelineRepository, TimelineItem>(
+      (TimelineRepository)_timelineRepository);
+    
+    public IToponymRepository ToponymRepository =>
+          GetRepository<ToponymRepository, Toponym>(
+      (ToponymRepository)_toponymRepository);
+
+    public ITransactLinksRepository TransactLinksRepository =>
+          GetRepository<TransactLinksRepository, TransactionLink>(
+      (TransactLinksRepository)_transactLinksRepository);
+
+    public IHistoricalContextRepository HistoricalContextRepository =>
+          GetRepository<HistoricalContextRepository, HistoricalContext>(
+      (HistoricalContextRepository)_historyContextRepository);
+
+    public IPartnerSourceLinkRepository PartnerSourceLinkRepository =>
+          GetRepository<PartnersourceLinksRepository, PartnerSourceLink>(
+      (PartnersourceLinksRepository)_partnerSourceLinkRepository);
+   
+    public IRelatedTermRepository RelatedTermRepository =>
+          GetRepository<RelatedTermRepository, RelatedTerm>(
+      (RelatedTermRepository)_relatedTermRepository);
+    
+    public IUserRepository UserRepository =>
+          GetRepository<UserRepository, User>(
+      (UserRepository)_userRepository);
+
+    public IStreetcodeTagIndexRepository StreetcodeTagIndexRepository =>
+          GetRepository<StreetcodeTagIndexRepository, StreetcodeTagIndex>(
+      (StreetcodeTagIndexRepository)_streetcodeTagIndexRepository);
+
+    public IPartnerStreetcodeRepository PartnerStreetcodeRepository =>
+        GetRepository<PartnerStreetodeRepository, StreetcodePartner>(
+            (PartnerStreetodeRepository)_partnerStreetcodeRepository);
+
+    public IPositionRepository PositionRepository => 
+        GetRepository<PositionRepository, Positions>(
+            (PositionRepository)_positionRepository);
+
+    public ITeamLinkRepository TeamLinkRepository =>
+          GetRepository<TeamLinkRepository, TeamMemberLink>(
+            (TeamLinkRepository)_teamLinkRepository);
+   
+    public IImageDetailsRepository ImageDetailsRepository =>
+        GetRepository<ImageDetailsRepository, ImageDetails>(
+            (ImageDetailsRepository)_imageDetailsRepository);
+
+    public IHistoricalContextTimelineRepository HistoricalContextTimelineRepository =>
+        GetRepository<HistoricalContextTimelineRepository, HistoricalContextTimeline>(
+            (HistoricalContextTimelineRepository)_historicalContextTimelineRepository);
+
+    public IStreetcodeToponymRepository StreetcodeToponymRepository =>
+        GetRepository<StreetcodeToponymRepository, StreetcodeToponym>(
+            (StreetcodeToponymRepository)_streetcodeToponymRepository);
+
+    public IStreetcodeImageRepository StreetcodeImageRepository =>
+        GetRepository<StreetcodeImageRepository, StreetcodeImage>(
+            (StreetcodeImageRepository)_streetcodeImageRepository);
+
+    public T GetRepository<T, TU>(T repo)
+      where T : RepositoryBase<TU>, new()
+      where TU : class, new()
     {
-        get
+        if (repo is null)
         {
-            if (_newsRepository is null)
-            {
-                _newsRepository = new NewsRepository(_streetcodeDbContext);
-            }
-
-            return _newsRepository;
+            repo = new T();
+            repo.DbContext = _streetcodeDbContext;
         }
+
+        return repo;
     }
-
-    public IFactRepository FactRepository
-    {
-        get
-        {
-            if (_factRepository is null)
-            {
-                _factRepository = new FactRepository(_streetcodeDbContext);
-            }
-
-            return _factRepository;
-        }
-    }
-
-    public IImageRepository ImageRepository
-    {
-        get
-        {
-            if (_imageRepository is null)
-            {
-                _imageRepository = new ImageRepository(_streetcodeDbContext);
-            }
-
-            return _imageRepository;
-        }
-    }
-
-    public ITeamRepository TeamRepository
-    {
-        get
-        {
-            if (_teamRepository is null)
-            {
-                _teamRepository = new TeamRepository(_streetcodeDbContext);
-            }
-
-            return _teamRepository;
-        }
-    }
-
-    public ITeamPositionRepository TeamPositionRepository
-    {
-        get
-        {
-            if (_teamPositionRepository is null)
-            {
-                _teamPositionRepository = new TeamPositionRepository(_streetcodeDbContext);
-            }
-
-            return _teamPositionRepository;
-        }
-    }
-
-    public IAudioRepository AudioRepository
-    {
-        get
-        {
-            if (_audioRepository is null)
-            {
-                _audioRepository = new AudioRepository(_streetcodeDbContext);
-            }
-
-            return _audioRepository;
-        }
-    }
-
-    public IStreetcodeCoordinateRepository StreetcodeCoordinateRepository
-    {
-        get
-        {
-            if (_streetcodeCoordinateRepository is null)
-            {
-                _streetcodeCoordinateRepository = new StreetcodeCoordinateRepository(_streetcodeDbContext);
-            }
-
-            return _streetcodeCoordinateRepository;
-        }
-    }
-
-    public IVideoRepository VideoRepository
-    {
-        get
-        {
-            if (_videoRepository is null)
-            {
-                _videoRepository = new VideoRepository(_streetcodeDbContext);
-            }
-
-            return _videoRepository;
-        }
-    }
-
-    public IArtRepository ArtRepository
-    {
-        get
-        {
-            if (_artRepository is null)
-            {
-                _artRepository = new ArtRepository(_streetcodeDbContext);
-            }
-
-            return _artRepository;
-        }
-    }
-
-    public IStreetcodeArtRepository StreetcodeArtRepository
-    {
-        get
-        {
-            if (_streetcodeArtRepository is null)
-            {
-                _streetcodeArtRepository = new StreetcodeArtRepository(_streetcodeDbContext);
-            }
-
-            return _streetcodeArtRepository;
-        }
-    }
-
-    public IPartnersRepository PartnersRepository
-    {
-        get
-        {
-            if (_partnersRepository is null)
-            {
-                _partnersRepository = new PartnersRepository(_streetcodeDbContext);
-            }
-
-            return _partnersRepository;
-        }
-    }
-
-    public ISourceCategoryRepository SourceCategoryRepository
-    {
-        get
-        {
-            if (_sourceCategoryRepository is null)
-            {
-                _sourceCategoryRepository = new SourceCategoryRepository(_streetcodeDbContext);
-            }
-
-            return _sourceCategoryRepository;
-        }
-    }
-
-    public IStreetcodeCategoryContentRepository StreetcodeCategoryContentRepository
-    {
-        get
-        {
-            if (_streetcodeCategoryContentRepository is null)
-            {
-                _streetcodeCategoryContentRepository = new StreetcodeCategoryContentRepository(_streetcodeDbContext);
-            }
-
-            return _streetcodeCategoryContentRepository;
-        }
-    }
-
-    public IRelatedFigureRepository RelatedFigureRepository
-    {
-        get
-        {
-            if (_relatedFigureRepository is null)
-            {
-                _relatedFigureRepository = new RelatedFigureRepository(_streetcodeDbContext);
-            }
-
-            return _relatedFigureRepository;
-        }
-    }
-
-    public IStreetcodeRepository StreetcodeRepository
-    {
-        get
-        {
-            if (_streetcodeRepository is null)
-            {
-                _streetcodeRepository = new StreetcodeRepository(_streetcodeDbContext);
-            }
-
-            return _streetcodeRepository;
-        }
-    }
-
-    public ISubtitleRepository SubtitleRepository
-    {
-        get
-        {
-            if (_subtitleRepository is null)
-            {
-                _subtitleRepository = new SubtitleRepository(_streetcodeDbContext);
-            }
-
-            return _subtitleRepository;
-        }
-    }
-
-    public IStatisticRecordRepository StatisticRecordRepository
-    {
-        get
-        {
-            if (_statisticRecordRepository is null)
-            {
-                _statisticRecordRepository = new StatisticRecordsRepository(_streetcodeDbContext);
-            }
-
-            return _statisticRecordRepository;
-        }
-    }
-
-    public ITagRepository TagRepository
-    {
-        get
-        {
-            if (_tagRepository is null)
-            {
-                _tagRepository = new TagRepository(_streetcodeDbContext);
-            }
-
-            return _tagRepository;
-        }
-    }
-
-    public ITermRepository TermRepository
-    {
-        get
-        {
-            if (_termRepository is null)
-            {
-                _termRepository = new TermRepository(_streetcodeDbContext);
-            }
-
-            return _termRepository;
-        }
-    }
-
-    public ITextRepository TextRepository
-    {
-        get
-        {
-            if (_textRepository is null)
-            {
-                _textRepository = new TextRepository(_streetcodeDbContext);
-            }
-
-            return _textRepository;
-        }
-    }
-
-    public ITimelineRepository TimelineRepository
-    {
-        get
-        {
-            if (_timelineRepository is null)
-            {
-                _timelineRepository = new TimelineRepository(_streetcodeDbContext);
-            }
-
-            return _timelineRepository;
-        }
-    }
-
-    public IToponymRepository ToponymRepository
-    {
-        get
-        {
-            if (_toponymRepository is null)
-            {
-                _toponymRepository = new ToponymRepository(_streetcodeDbContext);
-            }
-
-            return _toponymRepository;
-        }
-    }
-
-    public ITransactLinksRepository TransactLinksRepository
-    {
-        get
-        {
-            if (_transactLinksRepository is null)
-            {
-                _transactLinksRepository = new TransactLinksRepository(_streetcodeDbContext);
-            }
-
-            return _transactLinksRepository;
-        }
-    }
-
-    public IHistoricalContextRepository HistoricalContextRepository
-    {
-        get
-        {
-            if (_historyContextRepository is null)
-            {
-                _historyContextRepository = new HistoricalContextRepository(_streetcodeDbContext);
-            }
-
-            return _historyContextRepository;
-        }
-    }
-
-    public IPartnerSourceLinkRepository PartnerSourceLinkRepository
-    {
-        get
-        {
-            if (_partnerSourceLinkRepository is null)
-            {
-                _partnerSourceLinkRepository = new PartnersourceLinksRepository(_streetcodeDbContext);
-            }
-
-            return _partnerSourceLinkRepository;
-        }
-    }
-
-    public IRelatedTermRepository RelatedTermRepository
-    {
-        get
-        {
-            if(_relatedTermRepository is null)
-            {
-                _relatedTermRepository = new RelatedTermRepository(_streetcodeDbContext);
-            }
-
-            return _relatedTermRepository;
-        }
-    }
-
-    public IUserRepository UserRepository
-    {
-        get
-        {
-            if (_userRepository is null)
-            {
-                _userRepository = new UserRepository(_streetcodeDbContext);
-            }
-
-            return _userRepository;
-        }
-    }
-
-    public IStreetcodeTagIndexRepository StreetcodeTagIndexRepository
-    {
-        get
-        {
-            if (_streetcodeTagIndexRepository is null)
-            {
-                _streetcodeTagIndexRepository = new StreetcodeTagIndexRepository(_streetcodeDbContext);
-            }
-
-            return _streetcodeTagIndexRepository;
-        }
-    }
-
-    public IPartnerStreetcodeRepository PartnerStreetcodeRepository
-    {
-        get
-        {
-            if(_partnerStreetcodeRepository is null)
-            {
-                _partnerStreetcodeRepository = new PartnerStreetodeRepository(_streetcodeDbContext);
-            }
-
-            return _partnerStreetcodeRepository;
-        }
-    }
-
-    public IPositionRepository PositionRepository
-    {
-        get
-        {
-            if (_positionRepository is null)
-            {
-                _positionRepository = new PositionRepository(_streetcodeDbContext);
-            }
-
-            return _positionRepository;
-        }
-    }
-
-    public ITeamLinkRepository TeamLinkRepository
-    {
-        get
-        {
-            if (_teamLinkRepository is null)
-            {
-                _teamLinkRepository = new TeamLinkRepository(_streetcodeDbContext);
-            }
-
-            return _teamLinkRepository;
-        }
-    }
-
-    public IImageDetailsRepository ImageDetailsRepository => _imageDetailsRepository??=new ImageDetailsRepository(_streetcodeDbContext);
-
-    public IHistoricalContextTimelineRepository HistoricalContextTimelineRepository
-    {
-        get
-        {
-            if (_historicalContextTimelineRepository is null)
-            {
-                _historicalContextTimelineRepository = new HistoricalContextTimelineRepository(_streetcodeDbContext);
-            }
-
-            return _historicalContextTimelineRepository;
-        }
-    }
-
-    public IStreetcodeToponymRepository StreetcodeToponymRepository
-	{
-		get
-		{
-			if (_streetcodeToponymRepository is null)
-			{
-				_streetcodeToponymRepository = new StreetcodeToponymRepository(_streetcodeDbContext);
-			}
-
-			return _streetcodeToponymRepository;
-		}
-	}
-
-    public IStreetcodeImageRepository StreetcodeImageRepository
-	{
-		get
-		{
-			if (_streetcodeImageRepository is null)
-			{
-				_streetcodeImageRepository = new StreetcodeImageRepository(_streetcodeDbContext);
-			}
-
-			return _streetcodeImageRepository;
-		}
-	}
 
     public int SaveChanges()
     {

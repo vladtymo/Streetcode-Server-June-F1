@@ -13,5 +13,8 @@ namespace Streetcode.DAL.Repositories.Realizations.Team
             : base(context)
         {
         }
+        public TeamPositionRepository()
+        {
+        }
     }
 }
