@@ -1,20 +1,5 @@
 using System.Transactions;
 using Repositories.Interfaces;
-using Streetcode.DAL.Entities.AdditionalContent;
-using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
-using Streetcode.DAL.Entities.Analytics;
-using Streetcode.DAL.Entities.Media;
-using Streetcode.DAL.Entities.Media.Images;
-using Streetcode.DAL.Entities.News;
-using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Entities.Sources;
-using Streetcode.DAL.Entities.Streetcode;
-using Streetcode.DAL.Entities.Streetcode.TextContent;
-using Streetcode.DAL.Entities.Team;
-using Streetcode.DAL.Entities.Timeline;
-using Streetcode.DAL.Entities.Toponyms;
-using Streetcode.DAL.Entities.Transactions;
-using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
 using Streetcode.DAL.Repositories.Interfaces.Analytics;
@@ -127,148 +112,112 @@ public class RepositoryWrapper : IRepositoryWrapper
     }
 
     public INewsRepository NewsRepository =>
-          GetRepository<NewsRepository, News>(
-      (NewsRepository)_newsRepository);
+          GetRepository((NewsRepository)_newsRepository);
 
     public IFactRepository FactRepository =>
-          GetRepository<FactRepository, Fact>(
-      (FactRepository)_factRepository);
+          GetRepository((FactRepository)_factRepository);
 
     public IImageRepository ImageRepository =>
-          GetRepository<ImageRepository, Image>(
-      (ImageRepository)_imageRepository);
+          GetRepository((ImageRepository)_imageRepository);
 
     public ITeamRepository TeamRepository =>
-          GetRepository<TeamRepository, TeamMember>(
-      (TeamRepository)_teamRepository);
+          GetRepository((TeamRepository)_teamRepository);
 
     public ITeamPositionRepository TeamPositionRepository =>
-          GetRepository<TeamPositionRepository, TeamMemberPositions>(
-      (TeamPositionRepository)_teamPositionRepository);
+          GetRepository((TeamPositionRepository)_teamPositionRepository);
 
     public IAudioRepository AudioRepository =>
-          GetRepository<AudioRepository, Audio>(
-      (AudioRepository)_audioRepository);
+          GetRepository((AudioRepository)_audioRepository);
 
     public IStreetcodeCoordinateRepository StreetcodeCoordinateRepository =>
-          GetRepository<StreetcodeCoordinateRepository, StreetcodeCoordinate>(
-      (StreetcodeCoordinateRepository)_streetcodeCoordinateRepository);
+          GetRepository((StreetcodeCoordinateRepository)_streetcodeCoordinateRepository);
 
     public IVideoRepository VideoRepository =>
-          GetRepository<VideoRepository, Video>(
-      (VideoRepository)_videoRepository);
+          GetRepository((VideoRepository)_videoRepository);
 
     public IArtRepository ArtRepository =>
-          GetRepository<ArtRepository, Art>(
-      (ArtRepository)_artRepository);
+          GetRepository((ArtRepository)_artRepository);
 
     public IStreetcodeArtRepository StreetcodeArtRepository =>
-          GetRepository<StreetcodeArtRepository, StreetcodeArt>(
-      (StreetcodeArtRepository)_streetcodeArtRepository);
+          GetRepository((StreetcodeArtRepository)_streetcodeArtRepository);
 
     public IPartnersRepository PartnersRepository =>
-          GetRepository<PartnersRepository, Partner>(
-      (PartnersRepository)_partnersRepository);
+          GetRepository((PartnersRepository)_partnersRepository);
 
     public ISourceCategoryRepository SourceCategoryRepository =>
-          GetRepository<SourceCategoryRepository, SourceLinkCategory>(
-      (SourceCategoryRepository)_sourceCategoryRepository);
+          GetRepository((SourceCategoryRepository)_sourceCategoryRepository);
 
     public IStreetcodeCategoryContentRepository StreetcodeCategoryContentRepository =>
-          GetRepository<StreetcodeCategoryContentRepository, StreetcodeCategoryContent>(
-      (StreetcodeCategoryContentRepository)_streetcodeCategoryContentRepository);
+          GetRepository((StreetcodeCategoryContentRepository)_streetcodeCategoryContentRepository);
 
     public IRelatedFigureRepository RelatedFigureRepository =>
-          GetRepository<RelatedFigureRepository, RelatedFigure>(
-      (RelatedFigureRepository)_relatedFigureRepository);
+          GetRepository((RelatedFigureRepository)_relatedFigureRepository);
 
     public IStreetcodeRepository StreetcodeRepository =>
-          GetRepository<StreetcodeRepository, StreetcodeContent>(
-      (StreetcodeRepository)_streetcodeRepository);
+          GetRepository((StreetcodeRepository)_streetcodeRepository);
 
     public ISubtitleRepository SubtitleRepository =>
-          GetRepository<SubtitleRepository, Subtitle>(
-      (SubtitleRepository)_subtitleRepository);
+          GetRepository((SubtitleRepository)_subtitleRepository);
 
     public IStatisticRecordRepository StatisticRecordRepository =>
-          GetRepository<StatisticRecordsRepository, StatisticRecord>(
-      (StatisticRecordsRepository)_statisticRecordRepository);
+          GetRepository((StatisticRecordsRepository)_statisticRecordRepository);
 
     public ITagRepository TagRepository =>
-          GetRepository<TagRepository, Tag>(
-      (TagRepository)_tagRepository);
+          GetRepository((TagRepository)_tagRepository);
 
     public ITermRepository TermRepository =>
-          GetRepository<TermRepository, Term>(
-      (TermRepository)_termRepository);
+          GetRepository((TermRepository)_termRepository);
 
     public ITextRepository TextRepository =>
-          GetRepository<TextRepository, Text>(
-      (TextRepository)_textRepository);
+          GetRepository((TextRepository)_textRepository);
 
     public ITimelineRepository TimelineRepository =>
-          GetRepository<TimelineRepository, TimelineItem>(
-      (TimelineRepository)_timelineRepository);
-    
+          GetRepository((TimelineRepository)_timelineRepository);
+
     public IToponymRepository ToponymRepository =>
-          GetRepository<ToponymRepository, Toponym>(
-      (ToponymRepository)_toponymRepository);
+          GetRepository((ToponymRepository)_toponymRepository);
 
     public ITransactLinksRepository TransactLinksRepository =>
-          GetRepository<TransactLinksRepository, TransactionLink>(
-      (TransactLinksRepository)_transactLinksRepository);
+          GetRepository((TransactLinksRepository)_transactLinksRepository);
 
     public IHistoricalContextRepository HistoricalContextRepository =>
-          GetRepository<HistoricalContextRepository, HistoricalContext>(
-      (HistoricalContextRepository)_historyContextRepository);
+          GetRepository((HistoricalContextRepository)_historyContextRepository);
 
     public IPartnerSourceLinkRepository PartnerSourceLinkRepository =>
-          GetRepository<PartnersourceLinksRepository, PartnerSourceLink>(
-      (PartnersourceLinksRepository)_partnerSourceLinkRepository);
-   
+          GetRepository((PartnersourceLinksRepository)_partnerSourceLinkRepository);
+
     public IRelatedTermRepository RelatedTermRepository =>
-          GetRepository<RelatedTermRepository, RelatedTerm>(
-      (RelatedTermRepository)_relatedTermRepository);
-    
+          GetRepository((RelatedTermRepository)_relatedTermRepository);
+
     public IUserRepository UserRepository =>
-          GetRepository<UserRepository, User>(
-      (UserRepository)_userRepository);
+          GetRepository((UserRepository)_userRepository);
 
     public IStreetcodeTagIndexRepository StreetcodeTagIndexRepository =>
-          GetRepository<StreetcodeTagIndexRepository, StreetcodeTagIndex>(
-      (StreetcodeTagIndexRepository)_streetcodeTagIndexRepository);
+          GetRepository((StreetcodeTagIndexRepository)_streetcodeTagIndexRepository);
 
     public IPartnerStreetcodeRepository PartnerStreetcodeRepository =>
-        GetRepository<PartnerStreetodeRepository, StreetcodePartner>(
-            (PartnerStreetodeRepository)_partnerStreetcodeRepository);
+        GetRepository((PartnerStreetodeRepository)_partnerStreetcodeRepository);
 
-    public IPositionRepository PositionRepository => 
-        GetRepository<PositionRepository, Positions>(
-            (PositionRepository)_positionRepository);
+    public IPositionRepository PositionRepository =>
+        GetRepository((PositionRepository)_positionRepository);
 
     public ITeamLinkRepository TeamLinkRepository =>
-          GetRepository<TeamLinkRepository, TeamMemberLink>(
-            (TeamLinkRepository)_teamLinkRepository);
-   
+          GetRepository((TeamLinkRepository)_teamLinkRepository);
+
     public IImageDetailsRepository ImageDetailsRepository =>
-        GetRepository<ImageDetailsRepository, ImageDetails>(
-            (ImageDetailsRepository)_imageDetailsRepository);
+        GetRepository((ImageDetailsRepository)_imageDetailsRepository);
 
     public IHistoricalContextTimelineRepository HistoricalContextTimelineRepository =>
-        GetRepository<HistoricalContextTimelineRepository, HistoricalContextTimeline>(
-            (HistoricalContextTimelineRepository)_historicalContextTimelineRepository);
+        GetRepository((HistoricalContextTimelineRepository)_historicalContextTimelineRepository);
 
     public IStreetcodeToponymRepository StreetcodeToponymRepository =>
-        GetRepository<StreetcodeToponymRepository, StreetcodeToponym>(
-            (StreetcodeToponymRepository)_streetcodeToponymRepository);
+        GetRepository((StreetcodeToponymRepository)_streetcodeToponymRepository);
 
     public IStreetcodeImageRepository StreetcodeImageRepository =>
-        GetRepository<StreetcodeImageRepository, StreetcodeImage>(
-            (StreetcodeImageRepository)_streetcodeImageRepository);
+        GetRepository((StreetcodeImageRepository)_streetcodeImageRepository);
 
-    public T GetRepository<T, TU>(T repo)
-      where T : RepositoryBase<TU>, new()
-      where TU : class, new()
+    public T GetRepository<T>(T repo)
+     where T : IDbConextForRepositoryBase, new()
     {
         if (repo is null)
         {
