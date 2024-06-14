@@ -36,8 +36,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// app.UseMiddleware<CustomErrorHandlingMiddleware>();
-
 app.UseHangfireDashboard("/dash");
 
 if (app.Environment.EnvironmentName != "Local")

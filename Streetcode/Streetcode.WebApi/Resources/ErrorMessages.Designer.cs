@@ -61,65 +61,209 @@ namespace Streetcode.WebApi.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to oops 400 err.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        public static string _400 {
+        public static string BigCustomError {
             get {
-                return ResourceManager.GetString("400", resourceCulture);
+                return ResourceManager.GetString("BigCustomError", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to oops 401 err.
+        ///   Looks up a localized string similar to Cannot create team link.
         /// </summary>
-        public static string _401 {
+        public static string CanNotCreate {
             get {
-                return ResourceManager.GetString("401", resourceCulture);
+                return ResourceManager.GetString("CanNotCreate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to oops 402 err.
+        ///   Looks up a localized string similar to Cannot find any {0}.
         /// </summary>
-        public static string _402 {
+        public static string EntityNotFound {
             get {
-                return ResourceManager.GetString("402", resourceCulture);
+                return ResourceManager.GetString("EntityNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to oops 403 err.
+        ///   Looks up a localized string similar to Cannot find a {0} by a streetcode id: {1}.
         /// </summary>
-        public static string _403 {
+        public static string EntityNotFoundWithStreetcode {
             get {
-                return ResourceManager.GetString("403", resourceCulture);
+                return ResourceManager.GetString("EntityNotFoundWithStreetcode", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to oops 404 err.
+        ///   Looks up a localized string similar to No news by entered Url - {url}.
         /// </summary>
-        public static string _404 {
+        public static string EntityNotFoundWithUrl {
             get {
-                return ResourceManager.GetString("404", resourceCulture);
+                return ResourceManager.GetString("EntityNotFoundWithUrl", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to oops 500 err.
+        ///   Looks up a localized string similar to Cannot find any {0} with corresponding id: {1}.
         /// </summary>
-        public static string _500 {
+        public static string EntityWithIdNotFound {
             get {
-                return ResourceManager.GetString("500", resourceCulture);
+                return ResourceManager.GetString("EntityWithIdNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to oops bad req.
+        ///   Looks up a localized string similar to Cannot find a {0} by a streetcode id: {1}, because such streetcode doesn`t exist.
         /// </summary>
-        public static string BadRequest {
+        public static string EntityWithStreetcodeNotFound {
             get {
-                return ResourceManager.GetString("BadRequest", resourceCulture);
+                return ResourceManager.GetString("EntityWithStreetcodeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find any streetcode with corresponding tagid: {1}.
+        /// </summary>
+        public static string EntityWithStreetcodeTagNotFound {
+            get {
+                return ResourceManager.GetString("EntityWithStreetcodeTagNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to send email message.
+        /// </summary>
+        public static string FailSendEmail {
+            get {
+                return ResourceManager.GetString("FailSendEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot convert null to {0}.
+        /// </summary>
+        public static string FailToConvertNull {
+            get {
+                return ResourceManager.GetString("FailToConvertNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create a {0}.
+        /// </summary>
+        public static string FailToCreateA {
+            get {
+                return ResourceManager.GetString("FailToCreateA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create an {0}.
+        /// </summary>
+        public static string FailToCreateAn {
+            get {
+                return ResourceManager.GetString("FailToCreateAn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete a {0}.
+        /// </summary>
+        public static string FailToDeleteA {
+            get {
+                return ResourceManager.GetString("FailToDeleteA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete an {0}.
+        /// </summary>
+        public static string FailToDeleteAn {
+            get {
+                return ResourceManager.GetString("FailToDeleteAn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot map streetcode to shortDTO.
+        /// </summary>
+        public static string FailToMap {
+            get {
+                return ResourceManager.GetString("FailToMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to text was not parsed successfully.
+        /// </summary>
+        public static string FailToParse {
+            get {
+                return ResourceManager.GetString("FailToParse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update a {0}.
+        /// </summary>
+        public static string FailToUpdate {
+            get {
+                return ResourceManager.GetString("FailToUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string NoCustomError {
+            get {
+                return ResourceManager.GetString("NoCustomError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find any streetcode with corresponding index: {1}.
+        /// </summary>
+        public static string StreetcodeIndexNotFound {
+            get {
+                return ResourceManager.GetString("StreetcodeIndexNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No streetcodes exist now.
+        /// </summary>
+        public static string StreetcodeNotExist {
+            get {
+                return ResourceManager.GetString("StreetcodeNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
+        /// </summary>
+        public static string StreetcodeUrlNotFound {
+            get {
+                return ResourceManager.GetString("StreetcodeUrlNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetRelatedFiguresByStreetcodeIdHandler.
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find any tag by the title: {1}.
+        /// </summary>
+        public static string TagNotFoundWithTitle {
+            get {
+                return ResourceManager.GetString("TagNotFoundWithTitle", resourceCulture);
             }
         }
     }

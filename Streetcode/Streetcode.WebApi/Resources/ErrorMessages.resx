@@ -117,25 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="400" xml:space="preserve">
-    <value>oops 400 err</value>
+  <data name="BigCustomError" xml:space="preserve">
+    <value />
+    <comment>DeleteRelatedFigureHandler, CreateRelatedTermHandler, DeleteRelatedTermHandler, GetAllRelatedTermsByTermIdHandler</comment>
   </data>
-  <data name="401" xml:space="preserve">
-    <value>oops 401 err</value>
+  <data name="CanNotCreate" xml:space="preserve">
+    <value>Cannot create team link</value>
   </data>
-  <data name="402" xml:space="preserve">
-    <value>oops 402 err</value>
+  <data name="EntityNotFound" xml:space="preserve">
+    <value>Cannot find any {0}</value>
+    <comment>GetAllNewsHandler, GetAllCategoriesHandler, GetAllCategoryNamesHandler, CreateRelatedFigureHandler</comment>
   </data>
-  <data name="403" xml:space="preserve">
-    <value>oops 403 err</value>
+  <data name="EntityNotFoundWithStreetcode" xml:space="preserve">
+    <value>Cannot find a {0} by a streetcode id: {1}</value>
+    <comment>GetArtsByStreetcodeIdHandler, GetAudioByStreetcodeIdQueryHandler, GetImageByStreetcodeIdHandler, GetStreetcodeArtByStreetcodeIdHandler, GetCategoryContentByStreetcodeIdHandler, GetFactByStreetcodeIdHandler, GetRelatedFiguresByStreetcodeIdHandler (2 words)</comment>
   </data>
-  <data name="404" xml:space="preserve">
-    <value>oops 404 err</value>
+  <data name="EntityNotFoundWithUrl" xml:space="preserve">
+    <value>No news by entered Url - {url}</value>
+    <comment>GetNewsByUrlHandler</comment>
   </data>
-  <data name="500" xml:space="preserve">
-    <value>oops 500 err</value>
+  <data name="EntityWithIdNotFound" xml:space="preserve">
+    <value>Cannot find any {0} with corresponding id: {1}</value>
+    <comment>DeleteAudioHandler, DeleteImageHandler, DeleteNewsHandler, GetNewsByIdHandler, DeletePartnerHandler, DeleteSoftStreetcodeHandler</comment>
   </data>
-  <data name="BadRequest" xml:space="preserve">
-    <value>oops bad req</value>
+  <data name="EntityWithStreetcodeNotFound" xml:space="preserve">
+    <value>Cannot find a {0} by a streetcode id: {1}, because such streetcode doesn`t exist</value>
+    <comment>GetVideoByStreetcodeIdHandler, GetPartnersByStreetcodeIdHandler, GetCategoriesByStreetcodeIdHandler, GetCategoryContentByStreetcodeIdHandler, GetTextByStreetcodeIdHandler</comment>
+  </data>
+  <data name="EntityWithStreetcodeTagNotFound" xml:space="preserve">
+    <value>Cannot find any streetcode with corresponding tagid: {1}</value>
+  </data>
+  <data name="FailSendEmail" xml:space="preserve">
+    <value>Failed to send email message</value>
+  </data>
+  <data name="FailToConvertNull" xml:space="preserve">
+    <value>Cannot convert null to {0}</value>
+  </data>
+  <data name="FailToCreateA" xml:space="preserve">
+    <value>Failed to create a {0}</value>
+    <comment>CreatePartnerHandler, CreatePositionHandler</comment>
+  </data>
+  <data name="FailToCreateAn" xml:space="preserve">
+    <value>Failed to create an {0}</value>
+  </data>
+  <data name="FailToDeleteA" xml:space="preserve">
+    <value>Failed to delete a {0}</value>
+    <comment>DeletePartnerHandler</comment>
+  </data>
+  <data name="FailToDeleteAn" xml:space="preserve">
+    <value>Failed to delete an {0}</value>
+  </data>
+  <data name="FailToMap" xml:space="preserve">
+    <value>Cannot map streetcode to shortDTO</value>
+    <comment>CreateTeamLinkHandler</comment>
+  </data>
+  <data name="FailToParse" xml:space="preserve">
+    <value>text was not parsed successfully</value>
+  </data>
+  <data name="FailToUpdate" xml:space="preserve">
+    <value>Failed to update a {0}</value>
+    <comment>UpdatePartnerHandler</comment>
+  </data>
+  <data name="NoCustomError" xml:space="preserve">
+    <value />
+    <comment>CreateInvoiceHandler, GetAllRelatedTermsQuery, GetRelatedTermByIdQuery, UpdateRelatedTermHandler, GetAllStreetcodesHandler, GetStreetcodeShortByIdHandler, GetAllToponymsHandler</comment>
+  </data>
+  <data name="StreetcodeIndexNotFound" xml:space="preserve">
+    <value>Cannot find any streetcode with corresponding index: {1}</value>
+  </data>
+  <data name="StreetcodeNotExist" xml:space="preserve">
+    <value>No streetcodes exist now</value>
+  </data>
+  <data name="StreetcodeUrlNotFound" xml:space="preserve">
+    <value>Cannot find streetcode by transliteration url: {1}</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>GetRelatedFiguresByStreetcodeIdHandler</value>
+  </data>
+  <data name="TagNotFoundWithTitle" xml:space="preserve">
+    <value>Cannot find any tag by the title: {1}</value>
+    <comment>not sure GetTagByTitle</comment>
   </data>
 </root>

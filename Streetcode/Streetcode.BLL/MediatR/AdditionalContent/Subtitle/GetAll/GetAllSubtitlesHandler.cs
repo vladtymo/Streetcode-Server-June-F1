@@ -23,7 +23,7 @@ public class GetAllSubtitlesHandler : IRequestHandler<GetAllSubtitlesQuery, Resu
     public async Task<Result<IEnumerable<SubtitleDTO>>> Handle(GetAllSubtitlesQuery request, CancellationToken cancellationToken)
     {
         var subtitles = await _repositoryWrapper.SubtitleRepository.GetAllAsync();
-
+        subtitles = null;
         if (subtitles is null)
         {
             const string errorMsg = $"Cannot find any subtitles";
