@@ -118,18 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="400" xml:space="preserve">
-    <value>Invalid request. Please provide valid data</value>
+    <value>oops 400 err</value>
   </data>
   <data name="401" xml:space="preserve">
-    <value>Authentication required. Please provide valid credentials.</value>
+    <value>oops 401 err</value>
+  </data>
+  <data name="402" xml:space="preserve">
+    <value>oops 402 err</value>
   </data>
   <data name="403" xml:space="preserve">
-    <value>Access denied. You are not authorized to perform this action.</value>
+    <value>oops 403 err</value>
   </data>
   <data name="404" xml:space="preserve">
-    <value>We couldn't find what you were looking for.</value>
+    <value>oops 404 err</value>
   </data>
   <data name="500" xml:space="preserve">
-    <value>Something went wrong on the server. Please contact the administrator.</value>
+    <value>oops 500 err</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>oops bad req</value>
   </data>
 </root>

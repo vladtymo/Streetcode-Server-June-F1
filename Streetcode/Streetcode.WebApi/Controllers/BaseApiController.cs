@@ -32,14 +32,14 @@ public class BaseApiController : ControllerBase
         }
 
         var errorMessage = "An unknown error occurred.";
-        if (result.HasError<Error>())
+        if (result.Errors.Count > 0)
         {
             var errorCode = result.Errors[0].Message; // Assuming the error code is stored in the Message property
             errorMessage = _resourceManager.GetString(errorCode) ?? errorMessage;
         }
 
-        return BadRequest(new { Error = errorMessage });
+       // return BadRequest(new { Error = errorMessage });
 
-        // return BadRequest(result.Reasons);
+        return BadRequest(result.Reasons);
     }
 }

@@ -1,6 +1,7 @@
 using Hangfire;
 using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.WebApi.Extensions;
+using Streetcode.WebApi.Resources;
 using Streetcode.WebApi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// app.UseMiddleware<CustomErrorHandlingMiddleware>();
 
 app.UseHangfireDashboard("/dash");
 
