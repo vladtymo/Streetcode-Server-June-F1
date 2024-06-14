@@ -47,10 +47,4 @@ public class SourcesController : BaseApiController
     {
         return HandleResult(await Mediator.Send(new CreateSourceLinkCategoryCommand(category)));
     {
-    
-    [HttpPut]
-    public async Task<IActionResult> UpdateContent([FromBody] CategoryContentUpdateDTO updatedContent)
-    {
-        return HandleResult(await Mediator.Send(new CategoryContentUpdateCommand(updatedContent)));
-    }
 }
