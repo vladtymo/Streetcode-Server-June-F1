@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.DAL.Repositories.Realizations.Base;
 
-public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbConextProvider
+public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbContextProvider
     where T : class
 {
     private StreetcodeDbContext _dbContext = null!;

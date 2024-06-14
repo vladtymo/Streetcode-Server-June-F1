@@ -217,7 +217,7 @@ public class RepositoryWrapper : IRepositoryWrapper
         GetRepository(_streetcodeImageRepository as StreetcodeImageRepository);
 
     public T GetRepository<T>(T? repo)
-     where T : IStreetcodeDbConextProvider, new()
+     where T : IStreetcodeDbContextProvider, new()
     {
         if (repo is null)
         {
