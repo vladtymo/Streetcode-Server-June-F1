@@ -46,5 +46,5 @@ public class SourcesController : BaseApiController
     public async Task<IActionResult> Create([FromBody] CreateSourceCategoryDTO category)
     {
         return HandleResult(await Mediator.Send(new CreateSourceLinkCategoryCommand(category)));
-    {
+    }
 }
