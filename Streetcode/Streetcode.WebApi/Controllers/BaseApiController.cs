@@ -1,7 +1,9 @@
-﻿using FluentResults;
+﻿using System.Resources;
+using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.MediatR.ResultVariations;
+using Streetcode.WebApi.Resources;
 
 namespace Streetcode.WebApi.Controllers;
 
@@ -10,6 +12,8 @@ namespace Streetcode.WebApi.Controllers;
 public class BaseApiController : ControllerBase
 {
     private IMediator? _mediator;
+    private static ResourceManager _resourceManager = new ResourceManager("YourNamespace.ErrorMessages", typeof(ErrorMessages).Assembly);
+
 
     protected IMediator Mediator => _mediator ??=
         HttpContext.RequestServices.GetService<IMediator>()!;
@@ -27,6 +31,15 @@ public class BaseApiController : ControllerBase
                 NotFound("Found result matching null") : Ok(result.Value);
         }
 
-        return BadRequest(result.Reasons);
+        var errorMessage = "An unknown error occurred.";
+        if (result.HasError<Error>())
+        {
+            var errorCode = result.Errors[0].Message; // Assuming the error code is stored in the Message property
+            errorMessage = _resourceManager.GetString(errorCode) ?? errorMessage;
+        }
+
+        return BadRequest(new { Error = errorMessage });
+
+        // return BadRequest(result.Reasons);
     }
 }
