@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.DAL.Repositories.Realizations.Base;
 
-public abstract class RepositoryBase<T> : IRepositoryBase<T>, IDbConextForRepositoryBase
+public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbConextPropertyProvider
     where T : class
 {
     private StreetcodeDbContext _dbContext = null!;
@@ -22,7 +22,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T>, IDbConextForReposi
     {
     }
 
-    public StreetcodeDbContext DbContext { set => _dbContext = value; }
+    public StreetcodeDbContext DbContext { init => _dbContext = value; }
 
     public IQueryable<T> FindAll(Expression<Func<T, bool>>? predicate = default)
     {

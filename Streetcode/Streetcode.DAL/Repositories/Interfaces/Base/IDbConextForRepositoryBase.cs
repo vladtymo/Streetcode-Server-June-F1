@@ -2,8 +2,8 @@
 
 namespace Streetcode.DAL.Repositories.Interfaces.Base
 {
-    public interface IDbConextForRepositoryBase
+    public interface IStreetcodeDbConextPropertyProvider
     {
-        StreetcodeDbContext DbContext { set; }
+        StreetcodeDbContext DbContext { init; }
     }
 }
