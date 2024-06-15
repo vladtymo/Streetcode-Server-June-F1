@@ -70,14 +70,6 @@ public class StreetcodeDbContext : DbContext
     public DbSet<StreetcodePartner> StreetcodePartners { get; set; }
     public DbSet<TeamMemberPositions> TeamMemberPosition { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StreetcodeDB;Integrated Security=True;");
-        }
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

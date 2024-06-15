@@ -17,7 +17,7 @@ namespace Streetcode.DAL.Persistence.Configurations.AdditionalContent
 
             builder.Property(s => s.Index).IsRequired();
 
-            // builder.Property(s => s.Index).IsRequired().HasAnnotation("Range", new RangeAttribute(0, int.MaxValue));
+            // builder.HasCheckConstraint("CK_StreetcodeTagIndex_Index_Range", "[Index] >= 0 AND [Index] <= 2147483647");
         }
     }
 }

@@ -9,7 +9,6 @@ public class Response
 
     public string? Name { get; set; }
 
-    [EmailAddress]
     public string Email { get; set; }
 
     public string? Description { get; set; }

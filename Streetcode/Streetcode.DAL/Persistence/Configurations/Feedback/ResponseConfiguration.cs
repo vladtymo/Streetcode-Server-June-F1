@@ -21,8 +21,6 @@ namespace Streetcode.DAL.Persistence.Configurations.Feedback
                 .IsRequired()
                 .HasMaxLength(50);
 
-                // .HasAnnotation("EmailAddress", new EmailAddressAttribute());
-
             builder.Property(r => r.Description).HasMaxLength(1000);
         }
     }

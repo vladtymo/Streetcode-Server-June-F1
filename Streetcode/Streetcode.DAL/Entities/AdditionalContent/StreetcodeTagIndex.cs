@@ -12,7 +12,6 @@ namespace Streetcode.DAL.Entities.AdditionalContent
 
         public bool IsVisible { get; set; }
 
-        [Range(0, int.MaxValue)]
         public int Index { get; set; }
 
         public StreetcodeContent? Streetcode { get; set; }
