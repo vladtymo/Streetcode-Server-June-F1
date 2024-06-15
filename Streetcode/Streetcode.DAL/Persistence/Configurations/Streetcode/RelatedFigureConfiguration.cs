@@ -8,6 +8,8 @@ namespace Streetcode.DAL.Persistence.Configurations.Streetcode
     {
         public void Configure(EntityTypeBuilder<RelatedFigure> builder)
         {
+            builder.ToTable("related_figures", "streetcode");
+
             builder.HasKey(d => new { d.ObserverId, d.TargetId });
 
             builder.HasOne(d => d.Observer)

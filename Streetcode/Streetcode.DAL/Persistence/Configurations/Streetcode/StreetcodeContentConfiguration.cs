@@ -126,8 +126,6 @@ namespace Streetcode.DAL.Persistence.Configurations.Streetcode
                         sp => sp.HasOne(i => i.Streetcode).WithMany().HasForeignKey(x => x.StreetcodeId))
                    .ToTable("streetcode_partners", "streetcode");
 
-            // TODO
-
             builder.HasMany(d => d.Coordinates)
                 .WithOne(c => c.Streetcode)
                 .OnDelete(DeleteBehavior.Cascade)

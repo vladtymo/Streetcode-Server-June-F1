@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Streetcode.DAL.Entities.Streetcode;
 
-[Table("related_figures", Schema = "streetcode")]
 public class RelatedFigure
 {
     public int ObserverId { get; set; }
