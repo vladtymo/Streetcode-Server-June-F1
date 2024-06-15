@@ -27,7 +27,16 @@ public class CreateFactHandler : IRequestHandler<CreateFactCommand, Result<FactD
         {
             const string errorMsg = "Cannot convert null to fact";
             _logger.LogError(request, errorMsg);
-            return Result.Fail(errorMsg);
+            return Result.Fail(new Error(errorMsg));
+        }
+
+        newFact.ImageId = (newFact.ImageId == 0) ? (int?)null : newFact.ImageId;
+
+        if (newFact.StreetcodeId == 0)
+        {
+            const string errorMsg = "StreetcodeId cannot be 0. Please provide a valid StreetcodeId.";
+            _logger.LogError(request, errorMsg);
+            return Result.Fail(new Error(errorMsg));
         }
 
         var entity = await _repositoryWrapper.FactRepository.CreateAsync(newFact);

@@ -18,7 +18,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.Facts;
     private readonly CreateFactHandler _handler;
     private readonly Fact _factEntity;
     private readonly FactDto _factDTO;
-    private readonly FactUpdateCreateDto _factCreatedDTO;
+    private readonly Fact _withoutStreetcodeIdEntity;
     private readonly CreateFactCommand _createFactCommand;
 
     public CreateFactHandlerTests()
@@ -40,19 +40,19 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.Facts;
             StreetcodeId = 1
         };
 
-        _factCreatedDTO = new FactUpdateCreateDto
+        _withoutStreetcodeIdEntity = new Fact
         {
+            Id = 1,
             Title = "Interesting Fact",
             ImageId = 1,
             FactContent = "This is an interesting fact about something very important.",
-            StreetcodeId = 1,
-            ImageDescription = "Description"
+            StreetcodeId = 0
         };
 
         _mockMapper = new Mock<IMapper>();
         _mockRepositoryWrapper = new Mock<IRepositoryWrapper>();
         _mockLogger = new Mock<ILoggerService>();
-        _createFactCommand = new CreateFactCommand(_factCreatedDTO);
+        _createFactCommand = new CreateFactCommand(_factDTO);
         _handler = new CreateFactHandler(_mockMapper.Object, _mockRepositoryWrapper.Object, _mockLogger.Object);
     }
 
@@ -77,7 +77,21 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.Facts;
     {
         // Arrange
         var erorrMsg = new Error("Cannot convert null to fact");
-        _mockMapper.Setup(m => m.Map<Fact>(_factCreatedDTO)).Returns((Fact)null!);
+        _mockMapper.Setup(m => m.Map<Fact>(_factDTO)).Returns((Fact)null!);
+
+        // Act
+        var result = await _handler.Handle(_createFactCommand, CancellationToken.None);
+
+        // Assert
+        Assert.True(result.Errors?.Exists(e => e.Message == erorrMsg.Message));
+    }
+
+    [Fact]
+    public async Task Handle_ShouldReturnFailResult_WhenStreetcodeIdZero()
+    {
+        // Arrange
+        var erorrMsg = new Error("StreetcodeId cannot be 0. Please provide a valid StreetcodeId.");
+        _mockMapper.Setup(m => m.Map<Fact>(_factDTO)).Returns(_withoutStreetcodeIdEntity);
 
         // Act
         var result = await _handler.Handle(_createFactCommand, CancellationToken.None);
@@ -104,7 +118,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.Facts;
 
     private void SetupMocksForSuccess()
     {
-        _mockMapper.Setup(m => m.Map<Fact>(_factCreatedDTO)).Returns(_factEntity);
+        _mockMapper.Setup(m => m.Map<Fact>(_factDTO)).Returns(_factEntity);
         _mockRepositoryWrapper.Setup(r => r.FactRepository.CreateAsync(_factEntity))
             .Callback<Fact>(fact =>
             {
