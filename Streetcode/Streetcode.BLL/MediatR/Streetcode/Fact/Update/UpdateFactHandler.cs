@@ -12,7 +12,7 @@ using Streetcode.DAL.Repositories.Realizations.AdditionalContent;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Facts.Update
 {
-    public class UpdateFactHandler : IRequestHandler<UpdateFactCommand, Result<FactUpdateCreateDto>>
+    public class UpdateFactHandler : IRequestHandler<UpdateFactCommand, Result<FactDto>>
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IMapper _mapper;
@@ -24,19 +24,9 @@ namespace Streetcode.BLL.MediatR.Streetcode.Facts.Update
             _logger = logger;
         }
 
-        public async Task<Result<FactUpdateCreateDto>> Handle(UpdateFactCommand request, CancellationToken cancellationToken)
+        public async Task<Result<FactDto>> Handle(UpdateFactCommand request, CancellationToken cancellationToken)
         {
-            var existingFact = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Id == request.Fact.Id);
-
-            if (existingFact == null)
-            {
-                const string errorMsg = $"Fact with ID  does not exist";
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(new Error(errorMsg));
-            }
-
-      //     var fact = _mapper.Map(request.Fact, existingFact);
-              var fact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.Fact);
+            var fact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.Fact);
             if (fact is null)
             {
                 const string errorMsg = $"Cannot convert null to fact";
@@ -48,7 +38,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Facts.Update
             var resItIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
             if (resItIsSuccess)
             {
-                return Result.Ok(_mapper.Map<FactUpdateCreateDto>(fact));
+                return Result.Ok(_mapper.Map<FactDto>(fact));
             }
             else
             {
