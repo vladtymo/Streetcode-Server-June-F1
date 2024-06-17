@@ -66,9 +66,9 @@ namespace Streetcode.DAL.Persistence.Configurations.Streetcode
 
             builder.Property<string>("StreetcodeType").Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Save);
 
-            builder.HasOne(d => d.Text)
+            builder.HasMany(d => d.Texts)
                     .WithOne(p => p.Streetcode)
-                    .HasForeignKey<Text>(d => d.StreetcodeId)
+                    .HasForeignKey(d => d.StreetcodeId)
                     .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(d => d.Audio)
