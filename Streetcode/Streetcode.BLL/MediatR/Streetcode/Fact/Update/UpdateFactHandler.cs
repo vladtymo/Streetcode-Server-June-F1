@@ -29,7 +29,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Facts.Update
             var fact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.Fact);
             if (fact is null)
             {
-                const string errorMsg = $"Cannot convert null to fact";
+                const string errorMsg = $"Cannot convert FactDto to Fact Entity";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
