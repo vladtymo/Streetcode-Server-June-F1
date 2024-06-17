@@ -36,6 +36,8 @@ public class FactController : BaseApiController
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         return HandleResult(await Mediator.Send(new DeleteFactCommand(id)));
+    }
+
     [HttpPatch("{streetcodeId:int}")]
     public async Task<IActionResult> UpdateFactPositions([FromBody] IEnumerable<FactUpdatePositionDto> facts, [FromRoute] int streetcodeId)
     {
@@ -47,7 +49,7 @@ public class FactController : BaseApiController
     {
         return HandleResult(await Mediator.Send(new CreateFactCommand(fact)));
     }
-    
+
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update([FromBody] FactUpdateCreateDto relatedTerm)
     {
