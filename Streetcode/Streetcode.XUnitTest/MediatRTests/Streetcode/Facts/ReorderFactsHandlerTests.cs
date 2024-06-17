@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
+using FluentAssertions;
 using FluentResults;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
@@ -34,7 +35,7 @@ public class ReorderFactsCommandHandlerTests
         var request = new ReorderFactsCommand(new List<FactUpdatePositionDto>(), 1);
         IError msgError = new Error("Updated list of position cannot be empty or null");
 
-        SetupMocks(Enumerable.Empty<Fact>(), Enumerable.Empty<Fact>(), Enumerable.Empty<FactDto>(), 0);
+        SetupMocks(0, Enumerable.Empty<Fact>());
 
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
@@ -50,7 +51,7 @@ public class ReorderFactsCommandHandlerTests
         var request = GetTestReorderFactsCommand();
         IError msgError = new Error("Cannot find any fact by streetcodeId 1");
         
-        SetupMocks(Enumerable.Empty<Fact>(), Enumerable.Empty<Fact>(), Enumerable.Empty<FactDto>(), 1);
+        SetupMocks(1, Enumerable.Empty<Fact>());
 
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
@@ -67,8 +68,8 @@ public class ReorderFactsCommandHandlerTests
         IError msgError = new Error("Failed to save changes to the database.");
         var facts = GetTestFacts();
 
-        SetupMocks(facts, facts, Enumerable.Empty<FactDto>(), 0);
-
+        SetupMocks(0, facts, facts, Enumerable.Empty<FactDto>());
+         
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
@@ -84,7 +85,7 @@ public class ReorderFactsCommandHandlerTests
         var factsNew = GetExpectedFactsNew();
         var request = GetTestReorderFactsCommand();
 
-        SetupMocks(facts, facts, factsNew, 1);
+        SetupMocks(1, facts, facts, factsNew);
 
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
@@ -93,22 +94,23 @@ public class ReorderFactsCommandHandlerTests
         Assert.Equal(result.Value, factsNew);
     }
 
-    private void SetupMocks(IEnumerable<Fact> facts, IEnumerable<Fact> firstOrDefaultFacts, IEnumerable<FactDto> returnDto, int saveChangesResult)
+    private void SetupMocks(int saveChangesResult, IEnumerable<Fact>? firstOrDefaultFacts = default, IEnumerable<Fact>? facts = default, IEnumerable<FactDto>? returnDto = default)
     {
         _repositoryWrapperMock.Setup(repo => repo.FactRepository.GetAllAsync(
-            It.IsAny<Expression<Func<Fact, bool>>>(),
+            It.IsAny<Expression<Func<Fact, bool>>?>(),
             It.IsAny<Func<IQueryable<Fact>, IIncludableQueryable<Fact, object>>>()))
-            .ReturnsAsync(facts);
+            .Returns(Task.FromResult(facts) !);
 
-        _repositoryWrapperMock.SetupSequence(repo => repo.FactRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Fact, Fact>>>(), It.IsAny<Expression<Func<Fact, bool>>>(), default))
-            .ReturnsAsync(firstOrDefaultFacts.FirstOrDefault())
-            .ReturnsAsync(firstOrDefaultFacts.Skip(1).FirstOrDefault())
-            .ReturnsAsync(firstOrDefaultFacts.Skip(2).FirstOrDefault());
+        _repositoryWrapperMock.SetupSequence(repo => repo.FactRepository.GetFirstOrDefaultAsync(
+            It.IsAny<Expression<Func<Fact, Fact>>>(), It.IsAny<Expression<Func<Fact, bool>>>(), default))
+            .ReturnsAsync(firstOrDefaultFacts?.FirstOrDefault())
+            .ReturnsAsync(firstOrDefaultFacts?.Skip(1).FirstOrDefault())
+            .ReturnsAsync(firstOrDefaultFacts?.Skip(2).FirstOrDefault());
 
         _repositoryWrapperMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(saveChangesResult);
 
         _mapperMock.Setup(x => x.Map<IEnumerable<FactDto>>(It.IsAny<IEnumerable<Fact>>()))
-                  .Returns(returnDto);
+                  .Returns(returnDto!);
     }
 
     private IEnumerable<Fact> GetTestFacts()
@@ -131,14 +133,18 @@ public class ReorderFactsCommandHandlerTests
         };
     }
 
-    private ReorderFactsCommand GetTestReorderFactsCommand()
+    private IEnumerable<FactUpdatePositionDto> GetListOfNewPosition()
     {
-        return new ReorderFactsCommand(
-            new List<FactUpdatePositionDto>
+        return new List<FactUpdatePositionDto>
             {
                 new FactUpdatePositionDto { Id = 1, NewPosition = 1 },
                 new FactUpdatePositionDto { Id = 2, NewPosition = 2 },
                 new FactUpdatePositionDto { Id = 3, NewPosition = 3 }
-            }, 1);
+            };
+    }
+
+    private ReorderFactsCommand GetTestReorderFactsCommand()
+    {
+        return new ReorderFactsCommand(GetListOfNewPosition(), 1);
     }
 }

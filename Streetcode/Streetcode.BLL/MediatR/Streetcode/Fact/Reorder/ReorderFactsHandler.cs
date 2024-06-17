@@ -21,10 +21,11 @@ public class ReorderFactsHandler : IRequestHandler<ReorderFactsCommand, Result<I
 
     public async Task<Result<IEnumerable<FactDto>>> Handle(ReorderFactsCommand request, CancellationToken cancellationToken)
     {
-        var facts = await _repositoryWrapper.FactRepository.GetAllAsync(f => f.StreetcodeId == request.streetcodeId);
-        var listNewPosition = request.facts;
+        var factRepository = _repositoryWrapper.FactRepository;
+        var facts = await factRepository.GetAllAsync(f => f.StreetcodeId == request.streetcodeId);
+        var listOfNewPosition = request.newPositionsOfFacts;
 
-        if (listNewPosition is null || !listNewPosition.Any())
+        if (listOfNewPosition is null || !listOfNewPosition.Any())
         {
             const string errorMsg = $"Updated list of position cannot be empty or null";
             _logger.LogError(request, errorMsg);
@@ -38,17 +39,21 @@ public class ReorderFactsHandler : IRequestHandler<ReorderFactsCommand, Result<I
             return Result.Fail(new Error(errorMsg));
         }
 
-        var reorderPositionResult = UpdateFactsPositions(request, facts, listNewPosition);
-        var factsWithNewPosition = reorderPositionResult.Value;
-
-        if (!factsWithNewPosition.Any())
+        foreach(var fact in listOfNewPosition)
         {
-            string errorMsg = $"List of fact cannot be empty";
-            _logger.LogError(request, errorMsg);
-            return Result.Fail(new Error(errorMsg));
+            var newPosition = facts.FirstOrDefault(f => f.Id == fact.Id);
+
+            if(newPosition is null)
+            {
+                string errorMsg = $"Fact with id {fact.Id} not found in list of new position";
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(new Error(errorMsg));
+            }
+
+            newPosition.Position = fact.NewPosition;
         }
 
-        _repositoryWrapper.FactRepository.UpdateRange(factsWithNewPosition);
+        factRepository.UpdateRange(facts);
         var result = await _repositoryWrapper.SaveChangesAsync() > 0;
         if (!result)
         {
@@ -57,38 +62,6 @@ public class ReorderFactsHandler : IRequestHandler<ReorderFactsCommand, Result<I
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<IEnumerable<FactDto>>(factsWithNewPosition));
-    }
-
-    private Result<IEnumerable<DAL.Entities.Streetcode.TextContent.Fact>> UpdateFactsPositions(ReorderFactsCommand request, IEnumerable<DAL.Entities.Streetcode.TextContent.Fact> facts, IEnumerable<FactUpdatePositionDto> factsWithNewPosition)
-    {
-        foreach (var factDto in factsWithNewPosition)
-        {
-            var item = facts.FirstOrDefault(f => f.Id == factDto.Id);
-            var oldPosition = item?.Position ?? 0;
-            var newPosition = factDto.NewPosition;
-
-            if (item is null)
-            {
-                string errorMsg = $"Fact with id {factDto.Id}  not on the list";
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(new Error(errorMsg));
-            }
-
-            var itemsToShift = newPosition < oldPosition
-                ? facts.Where(i => i.Position >= newPosition && i.Position < oldPosition)
-                : facts.Where(i => i.Position > oldPosition && i.Position <= newPosition);
-
-            foreach (var it in itemsToShift)
-            {
-                it.Position += newPosition < oldPosition ? 1 : -1;
-            }
-
-            item.Position = newPosition;
-
-            item.Position = newPosition;
-        }
-
-        return Result.Ok(facts);
+        return Result.Ok(_mapper.Map<IEnumerable<FactDto>>(facts));
     }
 }
