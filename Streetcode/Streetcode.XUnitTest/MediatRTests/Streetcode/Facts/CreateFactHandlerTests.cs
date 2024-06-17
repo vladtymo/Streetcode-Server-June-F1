@@ -76,7 +76,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.Facts;
     public async Task Handle_ShouldReturnFailResult_WhenFactIsNull()
     {
         // Arrange
-        var erorrMsg = new Error("Cannot convert null to fact");
+        var erorrMsg = new Error("New fact cannot be null");
         _mockMapper.Setup(m => m.Map<Fact>(_factDTO)).Returns((Fact)null!);
 
         // Act
