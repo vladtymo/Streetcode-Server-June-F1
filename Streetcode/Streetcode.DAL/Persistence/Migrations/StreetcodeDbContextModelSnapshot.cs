@@ -696,6 +696,10 @@ namespace Streetcode.DAL.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("Author")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<int>("StreetcodeId")
                         .HasColumnType("int");
 
@@ -706,13 +710,16 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("VideoUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StreetcodeId")
-                        .IsUnique();
+                    b.HasIndex("StreetcodeId");
 
                     b.ToTable("texts", "streetcode");
                 });
@@ -1327,8 +1334,8 @@ namespace Streetcode.DAL.Persistence.Migrations
             modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.TextContent.Text", b =>
                 {
                     b.HasOne("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", "Streetcode")
-                        .WithOne("Text")
-                        .HasForeignKey("Streetcode.DAL.Entities.Streetcode.TextContent.Text", "StreetcodeId")
+                        .WithMany("Texts")
+                        .HasForeignKey("StreetcodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1520,7 +1527,7 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.Navigation("Targets");
 
-                    b.Navigation("Text");
+                    b.Navigation("Texts");
 
                     b.Navigation("TimelineItems");
 
