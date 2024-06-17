@@ -22,15 +22,16 @@ public class CreateFactHandler : IRequestHandler<CreateFactCommand, Result<FactD
     public async Task<Result<FactDto>> Handle(CreateFactCommand request, CancellationToken cancellationToken)
     {
         var newFact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.newFact);
+        var repositoryFacts = _repositoryWrapper.FactRepository;
 
         if (newFact is null)
         {
-            const string errorMsg = "Cannot convert null to fact";
+            const string errorMsg = "New fact cannot be null";
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        newFact.ImageId = (newFact.ImageId == 0) ? (int?)null : newFact.ImageId;
+        newFact.ImageId = (newFact.ImageId == 0) ? null : newFact.ImageId;
 
         if (newFact.StreetcodeId == 0)
         {
@@ -39,7 +40,7 @@ public class CreateFactHandler : IRequestHandler<CreateFactCommand, Result<FactD
             return Result.Fail(new Error(errorMsg));
         }
 
-        var entity = await _repositoryWrapper.FactRepository.CreateAsync(newFact);
+        var entity = await repositoryFacts.CreateAsync(newFact);
         var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
 
         if (resultIsSuccess)

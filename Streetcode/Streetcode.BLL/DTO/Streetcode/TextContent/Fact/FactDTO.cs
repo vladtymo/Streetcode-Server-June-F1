@@ -15,4 +15,5 @@ public class FactDto
     public string FactContent { get; set; } = string.Empty;
     [Required]
     public int StreetcodeId { get; set; }
+    public int? Position { get; set; }
 }
