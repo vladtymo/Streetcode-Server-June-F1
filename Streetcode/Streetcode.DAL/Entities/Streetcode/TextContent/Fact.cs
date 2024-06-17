@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Streetcode.DAL.Entities.Media.Images;
 
@@ -11,6 +12,8 @@ public class Fact
     public string? Title { get; set; }
 
     public string? FactContent { get; set; }
+
+    public int? Position { get; set; }
 
     public int? ImageId { get; set; }
 

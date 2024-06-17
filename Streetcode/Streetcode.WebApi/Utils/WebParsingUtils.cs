@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Security;
 using System.Text;
 using Newtonsoft.Json;
 using Polly;
@@ -57,7 +58,28 @@ public class WebParsingUtils
 
         var clientHandler = new HttpClientHandler();
         clientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-        clientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+        clientHandler.ServerCertificateCustomValidationCallback += (message, cert, chain, errors) =>
+            {
+                // Anything that would have been accepted by default is OK
+                if (errors == SslPolicyErrors.None)
+                {
+                    return true;
+                }
+
+                // If there is something wrong other than a chain processing error, don't trust it.
+                if (errors != SslPolicyErrors.RemoteCertificateChainErrors)
+                {
+                    return false;
+                }
+
+                // If the reason for RemoteCertificateChainError is that the chain built empty, don't trust it.
+                if (chain.ChainStatus.Length == 0)
+                {
+                    return false;
+                }
+
+                return true;
+            };
 
         var retryPolicy = Policy.Handle<Exception>().WaitAndRetryAsync(
             3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
