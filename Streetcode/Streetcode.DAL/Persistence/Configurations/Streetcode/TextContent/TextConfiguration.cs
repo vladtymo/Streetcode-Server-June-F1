@@ -16,7 +16,7 @@ namespace Streetcode.DAL.Persistence.Configurations.Streetcode.TextContent
 
             builder.Property(t => t.Title)
                 .IsRequired()
-                .HasMaxLength(300);
+                .HasMaxLength(50);
 
             builder.Property(t => t.TextContent)
                 .IsRequired()

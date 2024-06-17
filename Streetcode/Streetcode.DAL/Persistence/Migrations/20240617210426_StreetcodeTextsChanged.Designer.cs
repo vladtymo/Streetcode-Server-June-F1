@@ -12,7 +12,7 @@ using Streetcode.DAL.Persistence;
 namespace Streetcode.DAL.Persistence.Migrations
 {
     [DbContext(typeof(StreetcodeDbContext))]
-    [Migration("20240617205216_StreetcodeTextsChanged")]
+    [Migration("20240617210426_StreetcodeTextsChanged")]
     partial class StreetcodeTextsChanged
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -715,8 +715,8 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("VideoUrl")
                         .HasMaxLength(500)
