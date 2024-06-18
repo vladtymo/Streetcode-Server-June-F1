@@ -13,7 +13,7 @@ public class YoutubeUrlAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
 
-        if (Uri.IsWellFormedUriString(url, UriKind.Absolute) && url.StartsWith("https://www.youtube.com/"))
+        if (Uri.IsWellFormedUriString(url, UriKind.Absolute) && (url.StartsWith("https://www.youtube.com/")|| (url.StartsWith("https://youtube.com/"))))
         {
             return ValidationResult.Success;
         }
