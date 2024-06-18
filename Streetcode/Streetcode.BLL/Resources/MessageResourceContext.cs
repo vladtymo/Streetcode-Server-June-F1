@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Streetcode.DAL.Entities.Sources;
 
 namespace Streetcode.BLL.Resources
 {
@@ -49,9 +50,14 @@ namespace Streetcode.BLL.Resources
             if (match.Success)
             {
                 // Capture the group that matched
-                if (match.Groups[1].Value == "StreetcodeArt") 
+                if (match.Groups[1].Value == "StreetcodeArt" ) 
                 {
                     return "Art";
+                }
+
+                if (match.Groups[1].Value == "SourceLinkCategory")
+                {
+                    return "Categories";
                 }
 
                 return match.Groups[1].Value;

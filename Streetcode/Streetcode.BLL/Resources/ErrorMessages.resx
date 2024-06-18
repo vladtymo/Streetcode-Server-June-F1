@@ -119,33 +119,27 @@
   </resheader>
   <data name="BigCustomError" xml:space="preserve">
     <value />
-    <comment>DeleteRelatedFigureHandler, CreateRelatedTermHandler, DeleteRelatedTermHandler, GetAllRelatedTermsByTermIdHandler</comment>
   </data>
   <data name="CanNotCreate" xml:space="preserve">
     <value>Cannot create team link</value>
   </data>
   <data name="EntityNotFound" xml:space="preserve">
     <value>Cannot find any {0}</value>
-    <comment>GetAllNewsHandler, GetAllCategoriesHandler, GetAllCategoryNamesHandler, CreateRelatedFigureHandler</comment>
   </data>
   <data name="EntityNotFoundWithStreetcode" xml:space="preserve">
     <value>Cannot find any {0} by a streetcode id: {1}</value>
-    <comment>GetArtsByStreetcodeIdHandler, GetAudioByStreetcodeIdQueryHandler, GetImageByStreetcodeIdHandler, GetStreetcodeArtByStreetcodeIdHandler, GetCategoryContentByStreetcodeIdHandler, GetFactByStreetcodeIdHandler, GetRelatedFiguresByStreetcodeIdHandler (2 words)</comment>
   </data>
   <data name="EntityNotFoundWithTitle" xml:space="preserve">
     <value>Cannot find any tag by the title: {1}</value>
   </data>
   <data name="EntityNotFoundWithUrl" xml:space="preserve">
-    <value>No news by entered Url - {url}</value>
-    <comment>GetNewsByUrlHandler</comment>
+    <value>No {0} by entered Url - {url}</value>
   </data>
   <data name="EntityWithIdNotFound" xml:space="preserve">
     <value>Cannot find any {0} with corresponding id: {1}</value>
-    <comment>DeleteAudioHandler, DeleteImageHandler, DeleteNewsHandler, GetNewsByIdHandler, DeletePartnerHandler, DeleteSoftStreetcodeHandler</comment>
   </data>
   <data name="EntityWithStreetcodeNotFound" xml:space="preserve">
     <value>Cannot find a {0} by a streetcode id: {1}, because such streetcode doesn`t exist</value>
-    <comment>GetVideoByStreetcodeIdHandler, GetPartnersByStreetcodeIdHandler, GetCategoriesByStreetcodeIdHandler, GetCategoryContentByStreetcodeIdHandler, GetTextByStreetcodeIdHandler</comment>
   </data>
   <data name="EntityWithStreetcodeTagNotFound" xml:space="preserve">
     <value>Cannot find any streetcode with corresponding tagid: {1}</value>
@@ -158,35 +152,33 @@
   </data>
   <data name="FailToCreateA" xml:space="preserve">
     <value>Failed to create a {0}</value>
-    <comment>CreatePartnerHandler, CreatePositionHandler</comment>
   </data>
   <data name="FailToCreateAn" xml:space="preserve">
     <value>Failed to create an {0}</value>
   </data>
   <data name="FailToDeleteA" xml:space="preserve">
     <value>Failed to delete a {0}</value>
-    <comment>DeletePartnerHandler</comment>
   </data>
   <data name="FailToDeleteAn" xml:space="preserve">
     <value>Failed to delete an {0}</value>
   </data>
   <data name="FailToMap" xml:space="preserve">
     <value>Cannot map streetcode to shortDTO</value>
-    <comment>CreateTeamLinkHandler</comment>
   </data>
   <data name="FailToParse" xml:space="preserve">
     <value>text was not parsed successfully</value>
   </data>
   <data name="FailToUpdate" xml:space="preserve">
     <value>Failed to update a {0}</value>
-    <comment>UpdatePartnerHandler</comment>
   </data>
   <data name="NoCustomError" xml:space="preserve">
     <value />
-    <comment>CreateInvoiceHandler, GetAllRelatedTermsQuery, GetRelatedTermByIdQuery, UpdateRelatedTermHandler, GetAllStreetcodesHandler, GetStreetcodeShortByIdHandler, GetAllToponymsHandler</comment>
   </data>
   <data name="StreetcodeIndexNotFound" xml:space="preserve">
     <value>Cannot find any streetcode with corresponding index: {1}</value>
+  </data>
+  <data name="StreetCodeIsNull" xml:space="preserve">
+    <value>The streetcode content is null</value>
   </data>
   <data name="StreetcodeNotExist" xml:space="preserve">
     <value>No streetcodes exist now</value>

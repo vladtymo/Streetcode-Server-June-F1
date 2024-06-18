@@ -106,7 +106,7 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No news by entered Url - {url}.
+        ///   Looks up a localized string similar to No {0} by entered Url - {url}.
         /// </summary>
         public static string EntityNotFoundWithUrl {
             get {
@@ -237,6 +237,15 @@ namespace Streetcode.BLL.Resources {
         public static string StreetcodeIndexNotFound {
             get {
                 return ResourceManager.GetString("StreetcodeIndexNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The streetcode content is null.
+        /// </summary>
+        public static string StreetCodeIsNull {
+            get {
+                return ResourceManager.GetString("StreetCodeIsNull", resourceCulture);
             }
         }
         
