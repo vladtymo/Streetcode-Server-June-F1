@@ -8,7 +8,7 @@ public class StreetcodeCoordinate : Coordinate
 {
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; }
+    public StreetcodeContent Streetcode { get; set; } = new();
 
-    public StatisticRecord StatisticRecord { get; set; }
+    public StatisticRecord StatisticRecord { get; set; } = new();
 }

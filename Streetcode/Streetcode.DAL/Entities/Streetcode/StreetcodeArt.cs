@@ -10,9 +10,9 @@ public class StreetcodeArt
 
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; }
+    public StreetcodeContent? Streetcode { get; set; } = new();
 
     public int ArtId { get; set; }
 
-    public Art? Art { get; set; }
+    public Art? Art { get; set; } = new();
 }

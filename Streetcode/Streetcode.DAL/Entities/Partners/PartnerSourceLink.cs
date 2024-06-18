@@ -10,9 +10,9 @@ public class PartnerSourceLink
 
     public LogoType LogoType { get; set; }
 
-    public string? TargetUrl { get; set; }
+    public string TargetUrl { get; set; } = string.Empty;
 
     public int PartnerId { get; set; }
 
-    public Partner? Partner { get; set; }
+    public Partner Partner { get; set; } = new();
 }

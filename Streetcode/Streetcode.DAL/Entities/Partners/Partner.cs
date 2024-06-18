@@ -9,7 +9,7 @@ public class Partner
 {
     public int Id { get; set; }
 
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     public int LogoId { get; set; }
 
@@ -17,13 +17,13 @@ public class Partner
 
     public bool IsVisibleEverywhere { get; set; }
 
-    public string? TargetUrl { get; set; }
+    public string TargetUrl { get; set; } = string.Empty;
 
-    public string? UrlTitle { get; set; }
+    public string UrlTitle { get; set; } = string.Empty;
 
-    public string? Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-    public Image? Logo { get; set; }
+    public Image Logo { get; set; } = new();
 
     public List<PartnerSourceLink> PartnerSourceLinks { get; set; } = new ();
 

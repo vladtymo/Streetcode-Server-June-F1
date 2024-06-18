@@ -10,10 +10,10 @@ namespace Streetcode.DAL.Entities.Team
 
         public LogoType LogoType { get; set; }
 
-        public string? TargetUrl { get; set; }
+        public string? TargetUrl { get; set; } = string.Empty;
 
         public int TeamMemberId { get; set; }
 
-        public TeamMember? TeamMember { get; set; }
+        public TeamMember? TeamMember { get; set; } = new();
     }
 }

@@ -9,8 +9,8 @@ namespace Streetcode.DAL.Entities.Toponyms
 
         public int ToponymId { get; set; }
 
-        public StreetcodeContent? Streetcode { get; set; }
+        public StreetcodeContent? Streetcode { get; set; } = new();
 
-        public Toponym? Toponym { get; set; }
+        public Toponym? Toponym { get; set; } = new();
     }
 }

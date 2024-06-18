@@ -13,20 +13,20 @@ namespace Streetcode.DAL.Entities.Team
     {
         public int Id { get; set; }
 
-        public string? FirstName { get; set; }
+        public string? FirstName { get; set; } = string.Empty;
 
-        public string? LastName { get; set; }
+        public string? LastName { get; set; } = string.Empty;
 
-        public string? Description { get; set; }
+        public string? Description { get; set; } = string.Empty;
 
         public bool IsMain { get; set; }
 
-        public List<TeamMemberLink>? TeamMemberLinks { get; set; }
+        public List<TeamMemberLink>? TeamMemberLinks { get; set; } = new();
 
-        public List<Positions>? Positions { get; set; }
+        public List<Positions>? Positions { get; set; } = new();
 
         public int ImageId { get; set; }
 
-        public Image? Image { get; set; }
+        public Image? Image { get; set; } = new();
     }
 }
