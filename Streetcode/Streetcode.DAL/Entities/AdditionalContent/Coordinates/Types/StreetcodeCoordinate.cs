@@ -10,5 +10,5 @@ public class StreetcodeCoordinate : Coordinate
 
     public StreetcodeContent? Streetcode { get; set; }
 
-    public StatisticRecord StatisticRecord { get; set; }
+    public StatisticRecord? StatisticRecord { get; set; }
 }

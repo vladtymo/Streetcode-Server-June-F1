@@ -7,5 +7,5 @@ public class ToponymCoordinate : Coordinate
 {
     public int ToponymId { get; set; }
 
-    public Toponym? Toponym { get; set; }
+    public Toponym? Toponym { get; set; } = new();
 }
