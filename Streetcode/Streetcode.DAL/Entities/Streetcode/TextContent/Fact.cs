@@ -9,9 +9,9 @@ public class Fact
 {
     public int Id { get; set; }
 
-    public string? Title { get; set; }
+    public string? Title { get; set; } = string.Empty;
 
-    public string? FactContent { get; set; }
+    public string? FactContent { get; set; } = string.Empty;
 
     public int? Position { get; set; }
 
@@ -21,5 +21,5 @@ public class Fact
 
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; }
+    public StreetcodeContent? Streetcode { get; set; } = new();
 }

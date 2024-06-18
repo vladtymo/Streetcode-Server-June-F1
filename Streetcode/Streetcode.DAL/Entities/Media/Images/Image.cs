@@ -12,13 +12,13 @@ public class Image
 {
     public int Id { get; set; }
 
-    public string? Base64 { get; set; }
+    public string? Base64 { get; set; } = string.Empty;
 
-    public string? BlobName { get; set; }
+    public string? BlobName { get; set; } = string.Empty;
 
-    public string? MimeType { get; set; }
+    public string? MimeType { get; set; } = string.Empty;
 
-    public ImageDetails? ImageDetails { get; set; }
+    public ImageDetails? ImageDetails { get; set; } = new();
 
     public List<StreetcodeContent> Streetcodes { get; set; } = new ();
 
@@ -26,10 +26,10 @@ public class Image
 
     public Art? Art { get; set; }
 
-    public Partner? Partner { get; set; }
+    public Partner? Partner { get; set; } = new();
 
     public List<SourceLinkCategory> SourceLinkCategories { get; set; } = new ();
 
     public News.News? News { get; set; }
-    public TeamMember? TeamMember { get; set; }
+    public TeamMember? TeamMember { get; set; } = new();
 }

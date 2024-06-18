@@ -19,11 +19,11 @@ public class Toponym
 
     public string? Community { get; set; }
 
-    public string StreetName { get; set; }
+    public string? StreetName { get; set; }
 
     public string? StreetType { get; set; }
 
     public List<StreetcodeContent> Streetcodes { get; set; } = new ();
 
-    public ToponymCoordinate Coordinate { get; set; }
+    public ToponymCoordinate? Coordinate { get; set; }
 }
