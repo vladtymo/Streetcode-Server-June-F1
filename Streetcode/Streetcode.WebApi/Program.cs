@@ -1,8 +1,11 @@
 using Hangfire;
 using Streetcode.BLL.Services.BlobStorageService;
-using Streetcode.WebApi.Extensions;
 using Streetcode.BLL.Resources;
+using Streetcode.WebApi.Extensions;
+using Streetcode.WebApi.Middlewares;
+
 using Streetcode.WebApi.Utils;
+using Streetcode.BLL.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureApplication();
@@ -25,6 +28,8 @@ else
 {
     app.UseHsts();
 }
+
+app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 await app.ApplyMigrations();
 

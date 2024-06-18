@@ -24,7 +24,8 @@ public class GetAllSubtitlesHandler : IRequestHandler<GetAllSubtitlesQuery, Resu
     public async Task<Result<IEnumerable<SubtitleDTO>>> Handle(GetAllSubtitlesQuery request, CancellationToken cancellationToken)
     {
         var subtitles = await _repositoryWrapper.SubtitleRepository.GetAllAsync();
-        if (subtitles is null)
+
+        if (subtitles.Count() == 0)
         {
             var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request);
 
