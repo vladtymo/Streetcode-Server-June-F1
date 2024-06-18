@@ -7,9 +7,9 @@ namespace Streetcode.DAL.Entities.Media.Images
     {
         public int Id { get; set; }
 
-        public string? Title { get; set; }
+        public string? Title { get; set; } = string.Empty;
 
-        public string? Alt { get; set; }
+        public string? Alt { get; set; } = string.Empty;
 
         public int ImageId { get; set; }
 

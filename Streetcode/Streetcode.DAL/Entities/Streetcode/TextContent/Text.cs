@@ -7,19 +7,17 @@ public class Text
 {
     public int Id { get; set; }
 
-    public string? Title { get; set; }
+    public string? Title { get; set; } = string.Empty;
 
-    public string? TextContent { get; set; }
+    public string? TextContent { get; set; } = string.Empty;
 
-    public string? AdditionalText { get; set; }
+    public string? AdditionalText { get; set; } = string.Empty;
 
-    [MaxLength(500)]
-    public string? VideoUrl { get; set; }
+    public string? VideoUrl { get; set; } = string.Empty;
 
-    [MaxLength(200)]
-    public string? Author { get; set; }
-  
+    public string? Author { get; set; } = string.Empty;
+
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; }
+    public StreetcodeContent? Streetcode { get; set; } = new();
 }
