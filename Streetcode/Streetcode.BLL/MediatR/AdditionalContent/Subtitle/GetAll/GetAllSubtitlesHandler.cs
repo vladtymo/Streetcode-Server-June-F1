@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.AdditionalContent.Subtitle.GetAll;
@@ -23,10 +24,9 @@ public class GetAllSubtitlesHandler : IRequestHandler<GetAllSubtitlesQuery, Resu
     public async Task<Result<IEnumerable<SubtitleDTO>>> Handle(GetAllSubtitlesQuery request, CancellationToken cancellationToken)
     {
         var subtitles = await _repositoryWrapper.SubtitleRepository.GetAllAsync();
-        subtitles = null;
         if (subtitles is null)
         {
-            const string errorMsg = $"Cannot find any subtitles";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request);
 
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));

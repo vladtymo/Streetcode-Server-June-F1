@@ -1,7 +1,7 @@
 using Hangfire;
 using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.WebApi.Extensions;
-using Streetcode.WebApi.Resources;
+using Streetcode.BLL.Resources;
 using Streetcode.WebApi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
