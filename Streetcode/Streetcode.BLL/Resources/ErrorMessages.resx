@@ -129,12 +129,11 @@
     <comment>GetAllNewsHandler, GetAllCategoriesHandler, GetAllCategoryNamesHandler, CreateRelatedFigureHandler</comment>
   </data>
   <data name="EntityNotFoundWithStreetcode" xml:space="preserve">
-    <value>Cannot find a {0} by a streetcode id: {1}</value>
+    <value>Cannot find any {0} by a streetcode id: {1}</value>
     <comment>GetArtsByStreetcodeIdHandler, GetAudioByStreetcodeIdQueryHandler, GetImageByStreetcodeIdHandler, GetStreetcodeArtByStreetcodeIdHandler, GetCategoryContentByStreetcodeIdHandler, GetFactByStreetcodeIdHandler, GetRelatedFiguresByStreetcodeIdHandler (2 words)</comment>
   </data>
   <data name="EntityNotFoundWithTitle" xml:space="preserve">
     <value>Cannot find any tag by the title: {1}</value>
-    <comment>not sure GetTagByTitle</comment>
   </data>
   <data name="EntityNotFoundWithUrl" xml:space="preserve">
     <value>No news by entered Url - {url}</value>

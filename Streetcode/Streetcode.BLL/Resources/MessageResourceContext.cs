@@ -40,7 +40,7 @@ namespace Streetcode.BLL.Resources
         private static string EntityFilter(string input)
         {
             // Define a regex pattern to match the entity name
-            var regex = new Regex(@"\.MediatR(?:\.AdditionalContent)?\.(\w+)\.");
+            var regex = new Regex(@"\.MediatR(?:\.AdditionalContent|\.Media|\.Sources|\.Streetcode|\.Timeline|\.Transactions)?\.(\w+)\.");
 
             // Match the pattern
             var match = regex.Match(input);
@@ -49,6 +49,11 @@ namespace Streetcode.BLL.Resources
             if (match.Success)
             {
                 // Capture the group that matched
+                if (match.Groups[1].Value == "StreetcodeArt") 
+                {
+                    return "Art";
+                }
+
                 return match.Groups[1].Value;
             }
             else

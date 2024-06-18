@@ -88,7 +88,7 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find a {0} by a streetcode id: {1}.
+        ///   Looks up a localized string similar to Cannot find any {0} by a streetcode id: {1}.
         /// </summary>
         public static string EntityNotFoundWithStreetcode {
             get {
