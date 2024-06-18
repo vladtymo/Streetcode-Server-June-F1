@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.DTO.AdditionalContent.Tag;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetByTransliterationUrl
@@ -30,7 +31,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetByTransliterationUrl
 
             if (streetcode == null)
             {
-                string errorMsg = $"Cannot find streetcode by transliteration url: {request.url}";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.StreetcodeUrlNotFound, request, request.url);
                 _logger.LogError(request, errorMsg);
                 return new Error(errorMsg);
             }
