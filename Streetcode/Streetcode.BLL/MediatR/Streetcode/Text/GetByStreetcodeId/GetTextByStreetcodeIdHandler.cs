@@ -31,9 +31,7 @@ public class GetTextByStreetcodeIdHandler : IRequestHandler<GetTextByStreetcodeI
         var texts = await _repositoryWrapper.TextRepository
             .GetAllAsync(text => text.StreetcodeId == request.StreetcodeId);
 
-        var enumerable = texts.ToList();
-
-        if (!enumerable.Any())
+        if (!texts.Any())
         {
             if (await _repositoryWrapper.StreetcodeRepository
                  .GetFirstOrDefaultAsync(s => s.Id == request.StreetcodeId) == null)
@@ -44,11 +42,11 @@ public class GetTextByStreetcodeIdHandler : IRequestHandler<GetTextByStreetcodeI
             }
         }
 
-        foreach (var text in enumerable)
+        foreach (var text in texts)
         {
             text.TextContent = await _textService.AddTermsTag(text.TextContent ?? "");
         }
 
-        return _mapper.Map<Result<IEnumerable<TextDTO>>>(enumerable);
+        return Result.Ok(_mapper.Map<IEnumerable<TextDTO>>(texts));
     }
 }
