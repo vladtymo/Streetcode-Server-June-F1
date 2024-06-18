@@ -9,8 +9,8 @@ namespace Streetcode.DAL.Entities.Partners
 
         public int PartnerId { get; set; }
 
-        public StreetcodeContent Streetcode { get; set; } = new();
+        public StreetcodeContent? Streetcode { get; set; }
 
-        public Partner Partner { get; set; } = new();
+        public Partner? Partner { get; set; }
     }
 }

@@ -8,9 +8,9 @@ public class Subtitle
 {
     public int Id { get; set; }
 
-    public string SubtitleText { get; set; } = string.Empty;
+    public string? SubtitleText { get; set; }
 
     public int StreetcodeId { get; set; }
 
-    public Streetcode.StreetcodeContent Streetcode { get; set; } = new();
+    public Streetcode.StreetcodeContent? Streetcode { get; set; }
 }

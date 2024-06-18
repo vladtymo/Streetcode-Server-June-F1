@@ -8,11 +8,11 @@ public class TransactionLink
 {
     public int Id { get; set; }
 
-    public string? UrlTitle { get; set; } = string.Empty;
+    public string? UrlTitle { get; set; }
 
-    public string? Url { get; set; } = string.Empty;
+    public string? Url { get; set; }
 
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; } = new();
+    public StreetcodeContent? Streetcode { get; set; }
 }

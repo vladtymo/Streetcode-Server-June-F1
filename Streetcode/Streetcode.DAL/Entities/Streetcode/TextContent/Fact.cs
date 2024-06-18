@@ -9,17 +9,17 @@ public class Fact
 {
     public int Id { get; set; }
 
-    public string Title { get; set; } = string.Empty;
+    public string? Title { get; set; }
 
-    public string FactContent { get; set; } = string.Empty;
+    public string? FactContent { get; set; }
 
     public int? Position { get; set; }
 
     public int? ImageId { get; set; }
 
-    public Image? Image { get; set; } = new();
+    public Image? Image { get; set; }
 
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; } = new();
+    public StreetcodeContent? Streetcode { get; set; }
 }

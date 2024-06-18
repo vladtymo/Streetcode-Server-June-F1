@@ -8,9 +8,9 @@ public class Tag
 {
     public int Id { get; set; }
 
-    public string Title { get; set; } = string.Empty;
+    public string Title { get; set; }
 
-    public IEnumerable<StreetcodeTagIndex>? StreetcodeTagIndices { get; set; }
+    public IEnumerable<StreetcodeTagIndex> StreetcodeTagIndices { get; set; }
 
-    public IEnumerable<StreetcodeContent>? Streetcodes { get; set; }
+    public IEnumerable<StreetcodeContent> Streetcodes { get; set; }
 }

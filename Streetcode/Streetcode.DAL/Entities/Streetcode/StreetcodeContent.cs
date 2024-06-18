@@ -22,17 +22,17 @@ public class StreetcodeContent
 
     public int Index { get; set; }
 
-    public string Teaser { get; set; } = string.Empty;
+    public string? Teaser { get; set; }
 
-    public string DateString { get; set; } = string.Empty;
+    public string? DateString { get; set; }
 
-    public string Alias { get; set; } = string.Empty;
+    public string? Alias { get; set; }
 
     public StreetcodeStatus Status { get; set; }
 
-    public string Title { get; set; } = string.Empty;
+    public string? Title { get; set; }
 
-    public string TransliterationUrl { get; set; } = string.Empty;
+    public string? TransliterationUrl { get; set; }
 
     public int ViewCount { get; set; }
 
@@ -48,13 +48,13 @@ public class StreetcodeContent
 
     public List<Text> Texts { get; set; } = new();
 
-    public Audio? Audio { get; set; } = new();
+    public Audio? Audio { get; set; }
 
     public List<StatisticRecord> StatisticRecords { get; set; } = new();
 
     public List<StreetcodeCoordinate> Coordinates { get; set; } = new();
 
-    public TransactionLink? TransactionLink { get; set; } = new();
+    public TransactionLink? TransactionLink { get; set; }
 
     public List<Toponym> Toponyms { get; set; } = new ();
 

@@ -11,12 +11,12 @@ namespace Streetcode.DAL.Entities.Analytics
         public int QrId { get; set; }
         public int Count { get; set; }
 
-        public string Address { get; set; } = string.Empty;
+        public string Address { get; set; }
 
         public int StreetcodeId { get; set; }
-        public StreetcodeContent Streetcode { get; set; } = new();
+        public StreetcodeContent? Streetcode { get; set; }
 
         public int StreetcodeCoordinateId { get; set; }
-        public StreetcodeCoordinate StreetcodeCoordinate { get; set; } = new();
+        public StreetcodeCoordinate StreetcodeCoordinate { get; set; }
      }
 }

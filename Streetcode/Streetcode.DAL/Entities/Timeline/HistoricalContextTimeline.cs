@@ -8,8 +8,8 @@ namespace Streetcode.DAL.Entities.Timeline
 
         public int TimelineId { get; set; }
 
-        public HistoricalContext? HistoricalContext { get; set; } = new();
+        public HistoricalContext? HistoricalContext { get; set; }
 
-        public TimelineItem? Timeline { get; set; } = new();
+        public TimelineItem? Timeline { get; set; }
     }
 }

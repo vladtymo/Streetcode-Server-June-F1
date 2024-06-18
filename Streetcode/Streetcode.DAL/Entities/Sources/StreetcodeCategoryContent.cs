@@ -6,12 +6,12 @@ namespace Streetcode.DAL.Entities.Sources;
 
 public class StreetcodeCategoryContent
 {
-    public string Text { get; set; } = string.Empty;
+    public string? Text { get; set; }
 
     public int SourceLinkCategoryId { get; set; }
 
     public int StreetcodeId { get; set; }
 
-    public SourceLinkCategory SourceLinkCategory { get; set; } = new();
-    public StreetcodeContent Streetcode { get; set; } = new();
+    public SourceLinkCategory? SourceLinkCategory { get; set; }
+    public StreetcodeContent? Streetcode { get; set; }
 }

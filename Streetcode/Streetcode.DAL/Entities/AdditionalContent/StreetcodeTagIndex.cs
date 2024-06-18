@@ -14,8 +14,8 @@ namespace Streetcode.DAL.Entities.AdditionalContent
 
         public int Index { get; set; }
 
-        public StreetcodeContent Streetcode { get; set; } = new();
+        public StreetcodeContent? Streetcode { get; set; }
 
-        public Tag Tag { get; set; } = new();
+        public Tag? Tag { get; set; }
     }
 }
