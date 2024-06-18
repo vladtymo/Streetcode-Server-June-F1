@@ -40,32 +40,19 @@ namespace Streetcode.BLL.Resources
 
         private static string EntityFilter(string input)
         {
-            // Define a regex pattern to match the entity name
-            var regex = new Regex(@"\.MediatR(?:\.AdditionalContent|\.Media|\.Sources|\.Streetcode|\.Timeline|\.Transactions)?\.(\w+)\.");
+            var parts = input.Split('.');
 
-            // Match the pattern
-            var match = regex.Match(input);
-
-            // Check if the match is successful
-            if (match.Success)
+            if (parts[^3] == "StreetcodeArt" ) 
             {
-                // Capture the group that matched
-                if (match.Groups[1].Value == "StreetcodeArt" ) 
-                {
-                    return "Art";
-                }
-
-                if (match.Groups[1].Value == "SourceLinkCategory")
-                {
-                    return "Categories";
-                }
-
-                return match.Groups[1].Value;
+                return "Art";
             }
-            else
+
+            if (parts[^3] == "SourceLinkCategory")
             {
-                return null!;
+                return "Categories";
             }
+
+            return parts[^3];
         }
     }
 }
