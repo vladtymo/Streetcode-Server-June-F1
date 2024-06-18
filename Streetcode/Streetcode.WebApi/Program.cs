@@ -3,6 +3,7 @@ using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.BLL.Resources;
 using Streetcode.WebApi.Extensions;
 using Streetcode.WebApi.Utils;
+using Streetcode.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureApplication();
