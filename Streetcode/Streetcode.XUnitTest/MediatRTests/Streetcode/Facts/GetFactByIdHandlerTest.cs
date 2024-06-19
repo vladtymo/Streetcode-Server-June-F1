@@ -16,7 +16,7 @@ using Xunit;
 
 public class GetFactByIdHandlerTest
 {
-    private const string ERRORMESSAGE = "Cannot find any fact with corresponding id: ";
+    private const string ERRORMESSAGE = "Cannot find any Fact with corresponding id: ";
 
     private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
     private readonly Mock<IMapper> mockMapper;

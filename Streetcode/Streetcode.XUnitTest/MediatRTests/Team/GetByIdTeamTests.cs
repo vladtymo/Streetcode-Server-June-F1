@@ -16,7 +16,7 @@
     /// </summary>
     public class GetByIdTeamTests
     {
-        private const string Errormsg = "Cannot find any team with corresponding id: ";
+        private const string Errormsg = "Cannot find any Team with corresponding id: ";
 
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<IRepositoryWrapper> _mockRepositoryWrapper;

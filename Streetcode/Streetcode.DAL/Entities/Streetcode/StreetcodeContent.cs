@@ -46,41 +46,41 @@ public class StreetcodeContent
 
     public int? AudioId { get; set; }
 
-    public List<Text> Texts { get; set; } = new();
+    public List<Text> Texts { get; set; }
 
     public Audio? Audio { get; set; }
 
-    public List<StatisticRecord> StatisticRecords { get; set; } = new();
+    public List<StatisticRecord> StatisticRecords { get; set; }
 
-    public List<StreetcodeCoordinate> Coordinates { get; set; } = new();
+    public List<StreetcodeCoordinate> Coordinates { get; set; }
 
     public TransactionLink? TransactionLink { get; set; }
 
-    public List<Toponym> Toponyms { get; set; } = new ();
+    public List<Toponym> Toponyms { get; set; }
 
-    public List<Image> Images { get; set; } = new ();
+    public List<Image> Images { get; set; }
 
-    public List<StreetcodeTagIndex> StreetcodeTagIndices { get; set; } = new (); // typo here Indices
+    public List<StreetcodeTagIndex> StreetcodeTagIndices { get; set; }
 
-    public List<Tag> Tags { get; set; } = new();
+    public List<Tag> Tags { get; set; }
 
-    public List<Subtitle> Subtitles { get; set; } = new ();
+    public List<Subtitle> Subtitles { get; set; }
 
-    public List<Fact> Facts { get; set; } = new ();
+    public List<Fact> Facts { get; set; }
 
-    public List<Video> Videos { get; set; } = new ();
+    public List<Video> Videos { get; set; }
 
-    public List<SourceLinkCategory> SourceLinkCategories { get; set; } = new ();
+    public List<SourceLinkCategory> SourceLinkCategories { get; set; }
 
-    public List<TimelineItem> TimelineItems { get; set; } = new ();
+    public List<TimelineItem> TimelineItems { get; set; }
 
-    public List<RelatedFigure> Observers { get; set; } = new ();
+    public List<RelatedFigure> Observers { get; set; }
 
-    public List<RelatedFigure> Targets { get; set; } = new ();
+    public List<RelatedFigure> Targets { get; set; }
 
-    public List<Partner> Partners { get; set; } = new ();
+    public List<Partner> Partners { get; set; }
 
-    public List<StreetcodeArt> StreetcodeArts { get; set; } = new ();
+    public List<StreetcodeArt> StreetcodeArts { get; set; }
 
-    public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; } = new();
+    public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; }
 }

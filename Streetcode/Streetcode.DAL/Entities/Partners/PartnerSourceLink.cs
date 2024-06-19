@@ -14,5 +14,5 @@ public class PartnerSourceLink
 
     public int PartnerId { get; set; }
 
-    public Partner? Partner { get; set; } = new();
+    public Partner? Partner { get; set; }
 }

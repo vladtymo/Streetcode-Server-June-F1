@@ -16,7 +16,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
 
     public class GetFactByStreetcodeIdHandlerTests
     {
-        private const string ERRORMESSAGE = "Cannot find any fact by the streetcode id: ";
+        private const string ERRORMESSAGE = "Cannot find any Fact by a streetcode id: ";
 
         private readonly Mock<IRepositoryWrapper> _mockRepositoryWrapper;
         private readonly Mock<IMapper> _mockMapper;

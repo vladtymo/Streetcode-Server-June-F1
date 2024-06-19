@@ -16,7 +16,7 @@ public class SourceLinkCategory
 
     public Image? Image { get; set; }
 
-    public List<StreetcodeContent> Streetcodes { get; set; } = new ();
+    public List<StreetcodeContent> Streetcodes { get; set; }
 
-    public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; } = new ();
+    public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; }
 }

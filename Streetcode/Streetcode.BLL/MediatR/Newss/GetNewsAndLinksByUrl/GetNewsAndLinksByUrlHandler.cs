@@ -7,6 +7,7 @@ using Streetcode.DAL.Entities.News;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 
 namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
 {
@@ -34,7 +35,7 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
 
             if (newsDTO is null)
             {
-                string errorMsg = $"No news by entered Url - {url}";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithUrl, request, url);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
@@ -89,7 +90,7 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
 
             if (newsDTOWithUrls.News is null)
             {
-                string errorMsg = $"No news by entered Url - {url}";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithUrl, request, url);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }

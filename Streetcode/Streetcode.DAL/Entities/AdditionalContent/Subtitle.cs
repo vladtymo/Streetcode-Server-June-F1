@@ -12,5 +12,5 @@ public class Subtitle
 
     public int StreetcodeId { get; set; }
 
-    public Streetcode.StreetcodeContent? Streetcode { get; set; } = new();
+    public Streetcode.StreetcodeContent? Streetcode { get; set; }
 }
