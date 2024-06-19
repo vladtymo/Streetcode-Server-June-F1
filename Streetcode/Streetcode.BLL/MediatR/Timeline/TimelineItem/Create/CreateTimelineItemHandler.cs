@@ -6,7 +6,6 @@ using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-
 namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
 {
     public class CreateTimelineItemHandler : IRequestHandler<CreateTimelineItemCommand, Result<CreateTimelineItemDTO>>
@@ -39,7 +38,6 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
                 newTimelineItem.HistoricalContextTimelines.Clear();
                 await _repositoryWrapper.TimelineRepository.CreateAsync(newTimelineItem);
                 await _repositoryWrapper.SaveChangesAsync();
-
                 foreach (var hcDto in request.newTimeLine.HistoricalContexts!)
                 {
                     var historicalContext = await _repositoryWrapper.HistoricalContextRepository.GetFirstOrDefaultAsync(
