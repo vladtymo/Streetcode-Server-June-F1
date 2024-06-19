@@ -2,10 +2,8 @@
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
-using Streetcode.BLL.DTO.Transactions;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Interfaces.Text;
-using Streetcode.BLL.MediatR.ResultVariations;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Text.GetByStreetcodeId;
@@ -25,7 +23,6 @@ public class GetTextByStreetcodeIdHandler : IRequestHandler<GetTextByStreetcodeI
         _logger = logger;
     }
 
-    // TODO: should be updated to return all TextDTO by StreetcodeId ???
     public async Task<Result<IEnumerable<TextDTO>>> Handle(GetTextByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
         var texts = await _repositoryWrapper.TextRepository

@@ -23,6 +23,7 @@ namespace Streetcode.BLL.Services.Text
 
         public Regex Pattern { get; private set; }
 
+        // TODO: it should be optimized
         public async Task<string> AddTermsTag(string text)
         {
             _text.Clear();
