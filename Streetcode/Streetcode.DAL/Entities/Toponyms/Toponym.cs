@@ -23,7 +23,7 @@ public class Toponym
 
     public string? StreetType { get; set; }
 
-    public List<StreetcodeContent> Streetcodes { get; set; } = new ();
+    public List<StreetcodeContent> Streetcodes { get; set; }
 
     public ToponymCoordinate? Coordinate { get; set; }
 }

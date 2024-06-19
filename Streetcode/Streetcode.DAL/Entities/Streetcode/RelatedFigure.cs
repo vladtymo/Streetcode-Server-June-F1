@@ -7,9 +7,9 @@ public class RelatedFigure
 {
     public int ObserverId { get; set; }
 
-    public StreetcodeContent Observer { get; set; } = new();
+    public StreetcodeContent Observer { get; set; }
 
     public int TargetId { get; set; }
 
-    public StreetcodeContent Target { get; set; } = new();
+    public StreetcodeContent Target { get; set; }
 }

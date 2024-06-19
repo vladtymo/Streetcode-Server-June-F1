@@ -32,7 +32,7 @@ namespace Streetcode.DAL.Entities.Payment
         public string Footer { get; set; } = string.Empty;
 
         [JsonProperty("tax")]
-        public List<int> Tax { get; set; } = new();
+        public List<int> Tax { get; set; }
 
         [JsonProperty("uktzed")]
         public string Uktzed { get; set; } = string.Empty;
