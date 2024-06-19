@@ -9,5 +9,5 @@ public class HistoricalContext
 
     public string? Title { get; set; }
 
-    public List<HistoricalContextTimeline> HistoricalContextTimelines { get; set; }
+    public List<HistoricalContextTimeline> HistoricalContextTimelines { get; set; } = new ();
 }
