@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.AdditionalContent.Coordinate.GetByStreetcodeId;
@@ -24,8 +25,9 @@ public class GetCoordinatesByStreetcodeIdHandler : IRequestHandler<GetCoordinate
     {
         if ((await _repositoryWrapper.StreetcodeRepository.GetFirstOrDefaultAsync(s => s.Id == request.StreetcodeId)) is null)
         {
-            return Result.Fail(
-                new Error($"Cannot find a coordinates by a streetcode id: {request.StreetcodeId}, because such streetcode doesn`t exist"));
+            var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.EntityWithStreetcodeNotFound, request, request.StreetcodeId);
+
+            return Result.Fail(new Error(errorMsgNull));
         }
 
         var coordinates = await _repositoryWrapper.StreetcodeCoordinateRepository
@@ -33,7 +35,7 @@ public class GetCoordinatesByStreetcodeIdHandler : IRequestHandler<GetCoordinate
 
         if (coordinates is null)
         {
-            string errorMsg = $"Cannot find a coordinates by a streetcode id: {request.StreetcodeId}";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithStreetcode, request, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

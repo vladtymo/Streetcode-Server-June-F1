@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using NLog.Targets;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -28,14 +29,14 @@ public class CreateRelatedFigureHandler : IRequestHandler<CreateRelatedFigureCom
 
         if (observerEntity is null)
         {
-            string errorMsg = $"No existing streetcode with id: {request.ObserverId}";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.StreetcodeIndexNotFound, request, request.ObserverId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
         if (targetEntity is null)
         {
-            string errorMsg = $"No existing streetcode with id: {request.TargetId}";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.StreetcodeIndexNotFound, request, request.TargetId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

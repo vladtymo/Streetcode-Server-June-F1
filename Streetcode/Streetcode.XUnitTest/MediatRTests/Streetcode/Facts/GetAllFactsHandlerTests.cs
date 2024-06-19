@@ -12,7 +12,7 @@
 
     public class GetAllFactsHandlerTests
     {
-        private const string ERRORMESSAGE = "Cannot find any fact";
+        private const string ERRORMESSAGE = "Cannot find any Fact";
 
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<IMapper> mockMapper;

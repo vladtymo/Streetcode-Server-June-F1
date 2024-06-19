@@ -8,6 +8,7 @@ using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Enums;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.BLL.Resources;
 
 namespace Streetcode.BLL.MediatR.Streetcode.RelatedFigure.GetByStreetcodeId;
 
@@ -30,7 +31,7 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
 
         if (relatedFigureIds is null)
         {
-            string errorMsg = $"Cannot find any related figures by a streetcode id: {request.StreetcodeId}";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithStreetcode, request, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -42,7 +43,7 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
 
         if (relatedFigures is null)
         {
-            string errorMsg = $"Cannot find any related figures by a streetcode id: {request.StreetcodeId}";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithStreetcode, request, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
