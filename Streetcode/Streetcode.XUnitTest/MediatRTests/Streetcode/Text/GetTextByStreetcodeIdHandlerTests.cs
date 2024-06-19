@@ -121,28 +121,24 @@ public class GetTextByStreetcodeIdHandlerTests
     {
         mockRepo.Setup(repo => repo.TextRepository.GetAllAsync(
                 It.IsAny<Expression<Func<Text, bool>>>(),
-                It.IsAny<Func<IQueryable<Text>,
-                    IIncludableQueryable<Text, object>>>()))
-            .ReturnsAsync(textList);
+                It.IsAny<Func<IQueryable<Text>, IIncludableQueryable<Text, object>>>()))
+            .ReturnsAsync(textList.ToList());
 
-       if (streetcodeExists)
-       {
-           mockRepo.Setup(repo => repo.StreetcodeRepository.GetFirstOrDefaultAsync(
-                   It.IsAny<Expression<Func<StreetcodeContent, StreetcodeContent>>>(),
-                   It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
-                   It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
-               .ReturnsAsync(new StreetcodeContent { Id = streetcodeId });
-       }
-       else
-       {
-           mockRepo.Setup(repo => repo.StreetcodeRepository.GetFirstOrDefaultAsync(
-                   It.IsAny<Expression<Func<StreetcodeContent, StreetcodeContent>>>(),
-                   It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
-                   It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
-               .ReturnsAsync((StreetcodeContent)null);
-       }
+        if (streetcodeExists)
+        {
+            mockRepo.Setup(repo => repo.StreetcodeRepository.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
+                    It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
+                .ReturnsAsync(new StreetcodeContent { Id = streetcodeId });
+        }
+        else
+        {
+            mockRepo.Setup(repo => repo.StreetcodeRepository.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
+                    It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
+                .ReturnsAsync((StreetcodeContent)null!);
+        }
     }
-
 
     private void MockMapper(IEnumerable<TextDTO> textDtoList)
     {
