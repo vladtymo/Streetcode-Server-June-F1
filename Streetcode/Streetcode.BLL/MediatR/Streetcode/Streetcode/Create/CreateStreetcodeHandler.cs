@@ -3,7 +3,8 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Streetcode.Streetcode.GetAll;
+using Streetcode.BLL.Util;
+using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
@@ -21,9 +22,33 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             _logger = logger;
         }
 
-        public Task<Result<CreateStreetcodeDTO>> Handle(CreateStreetcodeCommand request, CancellationToken cancellationToken)
+        public async Task<Result<CreateStreetcodeDTO>> Handle(CreateStreetcodeCommand request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var newStreetcode = _mapper.Map<StreetcodeContent>(request.newStreetcode);
+            var repositoryStreetcode = _repositoryWrapper.StreetcodeRepository;
+
+            if (newStreetcode is null)
+            {
+                const string errorMsg = "New Streetcode cannot be null";
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(new Error(errorMsg));
+            }
+
+            newStreetcode.DateString = DateToStringConverter.CreateDateString(newStreetcode.EventStartOrPersonBirthDate, newStreetcode.EventEndOrPersonDeathDate);
+
+            var entity = await repositoryStreetcode.CreateAsync(newStreetcode);
+            var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
+
+            if (resultIsSuccess)
+            {
+                return Result.Ok(_mapper.Map<CreateStreetcodeDTO>(entity));
+            }
+            else
+            {
+                const string errorMsg = "Failed to create a Streetcode";
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(new Error(errorMsg));
+            }
         }
     }
 }
