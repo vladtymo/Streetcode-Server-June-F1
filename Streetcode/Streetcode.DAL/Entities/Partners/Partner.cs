@@ -25,7 +25,7 @@ public class Partner
 
     public Image? Logo { get; set; }
 
-    public List<PartnerSourceLink> PartnerSourceLinks { get; set; }
+    public List<PartnerSourceLink> PartnerSourceLinks { get; set; } = new ();
 
-    public List<StreetcodeContent> Streetcodes { get; set; }
+    public List<StreetcodeContent> Streetcodes { get; set; } = new ();
 }
