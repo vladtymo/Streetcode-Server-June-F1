@@ -11,5 +11,5 @@ public class Term
 
     public string? Description { get; set; } = string.Empty;
 
-    public List<RelatedTerm> RelatedTerms { get; set; }
+    public List<RelatedTerm> RelatedTerms { get; set; } = new ();
 }

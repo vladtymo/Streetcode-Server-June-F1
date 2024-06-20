@@ -20,7 +20,7 @@ public class Image
 
     public ImageDetails? ImageDetails { get; set; }
 
-    public List<StreetcodeContent> Streetcodes { get; set; }
+    public List<StreetcodeContent> Streetcodes { get; set; } = new();
 
     public List<Fact> Facts { get; set; }
 
@@ -28,7 +28,7 @@ public class Image
 
     public Partner? Partner { get; set; }
 
-    public List<SourceLinkCategory> SourceLinkCategories { get; set; }
+    public List<SourceLinkCategory> SourceLinkCategories { get; set; } = new();
 
     public News.News? News { get; set; }
     public TeamMember? TeamMember { get; set; }
