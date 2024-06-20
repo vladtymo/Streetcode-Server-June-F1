@@ -29,6 +29,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Toponyms.StreetCodeRecord
             // Arrange
             var query = new DeleteStreetcodeRecordQuery(1, 2);
             var handler = new DeleteStreetcodeRecordHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
+            _wrapperMock.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
             _wrapperMock.Setup(obj => obj.StreetcodeToponymRepository.GetFirstOrDefaultAsync(
                                                                      It.IsAny<Expression<Func<StreetcodeToponym, bool>>>(), default))
                                                                      .ReturnsAsync(_record);

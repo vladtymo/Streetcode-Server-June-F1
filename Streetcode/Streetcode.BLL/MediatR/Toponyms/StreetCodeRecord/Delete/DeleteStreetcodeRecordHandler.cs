@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Toponyms;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Delete
@@ -26,22 +27,24 @@ namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Delete
                                                                                                           p.ToponymId == request.ToponymId);
             if (record == null)
             {
-                const string errorMsg = "No record with such id";
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(errorMsg);
+                var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.FailToConvertNull, request);
+                _logger.LogError(request, errorMsgNull);
+                return Result.Fail(new Error(errorMsgNull));
             }
 
-            try
+            _repositoryWrapper.StreetcodeToponymRepository.Delete(record);
+            _repositoryWrapper.SaveChanges();
+
+            var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
+
+            if (!resultIsSuccess)
             {
-                _repositoryWrapper.StreetcodeToponymRepository.Delete(record);
-                _repositoryWrapper.SaveChanges();
-                return Result.Ok(_mapper.Map<StreetcodeRecordDTO>(record));
+                const string errorMsg = "Failed to create a team";
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(new Error(errorMsg));
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
-            }
+
+            return Result.Ok(_mapper.Map<StreetcodeRecordDTO>(record));
         }
     }
 }
