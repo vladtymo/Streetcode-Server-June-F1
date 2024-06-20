@@ -18,6 +18,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
+using Streetcode.BLL.Resources;
 
 public class GetCategoriesByStreetcodeIdHandlerTests
 {
@@ -64,7 +65,9 @@ public class GetCategoriesByStreetcodeIdHandlerTests
     {
         // Arrange
         var request = new GetCategoriesByStreetcodeIdQuery(1);
-        IError error = new Error($"Cant find any source category with the streetcode id {request.StreetcodeId}");
+        var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithStreetcode, request, request.StreetcodeId);
+
+        IError error = new Error(errorMsg);
 
         _repositoryWrapperMock.Setup(repo => repo.SourceCategoryRepository.GetAllAsync(
             It.IsAny<Expression<Func<SourceLinkCategory, bool>>>(),

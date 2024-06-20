@@ -19,7 +19,7 @@ public class TimelineItem
 
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; }
+    public StreetcodeContent? Streetcode { get; set; } 
 
     public List<HistoricalContextTimeline> HistoricalContextTimelines { get; set; } = new ();
 }

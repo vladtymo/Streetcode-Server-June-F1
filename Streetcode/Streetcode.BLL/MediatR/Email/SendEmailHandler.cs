@@ -2,6 +2,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Email;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 
 namespace Streetcode.BLL.MediatR.Email
@@ -28,7 +29,7 @@ namespace Streetcode.BLL.MediatR.Email
             }
             else
             {
-                const string errorMsg = $"Failed to send email message";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailSendEmail, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

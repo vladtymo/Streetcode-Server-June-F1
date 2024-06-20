@@ -4,6 +4,7 @@ using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.AdditionalContent.Tag.GetByStreetcodeId;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.GetTagByTitle;
@@ -27,7 +28,7 @@ public class GetTagByTitleHandler : IRequestHandler<GetTagByTitleQuery, Result<T
 
         if (tag is null)
         {
-            string errorMsg = $"Cannot find any tag by the title: {request.Title}";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithTitle, request, request.Title);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

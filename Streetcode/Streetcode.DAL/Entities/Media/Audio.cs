@@ -16,5 +16,5 @@ public class Audio
 
     public string? Base64 { get; set; } = string.Empty;
 
-    public StreetcodeContent? Streetcode { get; set; } = new();
+    public StreetcodeContent? Streetcode { get; set; }
 }

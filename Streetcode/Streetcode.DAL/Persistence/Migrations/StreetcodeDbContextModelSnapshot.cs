@@ -837,6 +837,9 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Title")
+                        .IsUnique();
+
                     b.ToTable("historical_contexts", "timeline");
                 });
 
@@ -1553,14 +1556,12 @@ namespace Streetcode.DAL.Persistence.Migrations
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Toponyms.Toponym", b =>
                 {
-                    b.Navigation("Coordinate")
-                        .IsRequired();
+                    b.Navigation("Coordinate");
                 });
 
             modelBuilder.Entity("Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types.StreetcodeCoordinate", b =>
                 {
-                    b.Navigation("StatisticRecord")
-                        .IsRequired();
+                    b.Navigation("StatisticRecord");
                 });
 #pragma warning restore 612, 618
         }

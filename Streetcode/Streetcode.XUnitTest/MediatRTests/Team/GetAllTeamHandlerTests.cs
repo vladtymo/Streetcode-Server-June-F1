@@ -16,7 +16,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
     /// </summary>
     public class GetAllTeamHandlerTests
     {
-        private const string ErrorMsg = "Cannot find any team";
+        private const string ErrorMsg = "Cannot find any Team";
 
         private readonly Mock<IMapper> mockMapper;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;

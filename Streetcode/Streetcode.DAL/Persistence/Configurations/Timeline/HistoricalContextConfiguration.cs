@@ -17,6 +17,8 @@ namespace Streetcode.DAL.Persistence.Configurations.Timeline
             builder.Property(h => h.Title)
                 .IsRequired()
                 .HasMaxLength(50);
+            
+            builder.HasIndex(h => h.Title).IsUnique();
         }
     }
 }
