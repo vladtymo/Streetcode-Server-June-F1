@@ -41,14 +41,25 @@ public static class ServiceCollectionExtensions
         services.AddFeatureManagement();
         var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(currentAssemblies);
-        services.AddMediatR(currentAssemblies);
-
+        services.AddMediatR(currentAssemblies);        
         services.AddScoped<IBlobService, BlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInstagramService, InstagramService>();
-        services.AddScoped<ITextService, AddTermsToTextService>();
+        services.AddScoped<ITextService, AddTermsToTextService>();       
+    }
+
+    public static void AddCachingServices(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
+
+        var reddisConStr = configuration.GetSection(environment).GetConnectionString("ReddisConnection");
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = reddisConStr;
+        });
     }
 
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
