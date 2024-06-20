@@ -82,8 +82,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         {
             // Arrange
             _mapperMock.Setup(obj => obj.Map<PartnerDTO>(It.IsAny<object>())).Returns(new PartnerDTO());
-            _mapperMock.Setup(obj => obj.Map<Partner>(It.IsAny<object>())).Returns(nullPartner);
-            _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(nullPartner);
+            _mapperMock.Setup(obj => obj.Map<Partner>(It.IsAny<object>())).Returns(_nullPartner);
+            _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(_nullPartner);
             _wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(new List<StreetcodeContent>());
 
             CreatePartnerQuery request = new CreatePartnerQuery(_createPartnerDTO);
