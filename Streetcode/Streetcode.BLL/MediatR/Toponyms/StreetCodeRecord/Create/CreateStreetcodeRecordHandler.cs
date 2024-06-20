@@ -33,9 +33,14 @@ namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Create
                 return Result.Fail(new Error(errorMsgNull));
             }
 
-           /* var existingIndex = await _repository.StreetcodeToponymRepository.GetFirstOrDefaultAsync(
-                predicate: x => newRecord.Streetcode.Index == x.Toponym.Streetcodes.Index);*/
+            var existingIndex = newRecord.Toponym.Streetcodes.Any(s => s.Index == newRecord.Streetcode.Index);
 
+            if(existingIndex)
+            {
+                var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.StreetcodeAlreadyExist, request);
+                _logger.LogError(request, errorMsgNull);
+                return Result.Fail(new Error(errorMsgNull));
+            }
 
             var createdRecord = await _repository.StreetcodeToponymRepository.CreateAsync(newRecord);
 

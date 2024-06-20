@@ -20,7 +20,9 @@ namespace Streetcode.XUnitTest.MediatRTests.Toponyms.StreetCodeRecord
         private readonly Mock<IMapper> _mockMapper;
         private readonly CreateStreetcodeRecordHandler _handler;
         private readonly Entity _recordEntity;
+        private readonly Entity _recordEntityError;
         private readonly EntityDTO _recordDTO;
+        private readonly EntityDTO _recordDTOError;
 
         public CreateStreetcodeRecordHandlerTests()
         {
@@ -33,7 +35,10 @@ namespace Streetcode.XUnitTest.MediatRTests.Toponyms.StreetCodeRecord
             {
                 StreetcodeId = 1, 
                 ToponymId = 1,
-                Streetcode = new StreetcodeContent(),
+                Streetcode = new StreetcodeContent()
+                {
+                    Index = 1,
+                },
                 Toponym = new Toponym(),
             };
 
@@ -41,8 +46,51 @@ namespace Streetcode.XUnitTest.MediatRTests.Toponyms.StreetCodeRecord
             {
                 StreetcodeId = 1,
                 ToponymId = 1,
-                Streetcode = new StreetcodeDTO(),
+                Streetcode = new StreetcodeDTO()
+                {
+                    Index = 1,
+                },
                 Toponym = new ToponymDTO(),
+            };
+
+            _recordEntityError = new Entity()
+            {
+                StreetcodeId = 1,
+                ToponymId = 1,
+                Streetcode = new StreetcodeContent()
+                {
+                    Index = 1,
+                },
+                Toponym = new Toponym()
+                {
+                    Streetcodes = new List<StreetcodeContent>
+                    {
+                        new StreetcodeContent()
+                        {
+                            Index = 1,
+                        }
+                    }
+                },
+            };
+
+            _recordDTOError = new EntityDTO()
+            {
+                StreetcodeId = 1,
+                ToponymId = 1,
+                Streetcode = new StreetcodeDTO()
+                {
+                    Index = 1,
+                },
+                Toponym = new ToponymDTO()
+                {
+                    Streetcodes = new List<StreetcodeDTO>
+                    {
+                        new StreetcodeDTO()
+                        {
+                            Index = 1,
+                        }
+                    }
+                },
             };
         }
 
@@ -61,6 +109,20 @@ namespace Streetcode.XUnitTest.MediatRTests.Toponyms.StreetCodeRecord
         }
 
         [Fact]
+        public async Task Handle_Should_ReturnFail_WhenSaveChangesError()
+        {
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<EntityDTO>())).Returns(_recordEntity);
+            _mockMapper.Setup(m => m.Map<EntityDTO>(It.IsAny<Entity>())).Returns(_recordDTO);
+            _mockRepositoryWrapper.Setup(r => r.StreetcodeToponymRepository.CreateAsync(_recordEntity)).ReturnsAsync(_recordEntity);
+            _mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(0);
+            CreateStreetcodeRecordCommand request = new CreateStreetcodeRecordCommand(_recordDTO);
+
+            var result = await _handler.Handle(request, CancellationToken.None);
+
+            Assert.True(result.Errors.Any());
+        }
+
+        [Fact]
         public async Task Handle_Should_ReturnFail_WhenRecordIsNull()
         {
             _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<EntityDTO>())).Returns((Entity)null);
@@ -68,6 +130,20 @@ namespace Streetcode.XUnitTest.MediatRTests.Toponyms.StreetCodeRecord
             _mockRepositoryWrapper.Setup(r => r.StreetcodeToponymRepository.CreateAsync(_recordEntity)).ReturnsAsync(_recordEntity);
             _mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
             CreateStreetcodeRecordCommand request = new CreateStreetcodeRecordCommand(_recordDTO);
+
+            var result = await _handler.Handle(request, CancellationToken.None);
+
+            Assert.True(result.Errors.Any());
+        }
+
+        [Fact]
+        public async Task Handle_Should_ReturnFail_WhenStreetcodeIndexNotUnique()
+        {
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<EntityDTO>())).Returns(_recordEntityError);
+            _mockMapper.Setup(m => m.Map<EntityDTO>(It.IsAny<Entity>())).Returns(_recordDTOError);
+            _mockRepositoryWrapper.Setup(r => r.StreetcodeToponymRepository.CreateAsync(_recordEntityError)).ReturnsAsync(_recordEntityError);
+            _mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
+            CreateStreetcodeRecordCommand request = new CreateStreetcodeRecordCommand(_recordDTOError);
 
             var result = await _handler.Handle(request, CancellationToken.None);
 
