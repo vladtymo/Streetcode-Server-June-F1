@@ -1,9 +1,8 @@
 ﻿using FluentResults;
-using MediatR;
-using Streetcode.BLL.DTO.Media.Audio;
 using Streetcode.BLL.DTO.Sources;
+using Streetcode.BLL.Validations;
 
 namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.UpdateContent
 {
-    public record CategoryContentUpdateCommand(CategoryContentUpdateDTO updatedContent) : IRequest<Result<StreetcodeCategoryContentDTO>>;
+    public record CategoryContentUpdateCommand(CategoryContentUpdateDTO updatedContent) : IValidatableRequest<Result<StreetcodeCategoryContentDTO>>;
 }

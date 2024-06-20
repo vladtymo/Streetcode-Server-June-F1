@@ -1,8 +1,8 @@
 ﻿using FluentResults;
-using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
+using Streetcode.BLL.Validations;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Facts.Update
 {
-    public record UpdateFactCommand(FactDto Fact) : IRequest<Result<FactDto>>;
+    public record UpdateFactCommand(FactUpdateCreateDto Fact) : IValidatableRequest<Result<FactDto>>;
 }

@@ -5,9 +5,7 @@ namespace Streetcode.BLL.DTO.Timeline.Create;
 
 public class CreateTimelineItemDTO
 {
-    [MaxLength(26)]
     public string Title { get; set; } = string.Empty;
-    [MaxLength(400)]
     public string Description { get; set; } = string.Empty;
     
     public DateTime Date { get; set; }
@@ -15,6 +13,5 @@ public class CreateTimelineItemDTO
 
     public List<HistoricalContextDTO>? HistoricalContexts { get; set; } = new List<HistoricalContextDTO>();
     
-    [Required]
     public int StreetCodeId { get; set; }
 }
