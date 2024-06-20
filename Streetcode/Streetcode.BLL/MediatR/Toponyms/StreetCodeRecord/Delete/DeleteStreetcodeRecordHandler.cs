@@ -26,7 +26,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Delete
                                                                                                           p.ToponymId == request.ToponymId);
             if (record == null)
             {
-                const string errorMsg = "No partner with such id";
+                const string errorMsg = "No record with such id";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
