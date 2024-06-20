@@ -33,10 +33,10 @@ public class CreateTextCommandHandler : IRequestHandler<CreateTextCommand, Resul
         }
 
         var createdText = await _repository.TextRepository.CreateAsync(newText);
-        
+
         var isSuccessResult = await _repository.SaveChangesAsync() > 0;
-        
-        if(!isSuccessResult)
+
+        if (!isSuccessResult)
         {
             const string errorMsg = "Cannot save changes in the database after Text creation!";
             _logger.LogError(request, errorMsg);
