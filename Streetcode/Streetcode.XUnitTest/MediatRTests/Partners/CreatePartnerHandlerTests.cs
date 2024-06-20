@@ -16,7 +16,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<IRepositoryWrapper> _wrapperMock;
         private readonly Mock<ILoggerService> _loggerMock;
-        private Partner nullPartner;
+        private Partner _nullPartner;
         private PartnerDTO _partnerDTO = new PartnerDTO() { Id = 2 };
         private Partner _partner = new () { Id = 2 };
         private List<StreetcodeContent> _streetcodes = new()
