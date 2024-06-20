@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Streetcode.DAL.Entities.Streetcode.TextContent;
+﻿namespace Streetcode.DAL.Entities.Streetcode.TextContent;
 
 public class Text
 {
@@ -19,5 +16,5 @@ public class Text
 
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; } = new();
+    public StreetcodeContent? Streetcode { get; set; }
 }

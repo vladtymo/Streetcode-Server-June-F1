@@ -46,28 +46,28 @@ public class StreetcodeContent
 
     public int? AudioId { get; set; }
 
-    public List<Text> Texts { get; set; } = new();
+    public List<Text> Texts { get; set; }
 
     public Audio? Audio { get; set; }
 
-    public List<StatisticRecord> StatisticRecords { get; set; } = new();
+    public List<StatisticRecord> StatisticRecords { get; set; } = new ();
 
-    public List<StreetcodeCoordinate> Coordinates { get; set; } = new();
+    public List<StreetcodeCoordinate> Coordinates { get; set; } = new ();
 
-    public TransactionLink? TransactionLink { get; set; }
+    public TransactionLink? TransactionLink { get; set; } 
 
     public List<Toponym> Toponyms { get; set; } = new ();
 
     public List<Image> Images { get; set; } = new ();
 
-    public List<StreetcodeTagIndex> StreetcodeTagIndices { get; set; } = new (); // typo here Indices
+    public List<StreetcodeTagIndex> StreetcodeTagIndices { get; set; } = new ();
 
-    public List<Tag> Tags { get; set; } = new();
+    public List<Tag> Tags { get; set; } = new ();
 
     public List<Subtitle> Subtitles { get; set; } = new ();
 
     public List<Fact> Facts { get; set; } = new ();
-
+ 
     public List<Video> Videos { get; set; } = new ();
 
     public List<SourceLinkCategory> SourceLinkCategories { get; set; } = new ();
@@ -82,5 +82,5 @@ public class StreetcodeContent
 
     public List<StreetcodeArt> StreetcodeArts { get; set; } = new ();
 
-    public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; } = new();
+    public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; } = new ();
 }

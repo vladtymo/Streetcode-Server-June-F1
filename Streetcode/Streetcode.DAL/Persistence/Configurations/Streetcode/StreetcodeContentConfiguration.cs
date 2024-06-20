@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
 using Streetcode.DAL.Entities.Media.Images;
 using Streetcode.DAL.Entities.Partners;
 using Streetcode.DAL.Entities.Sources;
 using Streetcode.DAL.Entities.Streetcode;
-using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Entities.Streetcode.Types;
 using Streetcode.DAL.Entities.Toponyms;
 using Streetcode.DAL.Entities.Transactions;

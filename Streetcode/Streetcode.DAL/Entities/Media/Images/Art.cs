@@ -14,7 +14,7 @@ public class Art
 
     public int ImageId { get; set; }
 
-    public Image? Image { get; set; } = new();
+    public Image? Image { get; set; }
 
     public List<StreetcodeArt> StreetcodeArts { get; set; } = new ();
 }

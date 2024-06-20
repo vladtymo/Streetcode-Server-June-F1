@@ -18,18 +18,18 @@ public class Image
 
     public string? MimeType { get; set; } = string.Empty;
 
-    public ImageDetails? ImageDetails { get; set; } = new();
+    public ImageDetails? ImageDetails { get; set; }
 
-    public List<StreetcodeContent> Streetcodes { get; set; } = new ();
+    public List<StreetcodeContent> Streetcodes { get; set; } = new();
 
-    public List<Fact> Facts { get; set; } = new ();
+    public List<Fact> Facts { get; set; }
 
     public Art? Art { get; set; }
 
-    public Partner? Partner { get; set; } = new();
+    public Partner? Partner { get; set; }
 
-    public List<SourceLinkCategory> SourceLinkCategories { get; set; } = new ();
+    public List<SourceLinkCategory> SourceLinkCategories { get; set; } = new();
 
     public News.News? News { get; set; }
-    public TeamMember? TeamMember { get; set; } = new();
+    public TeamMember? TeamMember { get; set; }
 }

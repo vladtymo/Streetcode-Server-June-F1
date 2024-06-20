@@ -6,6 +6,7 @@ using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
+
 namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
 {
     public class CreateTimelineItemHandler : IRequestHandler<CreateTimelineItemCommand, Result<CreateTimelineItemDTO>>
@@ -23,8 +24,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
 
         public async Task<Result<CreateTimelineItemDTO>> Handle(CreateTimelineItemCommand request, CancellationToken cancellationToken)
         {
-            DAL.Entities.Timeline.TimelineItem newTimelineItem =
-                _mapper.Map<DAL.Entities.Timeline.TimelineItem>(request.newTimeLine);
+            var newTimelineItem = _mapper.Map<DAL.Entities.Timeline.TimelineItem>(request.newTimeLine);
 
             if (string.IsNullOrEmpty(newTimelineItem?.Title))
             {
@@ -38,31 +38,34 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
                 newTimelineItem.HistoricalContextTimelines.Clear();
                 await _repositoryWrapper.TimelineRepository.CreateAsync(newTimelineItem);
                 await _repositoryWrapper.SaveChangesAsync();
-                foreach (var hcDto in request.newTimeLine.HistoricalContexts!)
+
+                var historicalContextTitles = request.newTimeLine.HistoricalContexts!.Select(hc => hc.Title).ToList();
+                var existingHistoricalContexts = await _repositoryWrapper.HistoricalContextRepository.GetAllAsync(
+                    hc => historicalContextTitles.Contains(hc.Title!));
+                var newHistoricalContexts = historicalContextTitles
+                    .Except(existingHistoricalContexts.Select(hc => hc.Title))
+                    .Select(title => new DAL.Entities.Timeline.HistoricalContext { Title = title })
+                    .ToList();
+
+                if (newHistoricalContexts.Any())
                 {
-                    var historicalContext = await _repositoryWrapper.HistoricalContextRepository.GetFirstOrDefaultAsync(
-                        hc => string.Equals(hc.Title, hcDto.Title));
-
-                    if (historicalContext == null)
-                    {
-                        historicalContext = new DAL.Entities.Timeline.HistoricalContext
-                        {
-                            Title = hcDto.Title
-                        };
-                        await _repositoryWrapper.HistoricalContextRepository.CreateAsync(historicalContext);
-                        await _repositoryWrapper.SaveChangesAsync();
-                    }
-
-                    newTimelineItem.HistoricalContextTimelines.Add(new HistoricalContextTimeline
-                    {
-                        HistoricalContextId = historicalContext.Id,
-                        HistoricalContext = historicalContext,
-                        TimelineId = newTimelineItem.Id,
-                        Timeline = newTimelineItem
-                    });
+                    await _repositoryWrapper.HistoricalContextRepository.CreateRangeAsync(newHistoricalContexts);
+                    await _repositoryWrapper.SaveChangesAsync();
                 }
 
+                var allHistoricalContexts = existingHistoricalContexts.Concat(newHistoricalContexts).ToList();
+
+                var historicalContextTimelines = allHistoricalContexts.Select(hc => new HistoricalContextTimeline
+                {
+                    HistoricalContextId = hc.Id,
+                    HistoricalContext = hc,
+                    TimelineId = newTimelineItem.Id,
+                    Timeline = newTimelineItem
+                }).ToList();
+
+                newTimelineItem.HistoricalContextTimelines.AddRange(historicalContextTimelines);
                 await _repositoryWrapper.SaveChangesAsync();
+
                 return Result.Ok(_mapper.Map<CreateTimelineItemDTO>(newTimelineItem));
             }
             catch (Exception ex)

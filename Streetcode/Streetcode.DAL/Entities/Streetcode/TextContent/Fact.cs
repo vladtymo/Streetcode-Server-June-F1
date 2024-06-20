@@ -21,5 +21,5 @@ public class Fact
 
     public int StreetcodeId { get; set; }
 
-    public StreetcodeContent? Streetcode { get; set; } = new();
+    public StreetcodeContent? Streetcode { get; set; }
 }
