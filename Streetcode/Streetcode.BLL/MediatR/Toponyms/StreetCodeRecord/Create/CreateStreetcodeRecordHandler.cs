@@ -29,6 +29,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Create
             if(newRecord is null)
             {
                 var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.FailToConvertNull, request);
+                _logger.LogError(request, errorMsgNull);
                 return Result.Fail(new Error(errorMsgNull));
             }
 
@@ -41,11 +42,11 @@ namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Create
             if(!isSuccessResult)
             {
                 var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToCreateA, request);
+                _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
             return Result.Ok(_mapper.Map<StreetcodeRecordDTO>(createdRecord));
-            throw new NotImplementedException();
         }
     }
 }
