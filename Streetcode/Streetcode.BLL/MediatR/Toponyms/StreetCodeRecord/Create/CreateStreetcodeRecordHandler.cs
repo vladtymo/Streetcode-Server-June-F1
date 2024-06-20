@@ -33,6 +33,8 @@ namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Create
                 return Result.Fail(new Error(errorMsgNull));
             }
 
+           /* var existingIndex = await _repository.StreetcodeToponymRepository.GetFirstOrDefaultAsync(
+                predicate: x => newRecord.Streetcode.Index == x.Toponym.Streetcodes.Index);*/
 
 
             var createdRecord = await _repository.StreetcodeToponymRepository.CreateAsync(newRecord);

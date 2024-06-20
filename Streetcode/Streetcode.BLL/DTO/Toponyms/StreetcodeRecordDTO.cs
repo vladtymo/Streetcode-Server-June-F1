@@ -8,7 +8,6 @@ using Streetcode.BLL.DTO.Streetcode;
 
 namespace Streetcode.BLL.DTO.Toponyms
 {
-    [Index(nameof(StreetcodeId), IsUnique = true)]
     public class StreetcodeRecordDTO
     {
         public int StreetcodeId { get; set; }
