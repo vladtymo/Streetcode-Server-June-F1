@@ -232,6 +232,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot add records because such streetcode already exists.
+        /// </summary>
+        public static string StreetcodeAlreadyExist {
+            get {
+                return ResourceManager.GetString("StreetcodeAlreadyExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find any streetcode with corresponding index: {1}.
         /// </summary>
         public static string StreetcodeIndexNotFound {
@@ -264,15 +273,6 @@ namespace Streetcode.BLL.Resources {
         public static string StreetcodeUrlNotFound {
             get {
                 return ResourceManager.GetString("StreetcodeUrlNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GetRelatedFiguresByStreetcodeIdHandler.
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }
