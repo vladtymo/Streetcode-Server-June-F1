@@ -30,19 +30,17 @@ namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Delete
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
-            else
+
+            try
             {
-                try
-                {
-                    _repositoryWrapper.StreetcodeToponymRepository.Delete(record);
-                    _repositoryWrapper.SaveChanges();
-                    return Result.Ok(_mapper.Map<StreetcodeRecordDTO>(record));
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(request, ex.Message);
-                    return Result.Fail(ex.Message);
-                }
+                _repositoryWrapper.StreetcodeToponymRepository.Delete(record);
+                _repositoryWrapper.SaveChanges();
+                return Result.Ok(_mapper.Map<StreetcodeRecordDTO>(record));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(request, ex.Message);
+                return Result.Fail(ex.Message);
             }
         }
     }
