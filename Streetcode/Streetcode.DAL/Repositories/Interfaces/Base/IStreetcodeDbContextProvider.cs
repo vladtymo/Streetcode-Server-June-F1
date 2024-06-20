@@ -1,4 +1,5 @@
-﻿using Streetcode.DAL.Persistence;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Streetcode.DAL.Persistence;
 
 namespace Streetcode.DAL.Repositories.Interfaces.Base
 {
@@ -6,4 +7,9 @@ namespace Streetcode.DAL.Repositories.Interfaces.Base
     {
         StreetcodeDbContext DbContext { init; }
     }
+
+    public interface IReddisDistributedCacheProvider
+    { 
+        IDistributedCache DistributedCache { init; }
+    }    
 }

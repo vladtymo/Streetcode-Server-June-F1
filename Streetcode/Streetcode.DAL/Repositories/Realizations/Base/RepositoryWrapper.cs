@@ -1,4 +1,5 @@
 using System.Transactions;
+using Microsoft.Extensions.Caching.Distributed;
 using Repositories.Interfaces;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
@@ -35,6 +36,8 @@ namespace Streetcode.DAL.Repositories.Realizations.Base;
 public class RepositoryWrapper : IRepositoryWrapper
 {
     private readonly StreetcodeDbContext _streetcodeDbContext;
+
+    private readonly IDistributedCache _distributedCache;
 
     private IVideoRepository? _videoRepository = null;
 
@@ -106,11 +109,17 @@ public class RepositoryWrapper : IRepositoryWrapper
 
     private IStreetcodeImageRepository? _streetcodeImageRepository = null;
 
-    public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext)
+    public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext, IDistributedCache distributedCache)
     {
         _streetcodeDbContext = streetcodeDbContext;
+
+        _distributedCache = distributedCache;
     }
 
+    public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext) : this(streetcodeDbContext, default)
+    {
+    }
+    
     public INewsRepository NewsRepository =>
           GetRepository(_newsRepository as NewsRepository);
 
@@ -217,13 +226,15 @@ public class RepositoryWrapper : IRepositoryWrapper
         GetRepository(_streetcodeImageRepository as StreetcodeImageRepository);
 
     public T GetRepository<T>(T? repo)
-     where T : IStreetcodeDbContextProvider, new()
+     where T : IStreetcodeDbContextProvider, IReddisDistributedCacheProvider, new()
     {
         if (repo is null)
         {
             repo = new T()
             {
-                DbContext = _streetcodeDbContext
+                DbContext = _streetcodeDbContext,
+
+                DistributedCache = _distributedCache
             }; 
         }
 

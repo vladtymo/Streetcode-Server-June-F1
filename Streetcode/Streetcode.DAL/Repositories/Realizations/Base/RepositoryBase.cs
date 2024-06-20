@@ -2,17 +2,19 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Caching.Distributed;
 using MimeKit;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.DAL.Repositories.Realizations.Base;
 
-public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbContextProvider
+public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbContextProvider, IReddisDistributedCacheProvider
     where T : class
 {
-    private StreetcodeDbContext _dbContext = null!;
-    
+    private StreetcodeDbContext _dbContext = null!;    
+    private IDistributedCache _distributedCache = null!;
+   
     protected RepositoryBase(StreetcodeDbContext context)
     {
         _dbContext = context;
@@ -24,9 +26,13 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbConte
 
     public StreetcodeDbContext DbContext { init => _dbContext = value; }
 
+    public IDistributedCache DistributedCache { init => _distributedCache = value; }
+
     public IQueryable<T> FindAll(Expression<Func<T, bool>>? predicate = default)
-    {
-        return GetQueryable(predicate).AsNoTracking();
+    {        
+        var res = GetQueryable(predicate).AsNoTracking();
+
+        return res;
     }
 
     public T Create(T entity)
@@ -159,7 +165,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbConte
         if (selector is not null)
         {
             query = query.Select(selector);
-        }
+        }        
 
         return query.AsNoTracking();
     }
