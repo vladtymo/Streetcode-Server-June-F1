@@ -6,7 +6,7 @@ public class ReorderFactsRequestDTOValidator : AbstractValidator<ReorderFactsCom
 {
     public ReorderFactsRequestDTOValidator()
     {
-        RuleFor(x => x.newPositionsOfFacts).NotNull();
-        RuleFor(x => x.streetcodeId).GreaterThan(0);
+        RuleFor(x => x.newPositionsOfFacts).NotEmpty();
+        RuleFor(x => x.streetcodeId).NotEmpty().GreaterThan(0);
     }
 }

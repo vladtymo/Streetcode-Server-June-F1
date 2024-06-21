@@ -6,7 +6,7 @@ public class CreateInvoiceRequestDTOValidator : AbstractValidator<CreateInvoiceC
 {
     public CreateInvoiceRequestDTOValidator()
     {
-        RuleFor(x => x.Payment.Amount).GreaterThan(0).NotEmpty();
+        RuleFor(x => x.Payment.Amount).NotEmpty().GreaterThan(0);
         RuleFor(x => x.Payment.RedirectUrl).NotEmpty();
     }
 }

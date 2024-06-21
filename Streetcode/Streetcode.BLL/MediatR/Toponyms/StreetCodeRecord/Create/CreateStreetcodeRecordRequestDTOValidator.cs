@@ -6,8 +6,8 @@ public class CreateStreetcodeRecordRequestDTOValidator : AbstractValidator<Creat
 {
     public CreateStreetcodeRecordRequestDTOValidator()
     {
-        RuleFor(x => x.newRecord).NotNull();
-        RuleFor(x => x.newRecord.StreetcodeId).GreaterThan(0).NotNull();
-        RuleFor(x => x.newRecord.ToponymId).GreaterThan(0).NotNull();
+        RuleFor(x => x.newRecord).NotEmpty();
+        RuleFor(x => x.newRecord.StreetcodeId).NotEmpty().GreaterThan(0);
+        RuleFor(x => x.newRecord.ToponymId).NotEmpty().GreaterThan(0);
     }
 }

@@ -6,7 +6,7 @@ public class DeleteContentCategoryRequestDTOValidator : AbstractValidator<Delete
 {
     public DeleteContentCategoryRequestDTOValidator()
     {
-        RuleFor(x => x.sourcelinkcatId).GreaterThan(0).NotNull();
-        RuleFor(x => x.streetcodeId).GreaterThan(0).NotNull();
+        RuleFor(x => x.sourcelinkcatId).NotEmpty().GreaterThan(0);
+        RuleFor(x => x.streetcodeId).NotEmpty().GreaterThan(0);
     }
 }

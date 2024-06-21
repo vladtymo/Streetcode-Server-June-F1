@@ -6,11 +6,11 @@ public class UpdateFactRequestDTOValidator : AbstractValidator<UpdateFactCommand
 {
     public UpdateFactRequestDTOValidator()
     {
-        RuleFor(x => x.Fact).NotNull();
-        RuleFor(x => x.Fact.Title).MaximumLength(100).NotNull();
-        RuleFor(x => x.Fact.FactContent).NotNull().MaximumLength(1500);
-        RuleFor(x => x.Fact.StreetcodeId).NotNull().GreaterThan(0);
-        RuleFor(x => x.Fact.ImageId).GreaterThan(0);
-        RuleFor(x => x.Fact.ImageDescription).MaximumLength(200).NotNull();
+        RuleFor(x => x.Fact).NotEmpty();
+        RuleFor(x => x.Fact.Title).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.Fact.FactContent).NotEmpty().MaximumLength(1500);
+        RuleFor(x => x.Fact.StreetcodeId).NotEmpty().GreaterThan(0);
+        RuleFor(x => x.Fact.ImageId).NotEmpty().GreaterThan(0);
+        RuleFor(x => x.Fact.ImageDescription).NotEmpty().MaximumLength(200);
     }
 }

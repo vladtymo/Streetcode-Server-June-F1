@@ -6,8 +6,8 @@ public class CreateSourceLinkCategoryRequestDTOValidator : AbstractValidator<Cre
 {
     public CreateSourceLinkCategoryRequestDTOValidator()
     {
-        RuleFor(x => x.newCategory).NotNull();
-        RuleFor(x => x.newCategory.Title).NotNull().MaximumLength(100);
-        RuleFor(x => x.newCategory.ImageId).GreaterThan(0).NotNull();
+        RuleFor(x => x.newCategory).NotEmpty();
+        RuleFor(x => x.newCategory.Title).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.newCategory.ImageId).NotEmpty().GreaterThan(0);
     }
 }

@@ -6,7 +6,7 @@ public class DeleteStreetcodeRecordRequestDTOValidator : AbstractValidator<Delet
 {
     public DeleteStreetcodeRecordRequestDTOValidator()
     {
-        RuleFor(x => x.StreetcodeId).GreaterThan(0).NotNull();
-        RuleFor(x => x.ToponymId).GreaterThan(0).NotNull();
+        RuleFor(x => x.StreetcodeId).NotEmpty().GreaterThan(0);
+        RuleFor(x => x.ToponymId).NotEmpty().GreaterThan(0);
     }
 }

@@ -6,7 +6,7 @@ public class CreatePositionRequestDTOValidator : AbstractValidator<CreatePositio
 {
     public CreatePositionRequestDTOValidator()
     {
-        RuleFor(x => x.position).NotNull();
+        RuleFor(x => x.position).NotEmpty();
         RuleFor(x => x.position.Position).MaximumLength(50);
     }
 }

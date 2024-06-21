@@ -7,7 +7,7 @@ public class CreateImageRequestDTOValidator : AbstractValidator<CreateImageComma
     public CreateImageRequestDTOValidator()
     {
         RuleFor(x => x.Image.Title).NotEmpty().MaximumLength(100);
-        RuleFor(x => x.Image.MimeType).NotNull();
-        RuleFor(x => x.Image.Alt).NotNull().MaximumLength(200);
+        RuleFor(x => x.Image.MimeType).NotEmpty();
+        RuleFor(x => x.Image.Alt).NotEmpty().MaximumLength(200);
     }
 }

@@ -7,7 +7,7 @@ public class CreateTeamLinkRequestDTOValidator : AbstractValidator<CreateTeamLin
 {
     public CreateTeamLinkRequestDTOValidator()
     {
-        RuleFor(x => x.teamMember).NotNull();
+        RuleFor(x => x.teamMember).NotEmpty();
         RuleFor(x => x.teamMember.TeamMemberId).GreaterThan(0);
         RuleFor(x => x.teamMember.LogoType).IsInEnum();
     }
