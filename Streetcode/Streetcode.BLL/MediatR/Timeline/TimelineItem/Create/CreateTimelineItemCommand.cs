@@ -1,6 +1,7 @@
 using FluentResults;
+using MediatR;
 using Streetcode.BLL.DTO.Timeline.Create;
-using Streetcode.BLL.Validations;
+using Streetcode.BLL.Behavior;
 
 namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create;
 

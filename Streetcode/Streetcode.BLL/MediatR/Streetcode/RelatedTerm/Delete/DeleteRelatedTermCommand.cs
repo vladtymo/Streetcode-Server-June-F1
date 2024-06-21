@@ -1,6 +1,7 @@
 ﻿using FluentResults;
+using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
-using Streetcode.BLL.Validations;
+using Streetcode.BLL.Behavior;
 
 namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
 {

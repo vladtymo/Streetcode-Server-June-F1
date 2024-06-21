@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Streetcode.BLL.Validations;
+namespace Streetcode.BLL.Behavior;
 
 public interface IValidatableRequest<out TResponse> : IRequest<TResponse>, IValidatableRequest
 {

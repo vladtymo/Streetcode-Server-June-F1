@@ -1,6 +1,7 @@
 ﻿using FluentResults;
+using MediatR;
 using Streetcode.BLL.DTO.Payment;
-using Streetcode.BLL.Validations;
+using Streetcode.BLL.Behavior;
 using Streetcode.DAL.Entities.Payment;
 
 namespace Streetcode.BLL.MediatR.Payment;

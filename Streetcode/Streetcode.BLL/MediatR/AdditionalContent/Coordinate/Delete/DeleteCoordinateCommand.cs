@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 using MediatR;
-using Streetcode.BLL.Validations;
+using Streetcode.BLL.Behavior;
 
 namespace Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Delete;
 

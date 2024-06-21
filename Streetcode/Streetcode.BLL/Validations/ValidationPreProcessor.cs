@@ -1,6 +1,7 @@
+using FluentResults;
 using FluentValidation;
 using MediatR.Pipeline;
-using Streetcode.BLL.Validations;
+using Streetcode.BLL.Behavior;
 
 namespace Streetcode.WebApi.Extensions;
 

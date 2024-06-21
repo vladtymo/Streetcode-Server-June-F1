@@ -1,7 +1,3 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using Streetcode.BLL.Validations;
-
 namespace Streetcode.BLL.DTO.Streetcode.TextContent.Text
 {
   public class TextCreateDTO

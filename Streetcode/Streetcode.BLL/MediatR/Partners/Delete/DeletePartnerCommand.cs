@@ -1,7 +1,7 @@
 ﻿using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.Validations;
+using Streetcode.BLL.Behavior;
 
 namespace Streetcode.BLL.MediatR.Partners.Delete
 {

@@ -15,6 +15,7 @@ using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Services.BlobStorageService;
 using Microsoft.FeatureManagement;
+using Streetcode.BLL.Behavior;
 using Streetcode.BLL.Interfaces.Payment;
 using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Interfaces.Instagram;
@@ -37,7 +38,7 @@ public static class ServiceCollectionExtensions
         var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(currentAssemblies);
         services.AddValidatorsFromAssemblies(currentAssemblies);
-        services.AddTransient(typeof(IRequestPreProcessor<>), typeof(ValidationPreProcessor<>));
+        services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddMediatR(currentAssemblies);
         services.AddScoped<IBlobService, BlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
