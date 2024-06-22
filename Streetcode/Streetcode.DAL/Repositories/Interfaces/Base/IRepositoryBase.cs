@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Ardalis.Specification;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
@@ -38,6 +39,7 @@ public interface IRepositoryBase<T>
     Task<IEnumerable<T>> GetAllAsync(
         Expression<Func<T, bool>>? predicate = default,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default);
+    Task<IEnumerable<T>?> GetAllAsync(ISpecification<T> specification);
 
     Task<IEnumerable<T>?> GetAllAsync(
         Expression<Func<T, T>> selector,
@@ -47,6 +49,7 @@ public interface IRepositoryBase<T>
     Task<T?> GetSingleOrDefaultAsync(
         Expression<Func<T, bool>>? predicate = default,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default);
+    Task<T?> GetSingleOrDefaultAsync(ISpecification<T> specification);
 
     Task<T?> GetFirstOrDefaultAsync(
         Expression<Func<T, bool>>? predicate = default,
@@ -56,4 +59,6 @@ public interface IRepositoryBase<T>
         Expression<Func<T, T>> selector,
         Expression<Func<T, bool>>? predicate = default,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default);
+
+    Task<T?> GetFirstOrDefaultAsync(ISpecification<T> specification);
 }
