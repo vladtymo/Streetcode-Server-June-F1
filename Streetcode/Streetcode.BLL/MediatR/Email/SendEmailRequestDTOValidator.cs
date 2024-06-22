@@ -7,7 +7,7 @@ public class SendEmailRequestDTOValidator : AbstractValidator<SendEmailCommand>
     public SendEmailRequestDTOValidator()
     {
         RuleFor(x => x.Email.From)
-            .MaximumLength(80);
+            .MaximumLength(80).EmailAddress();
 
         RuleFor(x => x.Email.Content)
             .NotEmpty()
