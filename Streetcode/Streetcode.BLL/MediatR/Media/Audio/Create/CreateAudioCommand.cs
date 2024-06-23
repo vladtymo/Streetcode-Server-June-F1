@@ -1,5 +1,4 @@
 ﻿using FluentResults;
-using MediatR;
 using Streetcode.BLL.DTO.Media.Audio;
 using Streetcode.BLL.Behavior;
 

@@ -3,7 +3,6 @@ using MediatR;
 using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Entities.Instagram;
-using Streetcode.DAL.Entities.Media.Images;
 
 namespace Streetcode.BLL.MediatR.Instagram.GetAll
 {
