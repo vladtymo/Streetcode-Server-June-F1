@@ -3,16 +3,14 @@ using System.Reflection;
 using Ardalis.Specification;
 using Streetcode.DAL.Entities.Streetcode;
 
+
 namespace Streetcode.BLL.Specification.Streetcode.Streetcode.GetAll;
 
-public class StreetcodesSortedSpec : Specification<StreetcodeContent>
+public class StreetcodesSortedByPropertySpec : Specification<StreetcodeContent>
 {
-    public StreetcodesSortedSpec(string sort)
+    public StreetcodesSortedByPropertySpec(string sort)
     {
-        if (!string.IsNullOrEmpty(sort))
-        {
-            ApplySorting(sort);
-        }
+        ApplySorting(sort);
     }
 
     private void ApplySorting(string sort)
@@ -27,13 +25,11 @@ public class StreetcodesSortedSpec : Specification<StreetcodeContent>
         }
 
         var property = GetProperty(sortColumn);
-        if (property == null)
+        if (property != null)
         {
-            return;
+            var orderByExpression = GetOrderByExpression(property);
+            ApplyOrderBy(orderByExpression, sortDirection);
         }
-
-        var orderByExpression = GetOrderByExpression(property);
-        ApplyOrderBy(orderByExpression, sortDirection);
     }
 
     private PropertyInfo? GetProperty(string sortColumn)

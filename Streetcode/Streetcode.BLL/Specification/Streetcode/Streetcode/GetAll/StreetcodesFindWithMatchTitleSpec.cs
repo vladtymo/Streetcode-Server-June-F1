@@ -8,7 +8,7 @@ public class StreetcodesFindWithMatchTitleSpec : Specification<StreetcodeContent
     public StreetcodesFindWithMatchTitleSpec(string title)
     {
         var lowerCaseTitle = title.ToLower();
-        Query.Where(s => (s.Title ?? string.Empty).ToLower().Contains(lowerCaseTitle) ||
-        s.Index.ToString() == title);
+        Query.Where(s => (!string.IsNullOrEmpty(s.Title) && (s.Title.ToLower().Contains(lowerCaseTitle) ||
+        s.Index.ToString() == title)));
     }
 }

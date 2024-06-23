@@ -11,7 +11,6 @@ public interface IRepositoryBase<T>
     where T : class
 {
     IQueryable<T> FindAll(Expression<Func<T, bool>>? predicate = default);
-
     T Create(T entity);
 
     Task<T> CreateAsync(T entity);

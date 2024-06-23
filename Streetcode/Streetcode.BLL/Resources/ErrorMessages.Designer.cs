@@ -223,6 +223,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount and page must be greater than zero.
+        /// </summary>
+        public static string InvalidPaginationParameters {
+            get {
+                return ResourceManager.GetString("InvalidPaginationParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string NoCustomError {

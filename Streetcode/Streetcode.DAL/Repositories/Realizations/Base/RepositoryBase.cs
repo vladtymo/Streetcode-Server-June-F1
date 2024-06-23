@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
 using MimeKit;
+using Streetcode.BLL.Specification.Streetcode.Streetcode.NewFolder;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -121,7 +122,10 @@ public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>, IS
 
     public async Task<IEnumerable<T>?> GetAllAsync(ISpecification<T> specification)
     {
-        return await ApplySpecificationToQuery(specification).ToListAsync();
+        return await _dbContext.Set<T>()
+            .AsQueryable()
+            .ApplySpecification(specification)
+            .ToListAsync();
     }
 
     public async Task<T?> GetSingleOrDefaultAsync(
@@ -133,7 +137,10 @@ public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>, IS
 
     public async Task<T?> GetSingleOrDefaultAsync(ISpecification<T> specification)
     {
-       return await ApplySpecificationToQuery(specification).SingleOrDefaultAsync();
+       return await _dbContext.Set<T>()
+            .AsQueryable()
+            .ApplySpecification(specification)
+            .SingleOrDefaultAsync();
     }
 
     public async Task<T?> GetFirstOrDefaultAsync(
@@ -153,7 +160,10 @@ public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>, IS
 
     public async Task<T?> GetFirstOrDefaultAsync(ISpecification<T> specification)
     {
-        return await ApplySpecificationToQuery(specification).FirstOrDefaultAsync();
+        return await _dbContext.Set<T>()
+            .AsQueryable()
+            .ApplySpecification(specification)
+            .SingleOrDefaultAsync();
     }
 
     private IQueryable<T> GetQueryable(
@@ -179,14 +189,5 @@ public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>, IS
         }
 
         return query.AsNoTracking();
-    }
-
-    private IQueryable<T> ApplySpecificationToQuery(ISpecification<T> specification)
-    {
-            return SpecificationEvaluator.Default.GetQuery(
-            query: _dbContext.Set<T>()
-            .AsQueryable()
-            .AsNoTracking(),
-            specification: specification);
     }
 }
