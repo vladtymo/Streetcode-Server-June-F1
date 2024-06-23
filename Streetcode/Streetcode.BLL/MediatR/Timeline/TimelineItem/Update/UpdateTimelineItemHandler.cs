@@ -3,6 +3,8 @@ using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.DTO.Timeline;
+using Streetcode.BLL.DTO.Timeline.Create;
+using Streetcode.BLL.Exceptions;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -24,7 +26,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
 
         public async Task<Result<TimelineItemDTO>> Handle(UpdateTimelineItemCommand request, CancellationToken cancellationToken)
         {
-            var sourceTimelineItem = _mapper.Map<DAL.Entities.Timeline.TimelineItem>(request.updatedTimeLine);
+            var sourceTimelineItem = request.sourceTimeLine;
             var updatingTimelineItem = await _repositoryWrapper.TimelineRepository
                 .GetFirstOrDefaultAsync(
                 predicate: t => t.Id == sourceTimelineItem.Id,
@@ -39,7 +41,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
 
             try
             {
-                var historicalContextTitles = request.updatedTimeLine.HistoricalContexts!.Select(hc => hc.Title).ToList();
+                var historicalContextTitles = sourceTimelineItem.HistoricalContexts!.Select(hc => hc.Title).ToList();
                 var existingHistoricalContexts = await _repositoryWrapper.HistoricalContextRepository.GetAllAsync(
                     hc => historicalContextTitles.Contains(hc.Title!));
                 var newHistoricalContexts = historicalContextTitles
