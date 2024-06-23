@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using FluentResults;
+﻿using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
-using Streetcode.DAL.Entities.News;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Newss.Delete

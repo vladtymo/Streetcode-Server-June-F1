@@ -16,7 +16,7 @@ namespace Streetcode.WebApi.Controllers.Toponyms
         [HttpDelete("{StreetcodeId:int}/{ToponymId:int}", Name = "DeleteRecord")]
         public async Task<IActionResult> DeleteRecord(int StreetcodeId, int ToponymId)
         {
-            return HandleResult(await Mediator.Send(new DeleteStreetcodeRecordQuery(StreetcodeId, ToponymId)));
+            return HandleResult(await Mediator.Send(new DeleteStreetcodeRecordCommand(StreetcodeId, ToponymId)));
         }
     }
 }

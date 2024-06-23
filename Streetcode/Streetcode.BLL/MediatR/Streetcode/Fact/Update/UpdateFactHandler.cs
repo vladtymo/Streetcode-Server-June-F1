@@ -1,14 +1,9 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Sources;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
-using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.DAL.Entities.Feedback;
-using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Streetcode.DAL.Repositories.Realizations.AdditionalContent;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Facts.Update
 {
