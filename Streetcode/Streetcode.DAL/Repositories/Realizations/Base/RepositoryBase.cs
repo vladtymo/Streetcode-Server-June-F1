@@ -1,18 +1,21 @@
 using System.Linq.Expressions;
+using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
 using MimeKit;
+using Streetcode.BLL.Specification.Streetcode.Streetcode.NewFolder;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.DAL.Repositories.Realizations.Base;
 
-public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbContextProvider
+public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>, IStreetcodeDbContextProvider
     where T : class
 {
     private StreetcodeDbContext _dbContext = null!;
-    
+
     protected RepositoryBase(StreetcodeDbContext context)
     {
         _dbContext = context;
@@ -117,11 +120,27 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbConte
         return await GetQueryable(predicate, include, selector).ToListAsync() ?? new List<T>();
     }
 
+    public async Task<IEnumerable<T>?> GetAllAsync(ISpecification<T> specification)
+    {
+        return await _dbContext.Set<T>()
+            .AsQueryable()
+            .ApplySpecification(specification)
+            .ToListAsync();
+    }
+
     public async Task<T?> GetSingleOrDefaultAsync(
         Expression<Func<T, bool>>? predicate = default,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default)
     {
         return await GetQueryable(predicate, include).SingleOrDefaultAsync();
+    }
+
+    public async Task<T?> GetSingleOrDefaultAsync(ISpecification<T> specification)
+    {
+       return await _dbContext.Set<T>()
+            .AsQueryable()
+            .ApplySpecification(specification)
+            .SingleOrDefaultAsync();
     }
 
     public async Task<T?> GetFirstOrDefaultAsync(
@@ -137,6 +156,14 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T>, IStreetcodeDbConte
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default)
     {
         return await GetQueryable(predicate, include, selector).FirstOrDefaultAsync();
+    }
+
+    public async Task<T?> GetFirstOrDefaultAsync(ISpecification<T> specification)
+    {
+        return await _dbContext.Set<T>()
+            .AsQueryable()
+            .ApplySpecification(specification)
+            .SingleOrDefaultAsync();
     }
 
     private IQueryable<T> GetQueryable(
