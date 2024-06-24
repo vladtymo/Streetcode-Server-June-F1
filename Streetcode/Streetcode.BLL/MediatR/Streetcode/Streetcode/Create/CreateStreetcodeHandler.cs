@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.Media.Images;
 using Streetcode.DAL.Entities.Streetcode;
@@ -33,7 +34,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
             if (newStreetcode is null)
             {
-                const string errorMsg = "New Streetcode cannot be null";
+                string errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToConvertNull, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -76,7 +77,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             }
             else
             {
-                const string errorMsg = "Failed to create a Streetcode";
+                string errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToCreateA, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

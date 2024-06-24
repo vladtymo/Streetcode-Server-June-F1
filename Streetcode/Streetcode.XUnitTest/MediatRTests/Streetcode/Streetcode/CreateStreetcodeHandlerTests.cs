@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Moq;
 using Streetcode.BLL.DTO.Streetcode;
-using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Streetcode.Fact.Create;
-using Streetcode.BLL.MediatR.Streetcode.Fact.GetAll;
 using Streetcode.BLL.MediatR.Streetcode.Streetcode.Create;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -15,9 +13,6 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.StreetcodeBlock
 {
     public class CreateStreetcodeHandlerTests
     {
-        private const string NULLERRORMESSAGE = "New Streetcode cannot be null";
-        private const string SAVEERRORMESSAGE = "Failed to create a Streetcode";
-
         private readonly Mock<IRepositoryWrapper> _mockRepositoryWrapper;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<ILoggerService> _mockLogger;
@@ -33,7 +28,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.StreetcodeBlock
             _mockMapper = new Mock<IMapper>();
             _mockLogger = new Mock<ILoggerService>();
             _streetcodeEntity = new StreetcodeContent
-            { 
+            {
                 Id = 1,
                 Title = "Title",
                 Alias = "alias",
@@ -85,11 +80,12 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.StreetcodeBlock
 
             // Act
             var result = await _handler.Handle(_command, CancellationToken.None);
+            string expected = MessageResourceContext.GetMessage(ErrorMessages.FailToConvertNull, _command);
 
             // Assert
             Assert.Multiple(
                 () => Assert.True(result.IsFailed),
-                () => Assert.Equal(NULLERRORMESSAGE, result.Errors.FirstOrDefault()?.Message));
+                () => Assert.Equal(expected, result.Errors.FirstOrDefault()?.Message));
         }
 
         [Fact]
@@ -108,11 +104,12 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTest.StreetcodeBlock
 
             // Act
             var result = await _handler.Handle(_command, CancellationToken.None);
+            string expected = MessageResourceContext.GetMessage(ErrorMessages.FailToCreateA, _command);
 
             // Assert
             Assert.Multiple(
                () => Assert.True(result.IsFailed),
-               () => Assert.Equal(SAVEERRORMESSAGE, result.Errors.FirstOrDefault()?.Message));
+               () => Assert.Equal(expected, result.Errors.FirstOrDefault()?.Message));
         }
     }
 }
