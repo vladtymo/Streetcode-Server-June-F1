@@ -3,7 +3,8 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.Util;
+using Streetcode.DAL.Entities.AdditionalContent;
+using Streetcode.DAL.Entities.Media.Images;
 using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -11,6 +12,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 {
     public class CreateStreetcodeHandler : IRequestHandler<CreateStreetcodeCommand, Result<CreateStreetcodeDTO>>
     {
+        private const int VISIBLETAGS = 10;
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
@@ -26,6 +28,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
         {
             var newStreetcode = _mapper.Map<StreetcodeContent>(request.newStreetcode);
             var repositoryStreetcode = _repositoryWrapper.StreetcodeRepository;
+            var repositoryStreetcodeTagIndex = _repositoryWrapper.StreetcodeTagIndexRepository;
+            var repositoryStreetcodeImage = _repositoryWrapper.StreetcodeImageRepository;
 
             if (newStreetcode is null)
             {
@@ -35,7 +39,36 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             }
 
             var entity = await repositoryStreetcode.CreateAsync(newStreetcode);
-            var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
+            bool resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
+
+            if (resultIsSuccess)
+            {
+                List<int> tagIds = request.newStreetcode.TagIds.ToList();
+                for (int i = 0; i < tagIds.Count(); i++)
+                {
+                    StreetcodeTagIndex streetcodeTagIndex = new StreetcodeTagIndex
+                    {
+                        TagId = tagIds[i],
+                        StreetcodeId = entity.Id,
+                        Index = entity.Index,
+                        IsVisible = i <= VISIBLETAGS
+                    };
+                    await repositoryStreetcodeTagIndex.CreateAsync(streetcodeTagIndex);
+                }
+
+                List<int> imageIds = request.newStreetcode.ImageIds.ToList();
+                for (int i = 0; i < imageIds.Count(); i++)
+                {
+                    StreetcodeImage streetcodeImage = new StreetcodeImage
+                    {
+                        ImageId = imageIds[i],
+                        StreetcodeId = entity.Id
+                    };
+                    await repositoryStreetcodeImage.CreateAsync(streetcodeImage);
+                }
+
+                resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
+            }
 
             if (resultIsSuccess)
             {
