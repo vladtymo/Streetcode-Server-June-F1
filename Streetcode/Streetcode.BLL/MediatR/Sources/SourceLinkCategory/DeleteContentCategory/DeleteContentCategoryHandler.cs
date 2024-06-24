@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.DeleteContentCategory
 {
-    public class DeleteContentCategoryHandler : IRequestHandler<DeleteContentCategoryQuery, Result<StreetcodeCategoryContentDTO>>
+    public class DeleteContentCategoryHandler : IRequestHandler<DeleteContentCategoryCommand, Result<StreetcodeCategoryContentDTO>>
     {
         private readonly IMapper m_mapper;
         private readonly ILoggerService m_logger;
@@ -21,7 +21,7 @@ namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.DeleteContentCategor
             m_rep_wrapper = wrapper;
         }
 
-        public async Task<Result<StreetcodeCategoryContentDTO>> Handle(DeleteContentCategoryQuery request, CancellationToken cancellationToken)
+        public async Task<Result<StreetcodeCategoryContentDTO>> Handle(DeleteContentCategoryCommand request, CancellationToken cancellationToken)
         {
             // FindStreetcode Content for removing
             var str_cont = await m_rep_wrapper.StreetcodeCategoryContentRepository

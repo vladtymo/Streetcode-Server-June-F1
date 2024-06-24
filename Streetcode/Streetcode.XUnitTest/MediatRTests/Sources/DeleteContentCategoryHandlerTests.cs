@@ -48,7 +48,7 @@ namespace Streetcode.XUnitTest.MediatRTests.SourcesTest
         public async Task Handler_DeleteSuccess_WhenRepIsNotEmpty()
         {
             // Assign
-            DeleteContentCategoryQuery quer = new DeleteContentCategoryQuery(1, 1);
+            DeleteContentCategoryCommand quer = new DeleteContentCategoryCommand(1, 1);
 
             await SetupRepoWrapper(quer);
 
@@ -66,7 +66,7 @@ namespace Streetcode.XUnitTest.MediatRTests.SourcesTest
         [Fact]
         public async Task Handler_DeleteFail_WhenIdIsIncorrect()
         {
-            DeleteContentCategoryQuery quer = new DeleteContentCategoryQuery(0, 0);
+            DeleteContentCategoryCommand quer = new DeleteContentCategoryCommand(0, 0);
 
             await SetupRepoWrapper(quer);
 
@@ -86,7 +86,7 @@ namespace Streetcode.XUnitTest.MediatRTests.SourcesTest
         {
             m_repo = new List<StreetcodeCategoryContent>();
 
-            DeleteContentCategoryQuery quer = new DeleteContentCategoryQuery(1, 1);
+            DeleteContentCategoryCommand quer = new DeleteContentCategoryCommand(1, 1);
 
             await SetupRepoWrapper(quer);
 
@@ -117,7 +117,7 @@ namespace Streetcode.XUnitTest.MediatRTests.SourcesTest
             return con;
         }
 
-        public async Task SetupRepoWrapper(DeleteContentCategoryQuery quer)
+        public async Task SetupRepoWrapper(DeleteContentCategoryCommand quer)
         {
             m_repmock = new Mock<IRepositoryWrapper>();
             m_repmock.Setup(r => r.StreetcodeCategoryContentRepository.
