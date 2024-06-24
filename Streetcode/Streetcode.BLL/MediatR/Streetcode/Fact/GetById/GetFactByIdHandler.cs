@@ -16,36 +16,15 @@ public class GetFactByIdHandler : IRequestHandler<GetFactByIdQuery, Result<FactD
     private readonly IRepositoryWrapper _repositoryWrapper;
     private readonly ILoggerService _logger;
 
-    // Bad Solution Just for testing
-    private readonly IDistributedCache _distributedCache;
-
-    public GetFactByIdHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger, IDistributedCache cache)
+    public GetFactByIdHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
     {
         _repositoryWrapper = repositoryWrapper;
         _mapper = mapper;
         _logger = logger;
-        _distributedCache = cache;  
     }
 
     public async Task<Result<FactDto>> Handle(GetFactByIdQuery request, CancellationToken cancellationToken)
     {
-        string key = $"FactDTO-{request.Id}";
-
-        string? cachedValue = await _distributedCache.GetStringAsync(key);
-
-        FactDto? factDto = null;
-
-        // Cache was found
-        if (!string.IsNullOrEmpty(cachedValue))
-        {
-            factDto = JsonConvert.DeserializeObject<FactDto>(cachedValue);
-
-            if (factDto != null)
-            {
-                return Result.Ok(factDto);
-            }            
-        }
-
         var facts = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Id == request.Id);
 
         if (facts is null)
@@ -55,9 +34,7 @@ public class GetFactByIdHandler : IRequestHandler<GetFactByIdQuery, Result<FactD
             return Result.Fail(new Error(errorMsg));
         }
 
-        factDto = _mapper.Map<FactDto>(facts);
-
-        await _distributedCache.SetStringAsync(key, JsonConvert.SerializeObject(factDto));
+        var factDto = _mapper.Map<FactDto>(facts);
 
         return Result.Ok(factDto);
     }

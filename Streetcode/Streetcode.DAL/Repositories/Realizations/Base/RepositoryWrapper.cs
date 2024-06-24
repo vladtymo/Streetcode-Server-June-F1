@@ -37,8 +37,6 @@ public class RepositoryWrapper : IRepositoryWrapper
 {
     private readonly StreetcodeDbContext _streetcodeDbContext;
 
-    private readonly IDistributedCache _distributedCache;
-
     private IVideoRepository? _videoRepository = null;
 
     private IAudioRepository? _audioRepository = null;
@@ -112,11 +110,10 @@ public class RepositoryWrapper : IRepositoryWrapper
     public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext, IDistributedCache distributedCache)
     {
         _streetcodeDbContext = streetcodeDbContext;
-
-        _distributedCache = distributedCache;
     }
 
-    public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext) : this(streetcodeDbContext, default)
+    public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext)
+        : this(streetcodeDbContext, default)
     {
     }
     
@@ -233,8 +230,6 @@ public class RepositoryWrapper : IRepositoryWrapper
             repo = new T()
             {
                 DbContext = _streetcodeDbContext,
-
-                DistributedCache = _distributedCache
             }; 
         }
 

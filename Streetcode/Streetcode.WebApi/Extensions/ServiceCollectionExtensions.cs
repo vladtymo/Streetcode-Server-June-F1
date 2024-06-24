@@ -25,6 +25,8 @@ using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
 using Serilog.Events;
+using StackExchange.Redis;
+using Streetcode.BLL.Services.Cache;
 
 namespace Streetcode.WebApi.Extensions;
 
@@ -47,19 +49,22 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInstagramService, InstagramService>();
-        services.AddScoped<ITextService, AddTermsToTextService>();       
+        services.AddScoped<ITextService, AddTermsToTextService>(); 
     }
 
     public static void AddCachingServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
 
-        var reddisConStr = configuration.GetSection(environment).GetConnectionString("ReddisConnection");
-
-        services.AddStackExchangeRedisCache(options =>
+        var redisConnectionString = configuration.GetSection(environment).GetConnectionString("ReddisConnection");
+        if (string.IsNullOrEmpty(redisConnectionString))
         {
-            options.Configuration = reddisConStr;
-        });
+            throw new ArgumentNullException(nameof(redisConnectionString), "Redis connection string is not configured.");
+        }
+
+        var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
+        services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+        services.AddScoped<ICacheService, CacheService>();
     }
 
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)

@@ -1,6 +1,5 @@
 using Hangfire;
 using Streetcode.BLL.Services.BlobStorageService;
-using Streetcode.BLL.Resources;
 using Streetcode.WebApi.Extensions;
 using Streetcode.WebApi.Utils;
 using Streetcode.WebApi.Middlewares;
@@ -32,7 +31,7 @@ app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 await app.ApplyMigrations();
 
-// await app.SeedDataAsync(); // uncomment for seeding data in local
+await app.SeedDataAsync(); // uncomment for seeding data in local
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -55,6 +54,3 @@ if (app.Environment.EnvironmentName != "Local")
 app.MapControllers();
 
 app.Run();
-public partial class Program
-{
-}

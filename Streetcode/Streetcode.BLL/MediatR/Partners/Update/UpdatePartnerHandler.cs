@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FluentResults;
+using MailKit;
 using MediatR;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Services.Cache;
 using Streetcode.DAL.Entities.Partners;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -13,12 +15,14 @@ namespace Streetcode.BLL.MediatR.Partners.Update
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
+        private readonly ICacheService _cacheService;
 
-        public UpdatePartnerHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
+        public UpdatePartnerHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger, ICacheService cacheService)
         {
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
             _logger = logger;
+            _cacheService = cacheService;
         }
 
         public async Task<Result<PartnerDTO>> Handle(UpdatePartnerQuery request, CancellationToken cancellationToken)
@@ -67,6 +71,7 @@ namespace Streetcode.BLL.MediatR.Partners.Update
                 _repositoryWrapper.SaveChanges();
                 var dbo = _mapper.Map<PartnerDTO>(partner);
                 dbo.Streetcodes = request.Partner.Streetcodes;
+                await _cacheService.InvalidateCacheAsync(_repositoryWrapper.PartnersRepository.GetType().Name);
                 return Result.Ok(dbo);
             }
             catch (Exception ex)

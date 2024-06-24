@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Services.Cache;
 using Streetcode.DAL.Entities.Partners;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -13,12 +16,13 @@ namespace Streetcode.BLL.MediatR.Partners.Create
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
-
-        public CreatePartnerHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
+        private readonly ICacheService _cacheService;
+        public CreatePartnerHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger, ICacheService cacheService)
         {
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
             _logger = logger;
+            _cacheService = cacheService;
         }
 
         public async Task<Result<PartnerDTO>> Handle(CreatePartnerQuery request, CancellationToken cancellationToken)
@@ -35,6 +39,7 @@ namespace Streetcode.BLL.MediatR.Partners.Create
                     .GetAllAsync(s => streetcodeIds.Contains(s.Id)));
 
                 _repositoryWrapper.SaveChanges();
+                await _cacheService.InvalidateCacheAsync("Partner");
                 return Result.Ok(_mapper.Map<PartnerDTO>(newPartner));
             }
             catch(Exception ex)
