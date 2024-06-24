@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Streetcode.BLL.Interfaces.Text;
+using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.Services.Text
@@ -11,13 +11,16 @@ namespace Streetcode.BLL.Services.Text
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private List<int> _buffer;
-
+        private HashSet<string> _notTerm;
+        private HashSet<string> _notRelated;
         private readonly StringBuilder _text = new StringBuilder();
 
         public AddTermsToTextService(IRepositoryWrapper repositoryWrapper)
         {
             _repositoryWrapper = repositoryWrapper;
             _buffer = new List<int>();
+            _notTerm = new HashSet<string>();
+            _notRelated = new HashSet<string>();
             Pattern = new("(\\s)|(<[^>]*>)", RegexOptions.None, TimeSpan.FromMilliseconds(1000));
         }
 
@@ -27,7 +30,6 @@ namespace Streetcode.BLL.Services.Text
         public async Task<string> AddTermsTag(string text)
         {
             _text.Clear();
-
             var splittedText = Pattern.Split(text)
                 .Where(x => !string.IsNullOrEmpty(x) && !string.IsNullOrWhiteSpace(x)).ToArray();
 
@@ -46,13 +48,17 @@ namespace Streetcode.BLL.Services.Text
                 }
 
                 var (resultedWord, extras) = CleanWord(word);
-
-                var term = await _repositoryWrapper.TermRepository
+                Term? term = null;
+                if (!_notTerm.Contains(resultedWord))
+                {
+                    term = await _repositoryWrapper.TermRepository
                     .GetFirstOrDefaultAsync(
                         t => t.Title.ToLower().Equals(resultedWord.ToLower()));
+                }
 
                 if (term == null)
                 {
+                    _notTerm.Add(resultedWord);
                     var buffer = await AddRelatedAsync(resultedWord);
                     if (!string.IsNullOrEmpty(buffer))
                     {
@@ -85,13 +91,18 @@ namespace Streetcode.BLL.Services.Text
 
         private async Task<string> AddRelatedAsync(string clearedWord)
         {
-            var relatedTerm = await _repositoryWrapper.RelatedTermRepository
+            RelatedTerm? relatedTerm = null;
+            if (!_notRelated.Contains(clearedWord))
+            {
+                 relatedTerm = await _repositoryWrapper.RelatedTermRepository
                 .GetFirstOrDefaultAsync(
                 rt => rt.Word.ToLower().Equals(clearedWord.ToLower()),
                 rt => rt.Include(rt => rt.Term));
+            }
 
             if (relatedTerm == null || relatedTerm.Term == null || CheckInBuffer(relatedTerm.TermId))
             {
+                _notRelated.Add(clearedWord);
                 return string.Empty;
             }
 
