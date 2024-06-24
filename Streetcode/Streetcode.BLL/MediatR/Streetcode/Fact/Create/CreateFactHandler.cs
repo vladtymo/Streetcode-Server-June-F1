@@ -21,7 +21,7 @@ public class CreateFactHandler : IRequestHandler<CreateFactCommand, Result<FactD
 
     public async Task<Result<FactDto>> Handle(CreateFactCommand request, CancellationToken cancellationToken)
     {
-        var newFact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.newFact);
+        var newFact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.NewFact);
         var repositoryFacts = _repositoryWrapper.FactRepository;
 
         if (newFact is null)

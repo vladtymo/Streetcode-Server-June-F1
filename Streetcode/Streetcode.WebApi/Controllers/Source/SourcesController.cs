@@ -52,6 +52,6 @@ public class SourcesController : BaseApiController
     [HttpDelete("{sourcelinkcatId:int}/{streetcodeId:int}", Name = "delete")]
     public async Task<IActionResult> Delete(int sourcelinkcatId, int streetcodeId)
     {
-        return HandleResult(await Mediator.Send(new DeleteContentCategoryQuery(sourcelinkcatId, streetcodeId)));
+        return HandleResult(await Mediator.Send(new DeleteContentCategoryCommand(sourcelinkcatId, streetcodeId)));
     }
 }

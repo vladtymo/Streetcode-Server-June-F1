@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FluentValidation;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Streetcode.WebApi.Extensions;
 
@@ -21,14 +22,36 @@ public sealed class GenericExceptionHandlerMiddleware
         {
             await _next(context);
         }
+        catch (ValidationException ex)
+        {
+            _logger.LogError($"Validation error: {ex}");
+            await HandleValidationExceptionAsync(context, ex);
+        }
         catch (Exception ex)
         {
             _logger.LogError($"Something went wrong: {ex}");
-            await HandleException(context, ex);
+            await HandleExceptionAsync(context, ex);
         }
     }
 
-    private static Task HandleException(HttpContext context, Exception exception)
+    private static Task HandleValidationExceptionAsync(HttpContext context, ValidationException exception)
+    {
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        context.Response.ContentType = "application/json";
+
+        var validationFailureResponse = new
+        {
+            Errors = exception.Errors.Select(x => new
+            {
+                PropertyName = x.PropertyName,
+                Message = x.ErrorMessage
+            }).ToList()
+        };
+
+        return context.Response.WriteAsync(SerializeJson(validationFailureResponse));
+    }
+
+    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var errorDetails = exception.GetErrorDetailsAndStatusCode();
 

@@ -3,12 +3,13 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.Partners;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Partners.Create
 {
-    public class CreatePartnerHandler : IRequestHandler<CreatePartnerQuery, Result<PartnerDTO>>
+    public class CreatePartnerHandler : IRequestHandler<CreatePartnerCommand, Result<PartnerDTO>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -21,11 +22,18 @@ namespace Streetcode.BLL.MediatR.Partners.Create
             _logger = logger;
         }
 
-        public async Task<Result<PartnerDTO>> Handle(CreatePartnerQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PartnerDTO>> Handle(CreatePartnerCommand request, CancellationToken cancellationToken)
         {
             var newPartner = _mapper.Map<Partner>(request.newPartner);
             try
             {
+                if (newPartner is null)
+                {
+                    var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.FailToConvertNull, request);
+                    _logger.LogError(request, errorMsgNull);
+                    return Result.Fail(new Error(errorMsgNull));
+                }
+
                 newPartner.Streetcodes.Clear();
                 newPartner = await _repositoryWrapper.PartnersRepository.CreateAsync(newPartner);
                 _repositoryWrapper.SaveChanges();
