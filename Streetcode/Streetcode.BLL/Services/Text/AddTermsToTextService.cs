@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.Interfaces.Text;
+using Streetcode.BLL.Util;
 using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -11,22 +12,21 @@ namespace Streetcode.BLL.Services.Text
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private List<int> _buffer;
-        private HashSet<string> _notTerm;
-        private HashSet<string> _notRelated;
+        private HashSet<Term> _terms;
+        private HashSet<RelatedTerm> _relatedTerms;
         private readonly StringBuilder _text = new StringBuilder();
 
         public AddTermsToTextService(IRepositoryWrapper repositoryWrapper)
         {
             _repositoryWrapper = repositoryWrapper;
             _buffer = new List<int>();
-            _notTerm = new HashSet<string>();
-            _notRelated = new HashSet<string>();
+            _terms = new HashSet<Term>(new IdComparerTerm());
+            _relatedTerms = new HashSet<RelatedTerm>(new IdComparerRelated());
             Pattern = new("(\\s)|(<[^>]*>)", RegexOptions.None, TimeSpan.FromMilliseconds(1000));
         }
 
         public Regex Pattern { get; private set; }
 
-        // TODO: it should be optimized
         public async Task<string> AddTermsTag(string text)
         {
             _text.Clear();
@@ -39,6 +39,24 @@ namespace Streetcode.BLL.Services.Text
                 splittedText[0] = split;
             }
 
+            HashSet<string> uniqueWords = new();
+
+            foreach (var word in splittedText)
+            {
+                var (resultedWord, extras) = CleanWord(word);
+                uniqueWords.Add(resultedWord.ToLower());
+            }
+
+            _terms = new HashSet<Term>(
+                await _repositoryWrapper.TermRepository
+                .GetAllAsync(t => uniqueWords.Contains(t.Title.ToLower())));
+
+            _relatedTerms = new HashSet<RelatedTerm>(
+                await _repositoryWrapper.RelatedTermRepository
+                .GetAllAsync(
+                rt => uniqueWords.Contains(rt.Word.ToLower()),
+                rt => rt.Include(rt => rt.Term)));
+                
             foreach (var word in splittedText)
             {
                 if (word.Contains('<'))
@@ -49,16 +67,14 @@ namespace Streetcode.BLL.Services.Text
 
                 var (resultedWord, extras) = CleanWord(word);
                 Term? term = null;
-                if (!_notTerm.Contains(resultedWord))
+
+                if (_terms.Any(x => x.Title.ToLower() == resultedWord.ToLower()))
                 {
-                    term = await _repositoryWrapper.TermRepository
-                    .GetFirstOrDefaultAsync(
-                        t => t.Title.ToLower().Equals(resultedWord.ToLower()));
+                    term = _terms.FirstOrDefault(x => x.Title.ToLower() == resultedWord.ToLower());
                 }
 
                 if (term == null)
                 {
-                    _notTerm.Add(resultedWord);
                     var buffer = await AddRelatedAsync(resultedWord);
                     if (!string.IsNullOrEmpty(buffer))
                     {
@@ -92,17 +108,14 @@ namespace Streetcode.BLL.Services.Text
         private async Task<string> AddRelatedAsync(string clearedWord)
         {
             RelatedTerm? relatedTerm = null;
-            if (!_notRelated.Contains(clearedWord))
+
+            if(_relatedTerms.Any(x => x.Word.ToLower() == clearedWord.ToLower()))
             {
-                 relatedTerm = await _repositoryWrapper.RelatedTermRepository
-                .GetFirstOrDefaultAsync(
-                rt => rt.Word.ToLower().Equals(clearedWord.ToLower()),
-                rt => rt.Include(rt => rt.Term));
+                relatedTerm = _relatedTerms.FirstOrDefault(x => x.Word.ToLower() == clearedWord.ToLower());
             }
 
             if (relatedTerm == null || relatedTerm.Term == null || CheckInBuffer(relatedTerm.TermId))
             {
-                _notRelated.Add(clearedWord);
                 return string.Empty;
             }
 
