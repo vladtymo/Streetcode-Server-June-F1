@@ -24,7 +24,7 @@ namespace Streetcode.XUnitTest.MappingTests.StreetcodeBlock
         }
 
         [Fact]
-        public void EventStreetcode_MapsCorrectly()
+        public void Profile_Should_MapsCorrectly_WhenEventStreetcode()
         {
             var dto = new CreateStreetcodeDTO
             {
@@ -37,7 +37,7 @@ namespace Streetcode.XUnitTest.MappingTests.StreetcodeBlock
         }
 
         [Fact]
-        public void PersonStreetcode_MapsCorrectly()
+        public void Profile_Should_MapsCorrectly_WhenPersonStreetcode()
         {
             var dto = new CreateStreetcodeDTO
             {
@@ -56,7 +56,7 @@ namespace Streetcode.XUnitTest.MappingTests.StreetcodeBlock
         }
 
         [Fact]
-        public void DateString_MapsCorrectly()
+        public void Profile_Should_MapsCorrectly_WhenDateString()
         {
             var dto = new CreateStreetcodeDTO
             {
