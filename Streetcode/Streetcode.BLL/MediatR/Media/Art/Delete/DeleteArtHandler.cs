@@ -45,7 +45,7 @@ namespace Streetcode.BLL.MediatR.Media.Art.Delete
                     _repositoryWrapper.ImageRepository.Delete(art.Image);
                 }
                 
-                _repositoryWrapper.SaveChanges();
+                await _repositoryWrapper.SaveChangesAsync();
                 return Result.Ok(_mapper.Map<ArtDTO>(art));
             }
             catch (Exception ex)
