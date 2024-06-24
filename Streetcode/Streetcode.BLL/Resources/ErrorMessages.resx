@@ -171,6 +171,9 @@
   <data name="FailToUpdate" xml:space="preserve">
     <value>Failed to update a {0}</value>
   </data>
+  <data name="InvalidPaginationParameters" xml:space="preserve">
+    <value>Amount and page must be greater than zero</value>
+  </data>
   <data name="NoCustomError" xml:space="preserve">
     <value />
   </data>
