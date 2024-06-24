@@ -80,7 +80,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Media.Art
             // Arrange
             var request = new CreateArtCommand(new ArtCreateUpdateDTO());
             _mapperMock.Setup(m => m.Map<DAL.Entities.Media.Images.Art>(It.IsAny<ArtCreateUpdateDTO>())).Returns((DAL.Entities.Media.Images.Art)null);
-            const string expectedErrorMsg = "Cannot convert ArtCreateUpdateDTO to Art";
+            const string expectedErrorMsg = "Cannot convert null to Art";
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);

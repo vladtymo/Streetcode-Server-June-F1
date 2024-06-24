@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Media.Art;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Media.Art.Create
@@ -24,7 +25,7 @@ namespace Streetcode.BLL.MediatR.Media.Art.Create
             var newArt = _mapper.Map<DAL.Entities.Media.Images.Art>(request.Art);
             if (newArt is null)
             {
-                const string errorMsg = "Cannot convert ArtCreateUpdateDTO to Art";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToConvertNull, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -37,7 +38,7 @@ namespace Streetcode.BLL.MediatR.Media.Art.Create
             }
             else
             {
-                const string errorMsg = "Failed to create a art";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToCreateA, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
