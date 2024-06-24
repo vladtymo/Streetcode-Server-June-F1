@@ -1,9 +1,13 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentResults;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
+using Streetcode.BLL.Specification.Streetcode.Streetcode.GetAll;
+using Streetcode.BLL.Specification.Streetcode.Streetcode.GetByFilter;
+using Streetcode.BLL.Specification.Streetcode.Streetcode.NewFolder;
 using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -25,28 +29,30 @@ public class GetAllStreetcodesHandler : IRequestHandler<GetAllStreetcodesQuery, 
     public async Task<Result<GetAllStreetcodesResponseDTO>> Handle(GetAllStreetcodesQuery query, CancellationToken cancellationToken)
     {
         var filterRequest = query.request;
+        var streetcodes = _repositoryWrapper.StreetcodeRepository.FindAll();
+        var amount = filterRequest.Amount;
+        var page = filterRequest.Page;
 
-        var streetcodes = _repositoryWrapper.StreetcodeRepository
-            .FindAll();
-
-        if (filterRequest.Title is not null)
+        if (streetcodes == null)
         {
-            FindStreetcodesWithMatchTitle(ref streetcodes, filterRequest.Title);
+            string errorMsg = string.Format(ErrorMessages.EntityNotFound, streetcodes);
+            _logger.LogError(filterRequest, errorMsg);
+            return Result.Fail(errorMsg);
         }
 
-        if (filterRequest.Sort is not null)
+        if (amount <= 0 || page <= 0)
         {
-            FindSortedStreetcodes(ref streetcodes, filterRequest.Sort);
+            string errorMsg = ErrorMessages.InvalidPaginationParameters;
+            _logger.LogError(filterRequest, errorMsg);
+            return Result.Fail(errorMsg);
         }
 
-        if (filterRequest.Filter is not null)
-        {
-            FindFilteredStreetcodes(ref streetcodes, filterRequest.Filter);
-        }
+        ApplyFilters(ref streetcodes, filterRequest);
 
-        int pagesAmount = ApplyPagination(ref streetcodes, filterRequest.Amount, filterRequest.Page);
+        int pagesAmount = ApplyPagination(ref streetcodes, amount, page);
+        var filteredListStreetcodes = await streetcodes.ToListAsync();
 
-        var streetcodeDtos = _mapper.Map<IEnumerable<StreetcodeDTO>>(streetcodes.AsEnumerable());
+        var streetcodeDtos = _mapper.Map<IEnumerable<StreetcodeDTO>>(filteredListStreetcodes);
 
         var response = new GetAllStreetcodesResponseDTO
         {
@@ -57,57 +63,23 @@ public class GetAllStreetcodesHandler : IRequestHandler<GetAllStreetcodesQuery, 
         return Result.Ok(response);
     }
 
-    private void FindStreetcodesWithMatchTitle(
-        ref IQueryable<StreetcodeContent> streetcodes,
-        string title)
+    private void ApplyFilters(
+        ref IQueryable<StreetcodeContent> streetcodes, GetAllStreetcodesRequestDTO filterRequest)
     {
-        streetcodes = streetcodes.Where(s => s.Title
-            .ToLower()
-            .Contains(title
-            .ToLower()) || s.Index
-            .ToString() == title);
-    }
-
-    private void FindFilteredStreetcodes(
-        ref IQueryable<StreetcodeContent> streetcodes,
-        string filter)
-    {
-        var filterParams = filter.Split(':');
-        var filterColumn = filterParams[0];
-        var filterValue = filterParams[1];
-
-        streetcodes = streetcodes
-            .AsEnumerable()
-            .Where(s => filterValue.Contains(s.Status.ToString()))
-            .AsQueryable();
-    }
-
-    private void FindSortedStreetcodes(
-        ref IQueryable<StreetcodeContent> streetcodes,
-        string sort)
-    {
-        var sortedRecords = streetcodes;
-
-        var sortColumn = sort.Trim();
-        var sortDirection = "asc";
-
-        if (sortColumn.StartsWith("-"))
+        if (!string.IsNullOrEmpty(filterRequest.Title))
         {
-            sortDirection = "desc";
-            sortColumn = sortColumn.Substring(1);
+            streetcodes = streetcodes.ApplySpecification(new StreetcodesFindWithMatchTitleSpec(filterRequest.Title));
         }
 
-        var type = typeof(StreetcodeContent);
-        var parameter = Expression.Parameter(type, "p");
-        var property = Expression.Property(parameter, sortColumn);
-        var lambda = Expression.Lambda(property, parameter);
-
-        streetcodes = sortDirection switch
+        if (!string.IsNullOrEmpty(filterRequest.Sort))
         {
-            "asc" => Queryable.OrderBy(sortedRecords, (dynamic)lambda),
-            "desc" => Queryable.OrderByDescending(sortedRecords, (dynamic)lambda),
-            _ => sortedRecords,
-        };
+            streetcodes = streetcodes.ApplySpecification(new StreetcodesSortedByPropertySpec(filterRequest.Sort));
+        }
+
+        if (!string.IsNullOrEmpty(filterRequest.Filter))
+        {
+            streetcodes = streetcodes.ApplySpecification(new StreetcodesFilteredByStatusSpec(filterRequest.Filter));
+        }
     }
 
     private int ApplyPagination(
@@ -117,10 +89,7 @@ public class GetAllStreetcodesHandler : IRequestHandler<GetAllStreetcodesQuery, 
     {
         var totalPages = (int)Math.Ceiling(streetcodes.Count() / (double)amount);
 
-        streetcodes = streetcodes
-            .Skip((page - 1) * amount)
-            .Take(amount);
-
+        streetcodes = streetcodes.ApplySpecification(new StreetcodeApplyPaginationSpec(amount, page));
         return totalPages;
     }
 }

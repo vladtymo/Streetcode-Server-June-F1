@@ -223,11 +223,29 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount and page must be greater than zero.
+        /// </summary>
+        public static string InvalidPaginationParameters {
+            get {
+                return ResourceManager.GetString("InvalidPaginationParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string NoCustomError {
             get {
                 return ResourceManager.GetString("NoCustomError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot add records because such streetcode already exists.
+        /// </summary>
+        public static string StreetcodeAlreadyExist {
+            get {
+                return ResourceManager.GetString("StreetcodeAlreadyExist", resourceCulture);
             }
         }
         
@@ -264,15 +282,6 @@ namespace Streetcode.BLL.Resources {
         public static string StreetcodeUrlNotFound {
             get {
                 return ResourceManager.GetString("StreetcodeUrlNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to GetRelatedFiguresByStreetcodeIdHandler.
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }

@@ -171,8 +171,14 @@
   <data name="FailToUpdate" xml:space="preserve">
     <value>Failed to update a {0}</value>
   </data>
+  <data name="InvalidPaginationParameters" xml:space="preserve">
+    <value>Amount and page must be greater than zero</value>
+  </data>
   <data name="NoCustomError" xml:space="preserve">
     <value />
+  </data>
+  <data name="StreetcodeAlreadyExist" xml:space="preserve">
+    <value>Cannot add records because such streetcode already exists</value>
   </data>
   <data name="StreetcodeIndexNotFound" xml:space="preserve">
     <value>Cannot find any streetcode with corresponding index: {1}</value>
@@ -185,8 +191,5 @@
   </data>
   <data name="StreetcodeUrlNotFound" xml:space="preserve">
     <value>Cannot find streetcode by transliteration url: {1}</value>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value>GetRelatedFiguresByStreetcodeIdHandler</value>
   </data>
 </root>
