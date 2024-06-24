@@ -67,7 +67,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(_partner);
             _wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(_streetcodes);
 
-            CreatePartnerQuery request = new CreatePartnerQuery(_createPartnerDTO);
+            CreatePartnerCommand request = new CreatePartnerCommand(_createPartnerDTO);
             CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
@@ -86,7 +86,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(_nullPartner);
             _wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(new List<StreetcodeContent>());
 
-            CreatePartnerQuery request = new CreatePartnerQuery(_createPartnerDTO);
+            CreatePartnerCommand request = new CreatePartnerCommand(_createPartnerDTO);
             CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act

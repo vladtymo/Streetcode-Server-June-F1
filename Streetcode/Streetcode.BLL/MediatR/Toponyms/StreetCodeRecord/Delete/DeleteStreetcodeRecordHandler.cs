@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Delete
 {
-    public class DeleteStreetcodeRecordHandler : IRequestHandler<DeleteStreetcodeRecordQuery, Result<StreetcodeRecordDTO>>
+    public class DeleteStreetcodeRecordHandler : IRequestHandler<DeleteStreetcodeRecordCommand, Result<StreetcodeRecordDTO>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -21,7 +21,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Delete
             _logger = logger;
         }
 
-        public async Task<Result<StreetcodeRecordDTO>> Handle(DeleteStreetcodeRecordQuery request, CancellationToken cancellationToken)
+        public async Task<Result<StreetcodeRecordDTO>> Handle(DeleteStreetcodeRecordCommand request, CancellationToken cancellationToken)
         {
             var record = await _repositoryWrapper.StreetcodeToponymRepository.GetFirstOrDefaultAsync(p => p.StreetcodeId == request.StreetcodeId &&
                                                                                                           p.ToponymId == request.ToponymId);

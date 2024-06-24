@@ -48,7 +48,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
         {
             // Arrange
             _mapperMock.Setup(m => m.Map<Fact>(It.IsAny<FactDto>())).Returns<Fact>(null);
-            var request = new UpdateFactCommand(new FactDto());
+            var request = new UpdateFactCommand(new FactUpdateCreateDto());
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);
@@ -62,7 +62,7 @@ namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Facts
         {
             // Arrange
             _mapperMock.Setup(m => m.Map<Fact>(It.IsAny<FactDto>())).Returns<Fact>(null);
-            var request = new UpdateFactCommand(new FactDto());
+            var request = new UpdateFactCommand(new FactUpdateCreateDto());
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);
