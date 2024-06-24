@@ -6,6 +6,7 @@ using Streetcode.BLL.DTO.Timeline;
 using Streetcode.BLL.DTO.Timeline.Create;
 using Streetcode.BLL.Exceptions;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -34,7 +35,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
 
             if (updatingTimelineItem == null)
             {
-                string errorMsg = $"Timeline item with given Id - {sourceTimelineItem.Id} not found";
+                string errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request, request.sourceTimeLine.Id);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail<TimelineItemDTO>(errorMsg);
             }
@@ -82,7 +83,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail<TimelineItemDTO>(ex.Message);
+                throw new InvalidOperationException(ex.Message);
             }
         }
     }

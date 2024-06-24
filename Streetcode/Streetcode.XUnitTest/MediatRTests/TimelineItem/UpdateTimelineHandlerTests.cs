@@ -20,14 +20,13 @@ namespace Streetcode.XUnitTest.MediatRTests.Timeline.TimelineItem
         private readonly Mock<IRepositoryWrapper> _repositoryWrapperMock;
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<ILoggerService> _loggerMock;
-        private readonly UpdateTimelineItemHandler _handler;
+        private UpdateTimelineItemHandler _handler;
 
         public UpdateTimelineHandlerTests()
         {
             _repositoryWrapperMock = new Mock<IRepositoryWrapper>();
             _mapperMock = new Mock<IMapper>();
             _loggerMock = new Mock<ILoggerService>();
-            _handler = new UpdateTimelineItemHandler(_repositoryWrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
         }
 
         [Fact]
@@ -38,10 +37,12 @@ namespace Streetcode.XUnitTest.MediatRTests.Timeline.TimelineItem
             _mapperMock.Setup(m => m.Map<TimelineItemEntity>(It.IsAny<TimelineItemDTO>())).Returns(new TimelineItemEntity { Id = 1 });
             MockRepositoryWrapper(returnNull: true);
 
+            _handler = new UpdateTimelineItemHandler(_repositoryWrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
+
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Act & Assert
-            Assert.True(result.Errors[0].Message == "Timeline item with given Id - 1 not found");
+            Assert.True(result.Errors[0].Message == "Cannot find any TimelineItem with corresponding id: 1");
         }
 
         [Fact]
@@ -74,12 +75,13 @@ namespace Streetcode.XUnitTest.MediatRTests.Timeline.TimelineItem
                 HistoricalContextTimelines = new List<HistoricalContextTimeline>()
             };
 
-
             MockRepositoryWrapper(updatingTimelineItem);
 
             MockRepositoryWrapper(new int[] { 1 });
 
             _mapperMock.Setup(m => m.Map<TimelineItemDTO>(It.IsAny<TimelineItemEntity>())).Returns(source);
+
+            _handler = new UpdateTimelineItemHandler(_repositoryWrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
@@ -88,13 +90,13 @@ namespace Streetcode.XUnitTest.MediatRTests.Timeline.TimelineItem
             _repositoryWrapperMock.Verify(r => r.TimelineRepository.Update(It.IsAny<TimelineItemEntity>()), Times.Once);
             _repositoryWrapperMock.Verify(r => r.SaveChangesAsync(), Times.Exactly(2));
             Assert.True(result.IsSuccess);
-            Assert.True(updatingTimelineItem.Title == source.Title);
-            Assert.True(updatingTimelineItem.Description == source.Description);
-            Assert.True(updatingTimelineItem.Date == source.Date);
-            Assert.True(updatingTimelineItem.DateViewPattern == source.DateViewPattern);
-            Assert.True(updatingTimelineItem.HistoricalContextTimelines.Count == 2);
-            Assert.True(updatingTimelineItem.HistoricalContextTimelines.Any(h => h.HistoricalContextId == 1 && h.TimelineId == 1));
-            Assert.True(updatingTimelineItem.HistoricalContextTimelines.Any(h => h.HistoricalContextId == 0 && h.TimelineId == 1)); 
+            Assert.True(updatingTimelineItem.Title == source.Title &&
+                updatingTimelineItem.Description == source.Description &&
+                updatingTimelineItem.Date == source.Date &&
+                updatingTimelineItem.DateViewPattern == source.DateViewPattern &&
+                updatingTimelineItem.HistoricalContextTimelines.Count == 2 &&
+                updatingTimelineItem.HistoricalContextTimelines.Any(h => h.HistoricalContextId == 1 && h.TimelineId == 1) &&
+                updatingTimelineItem.HistoricalContextTimelines.Any(h => h.HistoricalContextId == 0 && h.TimelineId == 1));  
         }
 
         [Fact]
@@ -133,13 +135,12 @@ namespace Streetcode.XUnitTest.MediatRTests.Timeline.TimelineItem
 
             MockRepositoryWrapper(new int[] { 1 });
 
-            _repositoryWrapperMock.Setup(r => r.SaveChangesAsync()).Throws(new Exception("Save failed"));
+            _repositoryWrapperMock.Setup(r => r.SaveChangesAsync()).Throws(new InvalidOperationException("Save failed"));
 
-            // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
+            _handler = new UpdateTimelineItemHandler(_repositoryWrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
-            // Assert
-            Assert.True(result.Errors[0].Message == "Save failed");
+            // Act&Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await _handler.Handle(command, CancellationToken.None));
         }
 
         private void MockRepositoryWrapper(int id = 1, bool returnNull = false)
