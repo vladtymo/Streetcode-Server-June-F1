@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
 namespace Streetcode.BLL.MediatR.Media.Art.Create
 {
-    internal class CreateArtRequestDTOValidator
+    public class CreateArtRequestDTOValidator : AbstractValidator<CreateArtCommand>
     {
+        public CreateArtRequestDTOValidator()
+        {
+            RuleFor(x => x.Art.Title).NotEmpty().MaximumLength(150);
+            RuleFor(x => x.Art.Description).NotEmpty().MaximumLength(400);
+            RuleFor(x => x.Art.ImageId).NotEmpty().GreaterThan(0);
+        }
     }
 }
