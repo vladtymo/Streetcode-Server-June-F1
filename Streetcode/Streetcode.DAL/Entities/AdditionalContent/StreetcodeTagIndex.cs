@@ -1,8 +1,9 @@
-﻿using Streetcode.DAL.Entities.Streetcode;
+﻿using Streetcode.DAL.Entities.Base;
+using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.AdditionalContent
 {
-    public class StreetcodeTagIndex
+    public class StreetcodeTagIndex : IEntity
     {
         public int StreetcodeId { get; set; }
 

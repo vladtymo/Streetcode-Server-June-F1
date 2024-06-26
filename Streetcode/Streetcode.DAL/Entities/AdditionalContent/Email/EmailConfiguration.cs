@@ -1,6 +1,8 @@
+using Streetcode.DAL.Entities.Base;
+
 namespace Streetcode.DAL.Entities.AdditionalContent.Email
 {
-    public class EmailConfiguration
+    public class EmailConfiguration : IEntity
     {
         public string From { get; set; } = string.Empty;
         public string SmtpServer { get; set; } = string.Empty;

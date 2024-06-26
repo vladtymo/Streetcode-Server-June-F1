@@ -1,6 +1,8 @@
-﻿namespace Streetcode.DAL.Entities.Team
+﻿using Streetcode.DAL.Entities.Base;
+
+namespace Streetcode.DAL.Entities.Team
 {
-    public class TeamMemberPositions
+    public class TeamMemberPositions : IEntity
     {
         public int TeamMemberId { get; set; }
         public Positions? Positions { get; set; }
