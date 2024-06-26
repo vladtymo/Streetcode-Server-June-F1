@@ -1,5 +1,4 @@
 using System.Transactions;
-using Microsoft.Extensions.Caching.Distributed;
 using Repositories.Interfaces;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
@@ -107,16 +106,11 @@ public class RepositoryWrapper : IRepositoryWrapper
 
     private IStreetcodeImageRepository? _streetcodeImageRepository = null;
 
-    public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext, IDistributedCache distributedCache)
+    public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext)
     {
         _streetcodeDbContext = streetcodeDbContext;
     }
 
-    public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext)
-        : this(streetcodeDbContext, default)
-    {
-    }
-    
     public INewsRepository NewsRepository =>
           GetRepository(_newsRepository as NewsRepository);
 
@@ -229,7 +223,7 @@ public class RepositoryWrapper : IRepositoryWrapper
         {
             repo = new T()
             {
-                DbContext = _streetcodeDbContext,
+                DbContext = _streetcodeDbContext
             }; 
         }
 

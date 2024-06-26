@@ -43,25 +43,27 @@ namespace Streetcode.BLL.Services.Email
 
         private async Task<bool> SendAsync(MimeMessage mailMessage)
         {
-            using var client = new SmtpClient();
-            try
+            using (var client = new SmtpClient())
             {
-                await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
-                client.AuthenticationMechanisms.Remove("XOAUTH2");
-                await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
+                try
+                {
+                    await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true);
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
 
-                await client.SendAsync(mailMessage);
-                return true;
-            }
-            catch
-            {
-                // Logger
-                return false;
-            }
-            finally
-            {
-                await client.DisconnectAsync(true);
-                client.Dispose();
+                    await client.SendAsync(mailMessage);
+                    return true;
+                }
+                catch
+                {
+                    // Logger
+                    return false;
+                }
+                finally
+                {
+                    await client.DisconnectAsync(true);
+                    client.Dispose();
+                 }
             }
         }
     }

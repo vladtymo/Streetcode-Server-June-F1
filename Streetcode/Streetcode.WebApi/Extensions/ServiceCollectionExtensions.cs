@@ -1,12 +1,8 @@
-using System.Text;
-using System.Data.SqlClient;
 using FluentValidation;
 using Hangfire;
 using MediatR;
 using MediatR.Pipeline;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Services.Logging;
@@ -18,7 +14,6 @@ using Streetcode.BLL.Services.Email;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Services.BlobStorageService;
-using Streetcode.BLL.Interfaces.Users;
 using Microsoft.FeatureManagement;
 using Streetcode.BLL.Interfaces.Payment;
 using Streetcode.BLL.Services.Payment;
@@ -26,7 +21,6 @@ using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
-using Serilog.Events;
 using StackExchange.Redis;
 using Streetcode.BLL.Behavior;
 using Streetcode.BLL.Services.Cache;
@@ -61,7 +55,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITextService, AddTermsToTextService>(); 
     }
 
-    public static void AddCachingServices(this IServiceCollection services, ConfigurationManager configuration)
+    public static void CachingService(this IServiceCollection services, ConfigurationManager configuration)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
 

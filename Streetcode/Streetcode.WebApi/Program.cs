@@ -14,7 +14,7 @@ builder.Services.ConfigureBlob(builder);
 builder.Services.ConfigurePayment(builder);
 builder.Services.ConfigureInstagram(builder);
 builder.Services.ConfigureSerilog(builder);
-builder.Services.AddCachingServices(builder.Configuration);
+builder.Services.CachingService(builder.Configuration);
 var app = builder.Build();
 
 if (app.Environment.EnvironmentName == "Local")
@@ -54,3 +54,6 @@ if (app.Environment.EnvironmentName != "Local")
 app.MapControllers();
 
 app.Run();
+public partial class Program
+{
+}
