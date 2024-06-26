@@ -32,7 +32,7 @@ public class GetImageByStreetcodeIdHandler : IRequestHandler<GetImageByStreetcod
             f => f.Streetcodes.Any(s => s.Id == request.StreetcodeId),
             include: q => q.Include(img => img.ImageDetails))).OrderBy(img => img.ImageDetails?.Alt);
 
-        if (images is null || !images.Any())
+        if (!images.Any())
         {
             var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithStreetcode, request, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
