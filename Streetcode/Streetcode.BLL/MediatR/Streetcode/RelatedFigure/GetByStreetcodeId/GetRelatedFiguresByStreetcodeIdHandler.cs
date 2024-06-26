@@ -73,7 +73,7 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
         }
         catch (ArgumentNullException)
         {
-            return null;
+            return Enumerable.Empty<int>().AsQueryable();
         }
     }
 }
