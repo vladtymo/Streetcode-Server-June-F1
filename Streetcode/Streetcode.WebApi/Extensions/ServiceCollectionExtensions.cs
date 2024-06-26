@@ -46,7 +46,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton(typeof(IRequestPostProcessor<,>), typeof(CachiblePostQueryProcessor<,>));
         services.AddSingleton(typeof(IRequestPostProcessor<,>), typeof(CachiblePostCommandProcessor<,>));
         services.AddMediatR(currentAssemblies);
-
         services.AddScoped<IBlobService, BlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
         services.AddScoped<IEmailService, EmailService>();

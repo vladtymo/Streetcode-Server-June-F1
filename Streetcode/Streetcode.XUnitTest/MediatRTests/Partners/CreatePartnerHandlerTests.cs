@@ -16,8 +16,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<IRepositoryWrapper> _wrapperMock;
         private readonly Mock<ILoggerService> _loggerMock;
-        private PartnerDTO _partnerDTO = new PartnerDTO() { Id = 2 };
         private Partner _nullPartner;
+        private PartnerDTO _partnerDTO = new PartnerDTO() { Id = 2 };
         private Partner _partner = new () { Id = 2 };
         private List<StreetcodeContent> _streetcodes = new()
         {
@@ -82,9 +82,10 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         {
             // Arrange
             _mapperMock.Setup(obj => obj.Map<PartnerDTO>(It.IsAny<object>())).Returns(new PartnerDTO());
-            _mapperMock.Setup(obj => obj.Map<Partner>(It.IsAny<object>())).Returns(new Partner());
-            _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(new Partner());
+            _mapperMock.Setup(obj => obj.Map<Partner>(It.IsAny<object>())).Returns(_nullPartner);
+            _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(_nullPartner);
             _wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(new List<StreetcodeContent>());
+
 
             CreatePartnerCommand request = new CreatePartnerCommand(_createPartnerDTO);
             CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
