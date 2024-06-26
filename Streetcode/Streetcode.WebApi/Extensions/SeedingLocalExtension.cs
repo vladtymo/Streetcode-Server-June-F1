@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Streetcode.BLL.Services.BlobStorageService;
@@ -15,6 +16,7 @@ using Streetcode.DAL.Entities.Streetcode.Types;
 using Streetcode.DAL.Entities.Team;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Entities.Transactions;
+using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Enums;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Realizations.Base;
@@ -267,17 +269,56 @@ namespace Streetcode.WebApi.Extensions
                         }
                     }
 
+                    //Seed Identity data
+                     //1) Add User Roles
+                    if (!dbContext.Roles.Any())
+                    {
+                        dbContext.Roles.AddRange(
+                            new IdentityRole<Guid>()
+                            {
+                                Id = Guid.Parse("0635994b-6361-4544-99f7-ad04066edbcb"),
+                                Name = "admin",
+                                NormalizedName = "Admin"
+                            },
+                            new IdentityRole<Guid>()
+                            {
+                                Id = Guid.Parse("597e1efa-c72b-49d4-a5cf-6162fc78d331"),
+                                Name = "user",
+                                NormalizedName = "User"
+                            });
+
+                        await dbContext.SaveChangesAsync();
+                    }
+
+                    // Add Admin user
                     if (!dbContext.Users.Any())
                     {
-                        dbContext.Users.AddRange(
-                            new DAL.Entities.Users.User
+                        dbContext.Users.Add(
+                            new User()
                             {
-                                Email = "admin",
-                                Role = UserRole.MainAdministrator,
-                                Login = "admin",
-                                Name = "admin",
-                                Password = "admin",
-                                Surname = "admin",
+                                Id = Guid.Parse("b817dcaa-941f-455b-979c-23223a84080c"),
+                                UserName = "admin",
+                                NormalizedUserName = "Admin",
+                                Email = "adminEmail@gmail.com",
+                                NormalizedEmail = "ADMINEMAIL@gmail.com",
+                                EmailConfirmed = true,
+                                PasswordHash = new PasswordHasher<IdentityUser>()
+                                .HashPassword(null, "superuser"),
+                                SecurityStamp = string.Empty,
+                            });
+
+                        await dbContext.SaveChangesAsync();
+                    }
+
+                    if (!dbContext.UserRoles.Any())
+                    {
+                        dbContext.UserRoles.Add(
+                            new IdentityUserRole<Guid>()
+                            {
+                                UserId = dbContext.Users
+                                .First(u => u.UserName.Equals("admin") || u.NormalizedUserName.Equals("Admin")).Id,
+                                RoleId = dbContext.Roles
+                                .First(r => r.Name.Equals("admin") || r.NormalizedName.Equals("Admin")).Id
                             });
 
                         await dbContext.SaveChangesAsync();

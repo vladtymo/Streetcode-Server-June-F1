@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Streetcode.DAL.Entities.AdditionalContent;
@@ -17,12 +19,12 @@ using Streetcode.DAL.Entities.Team;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Entities.Toponyms;
 using Streetcode.DAL.Entities.Transactions;
-using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Enums;
+using Streetcode.DAL.Entities.Users;
 
 namespace Streetcode.DAL.Persistence;
 
-public class StreetcodeDbContext : DbContext
+public class StreetcodeDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     public StreetcodeDbContext()
     {
@@ -58,7 +60,7 @@ public class StreetcodeDbContext : DbContext
     public DbSet<Video>? Videos { get; set; }
     public DbSet<StreetcodeCategoryContent>? StreetcodeCategoryContent { get; set; }
     public DbSet<StreetcodeArt>? StreetcodeArts { get; set; }
-    public DbSet<User>? Users { get; set; }
+    public override DbSet<User>? Users { get; set; }
     public DbSet<StreetcodeTagIndex>? StreetcodeTagIndices { get; set; }
     public DbSet<TeamMember>? TeamMembers { get; set; }
     public DbSet<TeamMemberLink>? TeamMemberLinks { get; set; }
@@ -79,4 +81,11 @@ public class StreetcodeDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(StreetcodeDbContext).Assembly);
     }
+
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Initial Catalog=StreetcodeDB_Mig_Target;Integrated Security=True");
+
+    //    base.OnConfiguring(optionsBuilder);
+    //}
 }
