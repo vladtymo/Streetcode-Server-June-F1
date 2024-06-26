@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Streetcode.TextContent
 {
     [Table("related_terms", Schema = "streetcode")]
-    public class RelatedTerm
+    public class RelatedTerm : IEntityId
     {
         public int Id { get; set; }
 

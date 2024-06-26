@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Transactions;
 
-public class TransactionLink
+public class TransactionLink : IEntityId
 {
     public int Id { get; set; }
 

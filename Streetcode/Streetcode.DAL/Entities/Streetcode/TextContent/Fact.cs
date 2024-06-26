@@ -1,11 +1,9 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.Media.Images;
 
 namespace Streetcode.DAL.Entities.Streetcode.TextContent;
 
-public class Fact
+public class Fact : IEntityId
 {
     public int Id { get; set; }
 

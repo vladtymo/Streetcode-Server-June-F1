@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Streetcode.DAL.Entities.Streetcode;
+﻿using Streetcode.DAL.Entities.Streetcode;
+using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Media;
 
-public class Audio
+public class Audio : IEntityId
 {
     public int Id { get; set; }
 

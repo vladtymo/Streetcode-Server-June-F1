@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Streetcode.DAL.Entities.Analytics;
 using Streetcode.DAL.Entities.Streetcode;
 

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Streetcode.DAL.Entities.Streetcode;
+﻿using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Partners
 {

@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Enums;
 
 namespace Streetcode.DAL.Entities.Team
 {
-    public class TeamMemberLink
+    public class TeamMemberLink : IEntityId
     {
         public int Id { get; set; }
 

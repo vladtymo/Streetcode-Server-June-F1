@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Streetcode.DAL.Enums;
+﻿using Streetcode.DAL.Entities.Base;
+
 
 namespace Streetcode.DAL.Entities.AdditionalContent;
 
-public class Subtitle
+public class Subtitle : IEntityId
 {
     public int Id { get; set; }
 

@@ -1,11 +1,10 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
 using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Analytics
 {
-    public class StatisticRecord
+    public class StatisticRecord : IEntityId
     {
         public int Id { get; set; }
         public int QrId { get; set; }

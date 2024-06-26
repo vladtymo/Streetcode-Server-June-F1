@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Feedback;
 
-public class Response
+public class Response : IEntityId
 {
     public int Id { get; set; }
 

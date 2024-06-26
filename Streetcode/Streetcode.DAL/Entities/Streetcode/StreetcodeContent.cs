@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
 using Streetcode.DAL.Entities.Analytics;
@@ -16,7 +14,7 @@ using Streetcode.DAL.Enums;
 
 namespace Streetcode.DAL.Entities.Streetcode;
 
-public class StreetcodeContent
+public class StreetcodeContent : IEntityId
 {
     public int Id { get; set; }
 

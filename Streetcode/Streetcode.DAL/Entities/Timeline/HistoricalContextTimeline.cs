@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Streetcode.DAL.Entities.Timeline
 {
     public class HistoricalContextTimeline
