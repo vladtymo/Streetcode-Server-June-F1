@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Streetcode.DAL.Entities.Partners;
+using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.BLL.Util
 {
-    public class IdComparer : IEqualityComparer<PartnerSourceLink>
+    public class IdComparer<T> : IEqualityComparer<T> 
+        where T : IEntityId
     {
-        public bool Equals(PartnerSourceLink? x, PartnerSourceLink? y)
-        {
+        public bool Equals(T? x, T? y)
+            {
             if(x == null || y == null)
             {
                 return false;
@@ -15,9 +16,9 @@ namespace Streetcode.BLL.Util
             return x.Id == y.Id;
         }
 
-        public int GetHashCode([DisallowNull] PartnerSourceLink obj)
+        public int GetHashCode([DisallowNull] T obj)
         {
             return obj.Id.GetHashCode();
-        }
+        } 
     }
 }

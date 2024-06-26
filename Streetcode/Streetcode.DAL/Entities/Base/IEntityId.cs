@@ -1,6 +1,6 @@
 ﻿namespace Streetcode.DAL.Entities.Base
 {
-    internal interface IEntityId : IEntity
+    public interface IEntityId : IEntity
     {
         public int Id { get; set; }
     }
