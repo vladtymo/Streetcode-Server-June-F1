@@ -1,7 +1,9 @@
 using System.Text;
 using System.Data.SqlClient;
+using FluentValidation;
 using Hangfire;
 using MediatR;
+using MediatR.Pipeline;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -26,6 +28,7 @@ using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
 using Serilog.Events;
 using StackExchange.Redis;
+using Streetcode.BLL.Behavior;
 using Streetcode.BLL.Services.Cache;
 
 namespace Streetcode.WebApi.Extensions;
@@ -43,7 +46,13 @@ public static class ServiceCollectionExtensions
         services.AddFeatureManagement();
         var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(currentAssemblies);
-        services.AddMediatR(currentAssemblies);        
+        services.AddValidatorsFromAssemblies(currentAssemblies);
+        services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachiblePreQueryProcessor<,>));
+        services.AddSingleton(typeof(IRequestPostProcessor<,>), typeof(CachiblePostQueryProcessor<,>));
+        services.AddSingleton(typeof(IRequestPostProcessor<,>), typeof(CachiblePostCommandProcessor<,>));
+        services.AddMediatR(currentAssemblies);
+
         services.AddScoped<IBlobService, BlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
         services.AddScoped<IEmailService, EmailService>();
@@ -57,11 +66,6 @@ public static class ServiceCollectionExtensions
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
 
         var redisConnectionString = configuration.GetSection(environment).GetConnectionString("ReddisConnection");
-        if (string.IsNullOrEmpty(redisConnectionString))
-        {
-            throw new ArgumentNullException(nameof(redisConnectionString), "Redis connection string is not configured.");
-        }
-
         var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
         services.AddSingleton<IConnectionMultiplexer>(multiplexer);
         services.AddScoped<ICacheService, CacheService>();

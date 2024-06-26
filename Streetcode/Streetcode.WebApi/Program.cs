@@ -4,7 +4,6 @@ using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.WebApi.Extensions;
 using Streetcode.WebApi.Utils;
 using Streetcode.WebApi.Middlewares;
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureApplication();
 
@@ -32,7 +31,7 @@ app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 await app.ApplyMigrations();
 
-await app.SeedDataAsync(); // uncomment for seeding data in local
+// await app.SeedDataAsync(); // uncomment for seeding data in local
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseRouting();

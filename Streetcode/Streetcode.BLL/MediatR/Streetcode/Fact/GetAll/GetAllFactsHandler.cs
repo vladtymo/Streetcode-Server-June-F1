@@ -24,6 +24,12 @@ public class GetAllFactsHandler : IRequestHandler<GetAllFactsQuery, Result<IEnum
 
     public async Task<Result<IEnumerable<FactDto>>> Handle(GetAllFactsQuery request, CancellationToken cancellationToken)
     {
+        if(request.CachedResponse is not null)
+        {
+            var cachedFactDtos = JsonConvert.DeserializeObject<IEnumerable<FactDto>>(request.CachedResponse.ToString() !);
+            return Result.Ok(_mapper.Map<IEnumerable<FactDto>>(cachedFactDtos));
+        }
+        
         var facts = await _repositoryWrapper.FactRepository.GetAllAsync();
         if (facts is null)
         {

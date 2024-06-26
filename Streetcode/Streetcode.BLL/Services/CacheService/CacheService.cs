@@ -26,7 +26,7 @@ namespace Streetcode.BLL.Services.Cache
                 foreach (var endpoint in endpoints)
                 {
                     var server = _redis.GetServer(endpoint);
-                    var keys = server.Keys(pattern: pattern + "*").ToArray();
+                    var keys = server.Keys(pattern: "*" + pattern + "*").ToArray();
 
                     if (keys.Any())
                     {

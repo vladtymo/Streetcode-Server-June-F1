@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
+using Newtonsoft.Json;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 using Streetcode.BLL.Interfaces.Logging;
@@ -24,6 +25,12 @@ public class GetFactByStreetcodeIdHandler : IRequestHandler<GetFactByStreetcodeI
 
     public async Task<Result<IEnumerable<FactDto>>> Handle(GetFactByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
+        if(request.CachedResponse is not null)
+        {
+            var cachedFactDto = JsonConvert.DeserializeObject<IEnumerable<FactDto>>(request.CachedResponse.ToString() !);
+            return Result.Ok(cachedFactDto) !;
+        }
+        
         var fact = await _repositoryWrapper.FactRepository
             .GetAllAsync(f => f.StreetcodeId == request.StreetcodeId);
 

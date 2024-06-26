@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
@@ -15,19 +16,22 @@ public class GetPartnersByStreetcodeIdHandler : IRequestHandler<GetPartnersByStr
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
     private readonly ILoggerService _logger;
-    private readonly ICacheService _cacheService;
 
-    public GetPartnersByStreetcodeIdHandler(IMapper mapper, IRepositoryWrapper repositoryWrapper, ILoggerService logger, ICacheService cacheService)
+    public GetPartnersByStreetcodeIdHandler(IMapper mapper, IRepositoryWrapper repositoryWrapper, ILoggerService logger)
     {
         _mapper = mapper;
         _repositoryWrapper = repositoryWrapper;
         _logger = logger;
-        _cacheService = cacheService;
     }
 
     public async Task<Result<IEnumerable<PartnerDTO>>> Handle(GetPartnersByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
-        var key = request.StreetcodeId.ToString();
+        if (request.CachedResponse is not null)
+        {
+            var cachedPartnerDtos = JsonConvert.DeserializeObject<IEnumerable<PartnerDTO>>(request.CachedResponse.ToString() !);
+            return Result.Ok(_mapper.Map<IEnumerable<PartnerDTO>>(cachedPartnerDtos));
+        }
+        
         var streetcode = await _repositoryWrapper.StreetcodeRepository
             .GetSingleOrDefaultAsync(st => st.Id == request.StreetcodeId);
 
@@ -50,7 +54,6 @@ public class GetPartnersByStreetcodeIdHandler : IRequestHandler<GetPartnersByStr
             return Result.Fail(new Error(errorMsg));
         }
 
-        await _cacheService.SetCacheAsync(key, partners);
         return Result.Ok(value: _mapper.Map<IEnumerable<PartnerDTO>>(partners));
     }
 }

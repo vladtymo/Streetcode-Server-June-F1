@@ -17,7 +17,6 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<IRepositoryWrapper> _wrapperMock;
         private readonly Mock<ILoggerService> _loggerMock;
-        private readonly Mock<ICacheService> _cacheServiceMock;
         private PartnerDTO _partnerDTO = new PartnerDTO() { Id = 2 };
         private Partner _partner = new () { Id = 2 };
         private List<StreetcodeContent> _streetcodes = new()
@@ -57,7 +56,6 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             _mapperMock = new Mock<IMapper>();
             _wrapperMock = new Mock<IRepositoryWrapper>();
             _loggerMock = new Mock<ILoggerService>();
-            _cacheServiceMock = new Mock<ICacheService>();
         }
 
         [Fact]
@@ -69,8 +67,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(_partner);
             _wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(_streetcodes);
 
-            CreatePartnerQuery request = new CreatePartnerQuery(_createPartnerDTO);
-            CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object, _cacheServiceMock.Object);
+            CreatePartnerCommand request = new CreatePartnerCommand(_createPartnerDTO);
+            CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = handler.Handle(request, CancellationToken.None);
@@ -88,8 +86,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             _wrapperMock.Setup(obj => obj.PartnersRepository.CreateAsync(_partner)).ReturnsAsync(new Partner());
             _wrapperMock.Setup(obj => obj.StreetcodeRepository.GetAllAsync(default, default)).ReturnsAsync(new List<StreetcodeContent>());
 
-            CreatePartnerQuery request = new CreatePartnerQuery(_createPartnerDTO);
-            CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object, _cacheServiceMock.Object);
+            CreatePartnerCommand request = new CreatePartnerCommand(_createPartnerDTO);
+            CreatePartnerHandler handler = new CreatePartnerHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = handler.Handle(request, CancellationToken.None);

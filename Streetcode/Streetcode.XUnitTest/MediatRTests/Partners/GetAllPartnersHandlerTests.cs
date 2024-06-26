@@ -15,7 +15,6 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
         private readonly Mock<IRepositoryWrapper> _wrapperMock;
         private readonly Mock<IMapper> _mapperMock;
         private readonly Mock<ILoggerService> _loggerMock;
-        private readonly Mock<ICacheService> _cacheServiceMock;
         private List<Partner> partners;
         private List<PartnerDTO> partnersDTO;
         private readonly PartnerDTO _partnerDTO = new PartnerDTO()
@@ -53,7 +52,6 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             _wrapperMock = new Mock<IRepositoryWrapper>();
             _mapperMock = new Mock<IMapper>();
             _loggerMock = new Mock<ILoggerService>();
-            _cacheServiceMock = new Mock<ICacheService>();
         }
 
         [Fact]
@@ -62,7 +60,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             // Arrange
             _mapperMock.Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<object>>())).Returns(partnersDTO);
             _wrapperMock.Setup(repo => repo.PartnersRepository.GetAllAsync(default, default)).ReturnsAsync(partners);
-            var handlerObj = new GetAllPartnersHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object, _cacheServiceMock.Object);
+            var handlerObj = new GetAllPartnersHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = await handlerObj.Handle(new GetAllPartnersQuery(), default);
@@ -77,7 +75,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             // Arrange
             _mapperMock.Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<PartnerDTO>>())).Returns(new List<PartnerDTO>());
             _wrapperMock.Setup(obj => obj.PartnersRepository.GetAllAsync(default, default)).ReturnsAsync(new List<Partner>());
-            var handlerObj = new GetAllPartnersHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object, _cacheServiceMock.Object);
+            var handlerObj = new GetAllPartnersHandler(_wrapperMock.Object, _mapperMock.Object, _loggerMock.Object);
 
             // Act
             var result = await handlerObj.Handle(new GetAllPartnersQuery(), default);

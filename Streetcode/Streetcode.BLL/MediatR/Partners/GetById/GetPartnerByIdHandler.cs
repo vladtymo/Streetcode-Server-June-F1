@@ -17,31 +17,20 @@ public class GetPartnerByIdHandler : IRequestHandler<GetPartnerByIdQuery, Result
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
     private readonly ILoggerService _logger;
-    private readonly ICacheService _cacheService;
 
-    public GetPartnerByIdHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger, ICacheService cacheService)
+    public GetPartnerByIdHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
     {
         _repositoryWrapper = repositoryWrapper;
         _mapper = mapper;
         _logger = logger;
-        _cacheService = cacheService;
     }
 
     public async Task<Result<PartnerDTO>> Handle(GetPartnerByIdQuery request, CancellationToken cancellationToken)
     {
-        string key = $"Partner{request.Id}";
-        await _cacheService.GetCacheAsync(key);
-        string? cachedValue = await _cacheService.GetCacheAsync(key);
-
-        if (!string.IsNullOrEmpty(cachedValue))
+        if (request.CachedResponse is not null)
         {
-            var partnersCache = JsonConvert.DeserializeObject<PartnerDTO>(
-                cachedValue);
-            
-            if (partnersCache != null)
-            {
-                return Result.Ok(_mapper.Map<PartnerDTO>(partnersCache));
-            }
+            var cachedPartnerDto = JsonConvert.DeserializeObject<PartnerDTO>(request.CachedResponse.ToString() !);
+            return Result.Ok(_mapper.Map<PartnerDTO>(cachedPartnerDto));
         }
 
         var partner = await _repositoryWrapper
@@ -57,7 +46,6 @@ public class GetPartnerByIdHandler : IRequestHandler<GetPartnerByIdQuery, Result
             return Result.Fail(new Error(errorMsg));
         }
         
-        await _cacheService.SetCacheAsync(key, partner);
         return Result.Ok(_mapper.Map<PartnerDTO>(partner));
     }
 }

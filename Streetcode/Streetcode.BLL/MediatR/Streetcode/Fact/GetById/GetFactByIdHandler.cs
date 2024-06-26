@@ -25,6 +25,12 @@ public class GetFactByIdHandler : IRequestHandler<GetFactByIdQuery, Result<FactD
 
     public async Task<Result<FactDto>> Handle(GetFactByIdQuery request, CancellationToken cancellationToken)
     {
+        if (request.CachedResponse is not null)
+        {
+            var cachedFactDto = JsonConvert.DeserializeObject<FactDto>(request.CachedResponse.ToString() !);
+            return Result.Ok(cachedFactDto) !;
+        }
+        
         var facts = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Id == request.Id);
 
         if (facts is null)

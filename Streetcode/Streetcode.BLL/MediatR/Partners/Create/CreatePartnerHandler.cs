@@ -11,21 +11,19 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Partners.Create
 {
-    public class CreatePartnerHandler : IRequestHandler<CreatePartnerQuery, Result<PartnerDTO>>
+    public class CreatePartnerHandler : IRequestHandler<CreatePartnerCommand, Result<PartnerDTO>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
-        private readonly ICacheService _cacheService;
-        public CreatePartnerHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger, ICacheService cacheService)
+        public CreatePartnerHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
         {
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
             _logger = logger;
-            _cacheService = cacheService;
         }
 
-        public async Task<Result<PartnerDTO>> Handle(CreatePartnerQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PartnerDTO>> Handle(CreatePartnerCommand request, CancellationToken cancellationToken)
         {
             var newPartner = _mapper.Map<Partner>(request.newPartner);
             try
@@ -39,7 +37,6 @@ namespace Streetcode.BLL.MediatR.Partners.Create
                     .GetAllAsync(s => streetcodeIds.Contains(s.Id)));
 
                 _repositoryWrapper.SaveChanges();
-                await _cacheService.InvalidateCacheAsync("Partner");
                 return Result.Ok(_mapper.Map<PartnerDTO>(newPartner));
             }
             catch(Exception ex)

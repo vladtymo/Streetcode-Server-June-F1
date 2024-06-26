@@ -18,29 +18,20 @@ namespace Streetcode.BLL.MediatR.Partners.GetAllPartnerShort
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
-        private readonly ICacheService _cacheService;
 
-        public GetAllPartnerShortHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger, ICacheService cacheService)
+        public GetAllPartnerShortHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
         {
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
             _logger = logger;
-            _cacheService = cacheService;
         }
 
         public async Task<Result<IEnumerable<PartnerShortDTO>>> Handle(GetAllPartnersShortQuery request, CancellationToken cancellationToken)
         {
-            string key = $"PartnerShort";
-            string? cachedValue = await _cacheService.GetCacheAsync(key);
-
-            if (!string.IsNullOrEmpty(cachedValue))
+            if (request.CachedResponse is not null)
             {
-                IEnumerable<PartnerShortDTO?> partnerShort = JsonConvert.DeserializeObject<IEnumerable<PartnerShortDTO>>(cachedValue) !;
-
-                if (partnerShort != null)
-                {
-                    return Result.Ok(partnerShort) !;
-                }
+                var cachedPartnerDtos = JsonConvert.DeserializeObject<IEnumerable<PartnerShortDTO>>(request.CachedResponse.ToString() !);
+                return Result.Ok(_mapper.Map<IEnumerable<PartnerShortDTO>>(cachedPartnerDtos));
             }
 
             var partners = await _repositoryWrapper.PartnersRepository.GetAllAsync();
@@ -52,7 +43,6 @@ namespace Streetcode.BLL.MediatR.Partners.GetAllPartnerShort
                 return Result.Fail(new Error(errorMsg));
             }
 
-            await _cacheService.SetCacheAsync(key, _mapper.Map<IEnumerable<PartnerShortDTO>>(partners));
 
             return Result.Ok(_mapper.Map<IEnumerable<PartnerShortDTO>>(partners));
         }
