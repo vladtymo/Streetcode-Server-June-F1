@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using StackExchange.Redis;
 
-
-namespace Streetcode.BLL.Services.Cache
+namespace Streetcode.BLL.Services.CacheService
 {
     public class CacheService : ICacheService
     {
@@ -54,32 +52,14 @@ namespace Streetcode.BLL.Services.Cache
         {
             try
             {
-                await _cache.StringSetAsync(key, value, expiry);
-                _logger.LogInformation($"Cache set for key: {key}");
+                var wasSetSuccessfully = await _cache.StringSetAsync(key, value, expiry);
+                _logger.LogInformation($"Cache '{wasSetSuccessfully}' set for key: '{key}'");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error setting cache for key: {key}");
             }
         }
-
-        public async Task SetCacheAsync(string key, object value, TimeSpan? expiry = null)
-        {
-            try
-            {
-                var settings = new JsonSerializerSettings
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                };
-                await _cache.StringSetAsync(key, JsonConvert.SerializeObject(value, settings), expiry);
-                _logger.LogInformation($"Cache set for key: {key}");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error setting cache for key: {key}");
-            }
-        }
-
 
         public async Task<string?> GetCacheAsync(string key)
         {

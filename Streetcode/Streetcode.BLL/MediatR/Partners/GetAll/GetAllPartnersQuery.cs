@@ -1,10 +1,10 @@
 ﻿using FluentResults;
 using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.Services.Cache;
+using Streetcode.BLL.Services.CacheService;
 
 namespace Streetcode.BLL.MediatR.Partners.GetAll;
 
 public record GetAllPartnersQuery : ICachibleQueryPreProcessor<Result<IEnumerable<PartnerDTO>>>
 {
-    public object? CachedResponse { get; set; }
+    public Result<IEnumerable<PartnerDTO>>? CachedResponse { get; set; }
 }

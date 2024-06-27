@@ -24,20 +24,12 @@ namespace Streetcode.BLL.MediatR.Partners.GetAllPartnerShort
 
         public async Task<Result<IEnumerable<PartnerShortDTO>>> Handle(GetAllPartnersShortQuery request, CancellationToken cancellationToken)
         {
-            if (request.CachedResponse is not null)
+            if (request.CachedResponse?.IsSuccess == true)
             {
-                var cachedPartnerDtos = JsonConvert.DeserializeObject<IEnumerable<PartnerShortDTO>>(request.CachedResponse.ToString() !);
-                return Result.Ok(_mapper.Map<IEnumerable<PartnerShortDTO>>(cachedPartnerDtos));
+                return request.CachedResponse;
             }
 
             var partners = await _repositoryWrapper.PartnersRepository.GetAllAsync();
-
-            if (partners is null)
-            {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request);
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(new Error(errorMsg));
-            }
 
 
             return Result.Ok(_mapper.Map<IEnumerable<PartnerShortDTO>>(partners));

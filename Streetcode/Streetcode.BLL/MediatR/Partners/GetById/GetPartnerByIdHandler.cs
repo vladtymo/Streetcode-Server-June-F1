@@ -2,7 +2,6 @@
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
@@ -25,18 +24,18 @@ public class GetPartnerByIdHandler : IRequestHandler<GetPartnerByIdQuery, Result
 
     public async Task<Result<PartnerDTO>> Handle(GetPartnerByIdQuery request, CancellationToken cancellationToken)
     {
-        if (request.CachedResponse is not null)
+        if (request.CachedResponse?.IsSuccess == true)
         {
-            var cachedPartnerDto = JsonConvert.DeserializeObject<PartnerDTO>(request.CachedResponse.ToString() !);
-            return Result.Ok(_mapper.Map<PartnerDTO>(cachedPartnerDto));
+            return request.CachedResponse;
         }
 
         var partner = await _repositoryWrapper
             .PartnersRepository
-            .GetSingleOrDefaultAsync(
+            .GetFirstOrDefaultAsync(
                 predicate: p => p.Id == request.Id,
                 include: p => p
                     .Include(pl => pl.PartnerSourceLinks));
+
         if (partner is null)
         {
             var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request, request.Id);

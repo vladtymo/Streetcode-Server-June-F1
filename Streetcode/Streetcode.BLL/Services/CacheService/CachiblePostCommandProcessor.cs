@@ -1,10 +1,10 @@
 using System.Text;
 using FluentResults;
 using MediatR.Pipeline;
-namespace Streetcode.BLL.Services.Cache;
 
-public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostProcessor<TRequest, TResponse>
-     where TRequest : ICachibleCommandPostProcessor<TResponse>
+namespace Streetcode.BLL.Services.CacheService;
+
+public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostProcessor<TRequest, TResponse> where TRequest : ICachibleCommandPostProcessor<TResponse>
 {
     private readonly ICacheService _cacheService;
     public CachiblePostCommandProcessor(ICacheService cacheService)
@@ -19,7 +19,7 @@ public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostPro
             return;
         }
 
-        var resultString = SplitCamelCase(request.ToResult().ValueOrDefault.ToString() !);
+        var resultString = SplitCamelCase(request.ToResult().ValueOrDefault.ToString()!);
         var sharedKeyForEntity = EraseLastCharIfThatEndLetterS(resultString);
         if (!await _cacheService.CacheKeyPatternExist(sharedKeyForEntity))
         {

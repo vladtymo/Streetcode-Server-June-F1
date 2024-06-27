@@ -23,7 +23,7 @@ using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
 using StackExchange.Redis;
 using Streetcode.BLL.Behavior;
-using Streetcode.BLL.Services.Cache;
+using Streetcode.BLL.Services.CacheService;
 
 namespace Streetcode.WebApi.Extensions;
 
