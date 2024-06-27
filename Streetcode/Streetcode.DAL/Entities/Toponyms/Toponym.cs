@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
 using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Toponyms;
 
-public class Toponym
+public class Toponym : IEntityId<int>
 {
     public int Id { get; set; }
 

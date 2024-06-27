@@ -1,6 +1,8 @@
-﻿namespace Streetcode.DAL.Entities.Streetcode.TextContent;
+﻿using Streetcode.DAL.Entities.Base;
 
-public class Text
+namespace Streetcode.DAL.Entities.Streetcode.TextContent;
+
+public class Text : IEntityId<int>
 {
     public int Id { get; set; }
 

@@ -1,8 +1,9 @@
 using MimeKit;
+using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.AdditionalContent.Email
 {
-    public class Message
+    public class Message : IEntity
     {
         public Message(IEnumerable<string> to, string from, string subject, string content)
         {

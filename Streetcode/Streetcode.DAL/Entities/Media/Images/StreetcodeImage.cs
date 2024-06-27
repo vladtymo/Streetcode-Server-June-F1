@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Media.Images
 {
-    public class StreetcodeImage
+    public class StreetcodeImage : IEntity
     {
         public int StreetcodeId { get; set; }
 

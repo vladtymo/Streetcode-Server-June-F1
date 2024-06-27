@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Streetcode;
 
-public class RelatedFigure
+public class RelatedFigure : IEntity
 {
     public int ObserverId { get; set; }
 
