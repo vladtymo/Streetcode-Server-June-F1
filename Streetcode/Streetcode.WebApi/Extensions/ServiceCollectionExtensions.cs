@@ -41,10 +41,6 @@ public static class ServiceCollectionExtensions
         var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(currentAssemblies);
         services.AddValidatorsFromAssemblies(currentAssemblies);
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachiblePreQueryProcessor<,>));
-        services.AddTransient(typeof(IRequestPostProcessor<,>), typeof(CachiblePostQueryProcessor<,>));
-        services.AddTransient(typeof(IRequestPostProcessor<,>), typeof(CachiblePostCommandProcessor<,>));
         services.AddMediatR(currentAssemblies);
         services.AddScoped<IBlobService, BlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
@@ -52,6 +48,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInstagramService, InstagramService>();
         services.AddScoped<ITextService, AddTermsToTextService>(); 
+        services.AddScoped<ICacheService, CacheService>();
     }
 
     public static void CachingService(this IServiceCollection services, ConfigurationManager configuration)
@@ -61,7 +58,14 @@ public static class ServiceCollectionExtensions
         var redisConnectionString = configuration.GetSection(environment).GetConnectionString("ReddisConnection");
         var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
         services.AddSingleton<IConnectionMultiplexer>(multiplexer);
-        services.AddSingleton<ICacheService, CacheService>();
+    }
+
+    public static void AddPipelineBehaviors(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachiblePreQueryProcessor<,>));
+        services.AddTransient(typeof(IRequestPostProcessor<,>), typeof(CachiblePostQueryProcessor<,>));
+        services.AddTransient(typeof(IRequestPostProcessor<,>), typeof(CachiblePostCommandProcessor<,>));
     }
 
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
