@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.Partners;
 using Streetcode.DAL.Entities.Sources;
 using Streetcode.DAL.Entities.Streetcode;
@@ -8,7 +7,7 @@ using Streetcode.DAL.Entities.Team;
 
 namespace Streetcode.DAL.Entities.Media.Images;
 
-public class Image
+public class Image : IEntityId<int>
 {
     public int Id { get; set; }
 

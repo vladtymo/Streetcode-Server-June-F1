@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Streetcode.DAL.Entities.Base;
+using Newtonsoft.Json;
 
 namespace Streetcode.DAL.Entities.Payment
 {
-    public class MerchantPaymentInfo
+    public class MerchantPaymentInfo : IEntity
     {
         // [JsonProperty("reference")]
         // public string Reference { get; set; }

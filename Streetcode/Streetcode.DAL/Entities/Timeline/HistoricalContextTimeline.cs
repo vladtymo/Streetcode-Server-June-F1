@@ -1,8 +1,8 @@
-using System.ComponentModel.DataAnnotations;
+using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Timeline
 {
-    public class HistoricalContextTimeline
+    public class HistoricalContextTimeline : IEntity
     {
         public int HistoricalContextId { get; set; }
 

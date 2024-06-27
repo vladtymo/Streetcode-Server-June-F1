@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Instagram
 {
-    public class InstagramPostResponse
+    public class InstagramPostResponse : IEntity
     {
         public IEnumerable<InstagramPost>? Data { get; set; }
     }

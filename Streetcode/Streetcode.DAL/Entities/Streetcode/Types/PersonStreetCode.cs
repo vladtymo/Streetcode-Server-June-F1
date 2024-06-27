@@ -1,8 +1,8 @@
-using System.ComponentModel.DataAnnotations;
+using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Streetcode.Types;
 
-public class PersonStreetcode : StreetcodeContent
+public class PersonStreetcode : StreetcodeContent, IEntity
 {
     public string FirstName { get; set; } = string.Empty;
 

@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Payment
 {
-    public class BasketOrder
+    public class BasketOrder : IEntity
     {
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;

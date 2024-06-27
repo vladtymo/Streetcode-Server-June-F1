@@ -1,8 +1,9 @@
+using Streetcode.DAL.Entities.Base;
 using Newtonsoft.Json;
 
 namespace Streetcode.DAL.Entities.Payment
 {
-    public class InvoiceInfo
+    public class InvoiceInfo : IEntity
     {
         [JsonConstructor]
         public InvoiceInfo(string invoiceId, string pageUrl)
