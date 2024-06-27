@@ -96,6 +96,34 @@ namespace Streetcode.BLL.Services.Cache
             }
         }
 
+        public async Task<bool> CacheKeyIsExist(string key)
+        {
+            if (await _cache.KeyExistsAsync(key))
+            {
+                _logger.LogInformation($"Cache key exists: {key}");
+                return true;
+            }
+
+            return false;
+        }
+        
+        public Task<bool> CacheKeyPatternExist(string pattern)
+        {
+            var endpoints = _redis.GetEndPoints();
+            foreach (var endpoint in endpoints)
+            {
+                var server = _redis.GetServer(endpoint);
+                var keys = server.Keys(pattern: "*" + pattern + "*").ToArray();
+                if (keys.Any())
+                {
+                    _logger.LogInformation($"Cache key pattern exists: {pattern}");
+                    return Task.FromResult(true);
+                }
+            }
+
+            return Task.FromResult(false);
+        }
+        
         public async Task DeleteCacheAsync(string key)
         {
             try

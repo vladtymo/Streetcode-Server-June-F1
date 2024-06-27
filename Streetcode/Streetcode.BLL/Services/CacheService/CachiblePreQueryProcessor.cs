@@ -21,8 +21,8 @@ namespace Streetcode.BLL.Services.Cache
 
             if (!string.IsNullOrEmpty(cachedValue))
             { 
-                request.CachedResponse = JsonConvert.DeserializeObject(cachedValue);
-                await next();
+                request.CachedResponse = JsonConvert.DeserializeObject(cachedValue) !;
+                return await next();
             }
             
             return await next();
