@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.Media.Images;
 
 namespace Streetcode.DAL.Entities.News
 {
-    public class News
+    public class News : IEntityId<int>
     { 
         public int Id { get; set; }
 
