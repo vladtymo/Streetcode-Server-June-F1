@@ -15,7 +15,7 @@ public class CachiblePostQueryProcessor<TRequest, TResponse> : IRequestPostProce
 
     public async Task Process(TRequest request, TResponse response, CancellationToken cancellationToken)
     {
-        if (await _cacheService.CacheKeyIsExist(request.ToResult().ValueOrDefault!.ToString() !))
+        if (await _cacheService.CacheKeyIsExist(request.ToResult().ValueOrDefault!.ToString() !) !)
         {
             return;
         }

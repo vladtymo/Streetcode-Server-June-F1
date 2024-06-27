@@ -1,3 +1,4 @@
+using FluentResults;
 using MediatR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -16,7 +17,7 @@ namespace Streetcode.BLL.Services.Cache
 
         public async Task<T> Handle(TRequest request, RequestHandlerDelegate<T> next, CancellationToken cancellationToken)
         {
-            string key = request.GetType().Name;
+            string key = request.ToResult().Value.ToString() !;
             string? cachedValue = await _cacheService.GetCacheAsync(key);
 
             if (!string.IsNullOrEmpty(cachedValue))
