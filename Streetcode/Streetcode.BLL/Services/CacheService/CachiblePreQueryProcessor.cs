@@ -1,12 +1,10 @@
-using FluentResults;
+﻿using FluentResults;
 using MediatR;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace Streetcode.BLL.Services.Cache
+namespace Streetcode.BLL.Services.CacheService
 {
-    public class CachiblePreQueryProcessor<TRequest, T> : IPipelineBehavior<TRequest, T>
-        where TRequest : ICachibleQueryPreProcessor<T>
+    public class CachiblePreQueryProcessor<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICachibleQueryPreProcessor<TResponse> where TResponse : class
     {
         private readonly ICacheService _cacheService;
 
@@ -15,14 +13,20 @@ namespace Streetcode.BLL.Services.Cache
             _cacheService = cacheService;
         }
 
-        public async Task<T> Handle(TRequest request, RequestHandlerDelegate<T> next, CancellationToken cancellationToken)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            string key = request.ToResult().Value.ToString() !;
-            string? cachedValue = await _cacheService.GetCacheAsync(key);
+            var key = request.ToResult().Value.ToString()!;
+            var cachedValue = await _cacheService.GetCacheAsync(key);
 
             if (!string.IsNullOrEmpty(cachedValue))
-            { 
-                request.CachedResponse = JsonConvert.DeserializeObject(cachedValue) !;
+            {
+                var innerType = typeof(TResponse).GetGenericArguments()[0];
+                var cachedObject = JsonConvert.DeserializeObject(cachedValue, innerType);
+                var resultType = typeof(Result<>).MakeGenericType(innerType);
+                var resultInstance = Activator.CreateInstance(resultType);
+                var successProperty = resultType.GetProperty("Value");
+                successProperty?.SetValue(resultInstance, cachedObject);
+                request.CachedResponse = (TResponse)resultInstance!;
                 return await next();
             }
             

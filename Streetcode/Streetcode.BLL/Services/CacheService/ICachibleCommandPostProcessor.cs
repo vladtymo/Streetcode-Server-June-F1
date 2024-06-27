@@ -1,11 +1,7 @@
 using MediatR;
 
-namespace Streetcode.BLL.Services.Cache;
+namespace Streetcode.BLL.Services.CacheService;
 
-public interface ICachibleCommandPostProcessor<out TResponse> : IRequest<TResponse>, ICachibleCommandPostProcessor
-{
-}
-
-public interface ICachibleCommandPostProcessor
+public interface ICachibleCommandPostProcessor<out TResponse> : IRequest<TResponse>
 {
 }

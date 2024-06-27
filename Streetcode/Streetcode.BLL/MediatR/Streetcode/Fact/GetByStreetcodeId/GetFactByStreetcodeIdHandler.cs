@@ -24,21 +24,13 @@ public class GetFactByStreetcodeIdHandler : IRequestHandler<GetFactByStreetcodeI
 
     public async Task<Result<IEnumerable<FactDto>>> Handle(GetFactByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
-        if(request.CachedResponse is not null)
+        if (request.CachedResponse?.IsSuccess == true)
         {
-            var cachedFactDto = JsonConvert.DeserializeObject<IEnumerable<FactDto>>(request.CachedResponse.ToString() !);
-            return Result.Ok(cachedFactDto) !;
+            return request.CachedResponse;
         }
-        
+
         var fact = await _repositoryWrapper.FactRepository
             .GetAllAsync(f => f.StreetcodeId == request.StreetcodeId);
-
-        if (fact is null)
-        {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFoundWithStreetcode, request, request.StreetcodeId);
-            _logger.LogError(request, errorMsg);
-            return Result.Fail(new Error(errorMsg));
-        }
 
         return Result.Ok(_mapper.Map<IEnumerable<FactDto>>(fact));
     }

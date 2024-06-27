@@ -1,12 +1,8 @@
 using MediatR;
 
-namespace Streetcode.BLL.Services.Cache;
+namespace Streetcode.BLL.Services.CacheService;
 
-public interface ICachibleQueryPreProcessor<T> : IRequest<T>, ICachibleQueryPreProcessor
+public interface ICachibleQueryPreProcessor<TResult> : IRequest<TResult>
 {
-   object? CachedResponse { get; set; }
-}
-
-public interface ICachibleQueryPreProcessor
-{
+    TResult? CachedResponse { get; set; }
 }

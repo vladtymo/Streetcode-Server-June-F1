@@ -24,22 +24,21 @@ public class GetFactByIdHandler : IRequestHandler<GetFactByIdQuery, Result<FactD
 
     public async Task<Result<FactDto>> Handle(GetFactByIdQuery request, CancellationToken cancellationToken)
     {
-        if (request.CachedResponse is not null)
+        if (request.CachedResponse?.IsSuccess == true)
         {
-            var cachedFactDto = JsonConvert.DeserializeObject<FactDto>(request.CachedResponse.ToString() !);
-            return Result.Ok(cachedFactDto) !;
+            return request.CachedResponse;
         }
-        
-        var facts = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Id == request.Id);
 
-        if (facts is null)
+        var fact = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Id == request.Id);
+
+        if (fact is null)
         {
             var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        var factDto = _mapper.Map<FactDto>(facts);
+        var factDto = _mapper.Map<FactDto>(fact);
 
         return Result.Ok(factDto);
     }

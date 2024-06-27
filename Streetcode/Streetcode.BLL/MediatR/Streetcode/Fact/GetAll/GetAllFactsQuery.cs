@@ -1,10 +1,10 @@
 ﻿using FluentResults;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
-using Streetcode.BLL.Services.Cache;
+using Streetcode.BLL.Services.CacheService;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Fact.GetAll;
 
 public record GetAllFactsQuery : ICachibleQueryPreProcessor<Result<IEnumerable<FactDto>>>
 {
-    public object? CachedResponse { get; set; }
+    public Result<IEnumerable<FactDto>>? CachedResponse { get; set; }
 }

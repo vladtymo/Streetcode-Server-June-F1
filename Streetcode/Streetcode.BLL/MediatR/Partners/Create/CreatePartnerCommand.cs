@@ -1,7 +1,7 @@
 ﻿using FluentResults;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Behavior;
-using Streetcode.BLL.Services.Cache;
+using Streetcode.BLL.Services.CacheService;
 
 namespace Streetcode.BLL.MediatR.Partners.Create
 {
