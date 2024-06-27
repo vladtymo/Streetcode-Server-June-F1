@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Streetcode.DAL.Entities.Base;
+using Newtonsoft.Json;
 
 namespace Streetcode.DAL.Entities.Payment
 {
-    public class SaveCardData
+    public class SaveCardData : IEntity
     {
         [JsonProperty("saveCard")]
         public bool SaveCard { get; set; }

@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Sources;
 
-public class StreetcodeCategoryContent
+public class StreetcodeCategoryContent : IEntity
 {
     public string? Text { get; set; } = string.Empty;
 

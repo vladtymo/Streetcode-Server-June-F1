@@ -38,17 +38,17 @@ public interface IRepositoryBase<T>
     Task<IEnumerable<T>> GetAllAsync(
         Expression<Func<T, bool>>? predicate = default,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default);
-    Task<IEnumerable<T>?> GetAllAsync(ISpecification<T> specification);
 
     Task<IEnumerable<T>?> GetAllAsync(
         Expression<Func<T, T>> selector,
         Expression<Func<T, bool>>? predicate = default,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default);
+    Task<IEnumerable<T>?> GetAllWithSpecAsync(params ISpecification<T>[] specs);
 
     Task<T?> GetSingleOrDefaultAsync(
         Expression<Func<T, bool>>? predicate = default,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default);
-    Task<T?> GetSingleOrDefaultAsync(ISpecification<T> specification);
+    Task<T?> GetSingleOrDefaultWithSpecAsync(params ISpecification<T>[] specs);
 
     Task<T?> GetFirstOrDefaultAsync(
         Expression<Func<T, bool>>? predicate = default,
@@ -58,6 +58,5 @@ public interface IRepositoryBase<T>
         Expression<Func<T, T>> selector,
         Expression<Func<T, bool>>? predicate = default,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = default);
-
-    Task<T?> GetFirstOrDefaultAsync(ISpecification<T> specification);
+    Task<T?> GetFirstOrDefaultWithSpecAsync(params ISpecification<T>[] specs);
 }

@@ -20,8 +20,8 @@ namespace Streetcode.BLL.Services.Text
         {
             _repositoryWrapper = repositoryWrapper;
             _buffer = new List<int>();
-            _terms = new HashSet<Term>(new IdComparerTerm());
-            _relatedTerms = new HashSet<RelatedTerm>(new IdComparerRelated());
+            _terms = new HashSet<Term>(new IdComparer<Term>());
+            _relatedTerms = new HashSet<RelatedTerm>(new IdComparer<RelatedTerm>());
             Pattern = new("(\\s)|(<[^>]*>)", RegexOptions.None, TimeSpan.FromMilliseconds(1000));
         }
 

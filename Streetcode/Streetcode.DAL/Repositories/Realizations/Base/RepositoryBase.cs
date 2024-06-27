@@ -4,8 +4,6 @@ using Ardalis.Specification.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
-using MimeKit;
-using Streetcode.BLL.Specification.Streetcode.Streetcode.NewFolder;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -120,11 +118,9 @@ public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>, IS
         return await GetQueryable(predicate, include, selector).ToListAsync() ?? new List<T>();
     }
 
-    public async Task<IEnumerable<T>?> GetAllAsync(ISpecification<T> specification)
+    public async Task<IEnumerable<T>?> GetAllWithSpecAsync(params ISpecification<T>[] specs)
     {
-        return await _dbContext.Set<T>()
-            .AsQueryable()
-            .ApplySpecification(specification)
+        return await ApplySpecifications(specs)
             .ToListAsync();
     }
 
@@ -135,11 +131,9 @@ public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>, IS
         return await GetQueryable(predicate, include).SingleOrDefaultAsync();
     }
 
-    public async Task<T?> GetSingleOrDefaultAsync(ISpecification<T> specification)
+    public async Task<T?> GetSingleOrDefaultWithSpecAsync(params ISpecification<T>[] specs)
     {
-       return await _dbContext.Set<T>()
-            .AsQueryable()
-            .ApplySpecification(specification)
+        return await ApplySpecifications(specs)
             .SingleOrDefaultAsync();
     }
 
@@ -158,12 +152,22 @@ public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>, IS
         return await GetQueryable(predicate, include, selector).FirstOrDefaultAsync();
     }
 
-    public async Task<T?> GetFirstOrDefaultAsync(ISpecification<T> specification)
+    public async Task<T?> GetFirstOrDefaultWithSpecAsync(params ISpecification<T>[] specs)
     {
-        return await _dbContext.Set<T>()
-            .AsQueryable()
-            .ApplySpecification(specification)
-            .SingleOrDefaultAsync();
+        return await ApplySpecifications(specs)
+            .FirstOrDefaultAsync();
+    }
+
+    private IQueryable<T> ApplySpecifications(params ISpecification<T>[] specs)
+    {
+        var query = _dbContext.Set<T>().AsQueryable().AsNoTracking();
+
+        foreach (var spec in specs)
+        {
+            query = SpecificationEvaluator.Default.GetQuery(query, spec);
+        }
+
+        return query;
     }
 
     private IQueryable<T> GetQueryable(

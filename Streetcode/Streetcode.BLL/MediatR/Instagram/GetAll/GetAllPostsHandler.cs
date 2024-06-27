@@ -21,7 +21,7 @@ namespace Streetcode.BLL.MediatR.Instagram.GetAll
         {
             var result = await _instagramService.GetPostsAsync();
 
-            if (result.Count() == 0)
+            if (!result.Any())
             {
                 const string errorMsg = $"Cannot find any posts";
                 _logger.LogError(request, errorMsg);
