@@ -8,5 +8,9 @@ namespace Streetcode.DAL.Entities.Users
     public class User : IdentityUser<Guid>
     {
         public DateOnly BirthDate { get; set; }
+
+        public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
     }
 }

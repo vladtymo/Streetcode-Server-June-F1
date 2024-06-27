@@ -14,6 +14,12 @@ namespace Streetcode.DAL.Persistence.Configurations.Identity.Users
             builder.Property(u => u.BirthDate)
                 .HasConversion<DateOnlyConverter>()
                 .HasColumnType("date");
+
+            builder.Property(u => u.FirstName)
+                .HasMaxLength(50);
+
+            builder.Property(u => u.LastName)
+                .HasMaxLength(50);
         }
     }
 }
