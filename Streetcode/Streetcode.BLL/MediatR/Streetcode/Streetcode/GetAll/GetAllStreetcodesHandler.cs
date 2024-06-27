@@ -48,7 +48,7 @@ public class GetAllStreetcodesHandler : IRequestHandler<GetAllStreetcodesQuery, 
 
         if (filteredListStreetcodes == null)
         {
-            string errorMsg = string.Format(ErrorMessages.StreetCodeIsNull, nameof(filteredListStreetcodes));
+            string errorMsg = ErrorMessages.StreetCodeIsNull;
             _logger.LogError(filterRequest, errorMsg);
             return Result.Fail(errorMsg);
         }
