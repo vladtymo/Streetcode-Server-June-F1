@@ -41,10 +41,10 @@ public static class ServiceCollectionExtensions
         var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(currentAssemblies);
         services.AddValidatorsFromAssemblies(currentAssemblies);
-        services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachiblePreQueryProcessor<,>));
-        services.AddSingleton(typeof(IRequestPostProcessor<,>), typeof(CachiblePostQueryProcessor<,>));
-        services.AddSingleton(typeof(IRequestPostProcessor<,>), typeof(CachiblePostCommandProcessor<,>));
+        services.AddTransient(typeof(IRequestPostProcessor<,>), typeof(CachiblePostQueryProcessor<,>));
+        services.AddTransient(typeof(IRequestPostProcessor<,>), typeof(CachiblePostCommandProcessor<,>));
         services.AddMediatR(currentAssemblies);
         services.AddScoped<IBlobService, BlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
@@ -61,7 +61,7 @@ public static class ServiceCollectionExtensions
         var redisConnectionString = configuration.GetSection(environment).GetConnectionString("ReddisConnection");
         var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
         services.AddSingleton<IConnectionMultiplexer>(multiplexer);
-        services.AddScoped<ICacheService, CacheService>();
+        services.AddSingleton<ICacheService, CacheService>();
     }
 
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)

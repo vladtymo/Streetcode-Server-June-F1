@@ -1,5 +1,4 @@
 ﻿using FluentResults;
-using MediatR;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Behavior;
 using Streetcode.BLL.Services.Cache;

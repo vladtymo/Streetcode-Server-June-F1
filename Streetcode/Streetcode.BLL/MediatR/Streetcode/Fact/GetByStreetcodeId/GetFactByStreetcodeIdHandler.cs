@@ -2,7 +2,6 @@
 using FluentResults;
 using MediatR;
 using Newtonsoft.Json;
-using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;

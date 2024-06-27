@@ -3,11 +3,9 @@ using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
-using Streetcode.BLL.Services.Cache;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Partners.GetById;
