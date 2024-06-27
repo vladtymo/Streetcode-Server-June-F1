@@ -268,62 +268,7 @@ namespace Streetcode.WebApi.Extensions
                             }
                         }
                     }
-
-                    //Seed Identity data
-                     //1) Add User Roles
-                    if (!dbContext.Roles.Any())
-                    {
-                        dbContext.Roles.AddRange(
-                            new IdentityRole<Guid>()
-                            {
-                                Id = Guid.Parse("0635994b-6361-4544-99f7-ad04066edbcb"),
-                                Name = "admin",
-                                NormalizedName = "Admin"
-                            },
-                            new IdentityRole<Guid>()
-                            {
-                                Id = Guid.Parse("597e1efa-c72b-49d4-a5cf-6162fc78d331"),
-                                Name = "user",
-                                NormalizedName = "User"
-                            });
-
-                        await dbContext.SaveChangesAsync();
-                    }
-
-                    // Add Admin user
-                    if (!dbContext.Users.Any())
-                    {
-                        dbContext.Users.Add(
-                            new User()
-                            {
-                                Id = Guid.Parse("b817dcaa-941f-455b-979c-23223a84080c"),
-                                UserName = "admin",
-                                NormalizedUserName = "Admin",
-                                Email = "adminEmail@gmail.com",
-                                NormalizedEmail = "ADMINEMAIL@gmail.com",
-                                EmailConfirmed = true,
-                                PasswordHash = new PasswordHasher<IdentityUser>()
-                                .HashPassword(null, "superuser"),
-                                SecurityStamp = string.Empty,
-                            });
-
-                        await dbContext.SaveChangesAsync();
-                    }
-
-                    if (!dbContext.UserRoles.Any())
-                    {
-                        dbContext.UserRoles.Add(
-                            new IdentityUserRole<Guid>()
-                            {
-                                UserId = dbContext.Users
-                                .First(u => u.UserName.Equals("admin") || u.NormalizedUserName.Equals("Admin")).Id,
-                                RoleId = dbContext.Roles
-                                .First(r => r.Name.Equals("admin") || r.NormalizedName.Equals("Admin")).Id
-                            });
-
-                        await dbContext.SaveChangesAsync();
-                    }
-
+                    
                     if (!dbContext.News.Any())
                     {
                         dbContext.News.AddRange(
