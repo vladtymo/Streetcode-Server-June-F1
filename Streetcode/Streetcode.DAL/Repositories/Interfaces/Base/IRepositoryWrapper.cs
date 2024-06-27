@@ -12,7 +12,6 @@ using Streetcode.DAL.Repositories.Interfaces.Team;
 using Streetcode.DAL.Repositories.Interfaces.Timeline;
 using Streetcode.DAL.Repositories.Interfaces.Toponyms;
 using Streetcode.DAL.Repositories.Interfaces.Transactions;
-using Streetcode.DAL.Repositories.Interfaces.Users;
 namespace Streetcode.DAL.Repositories.Interfaces.Base;
 
 public interface IRepositoryWrapper
@@ -43,8 +42,7 @@ public interface IRepositoryWrapper
     IToponymRepository ToponymRepository { get; }
     ITransactLinksRepository TransactLinksRepository { get; }
     IHistoricalContextRepository HistoricalContextRepository { get; }
-    IPartnerSourceLinkRepository PartnerSourceLinkRepository { get; }
-    IUserRepository UserRepository { get; }
+    IPartnerSourceLinkRepository PartnerSourceLinkRepository { get; }    
     IStreetcodeTagIndexRepository StreetcodeTagIndexRepository { get; }
     IPartnerStreetcodeRepository PartnerStreetcodeRepository { get;  }
     INewsRepository NewsRepository { get; }

@@ -22,10 +22,19 @@ using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
+using Microsoft.Extensions.DependencyInjection;
+using Streetcode.DAL.Entities.Users;
+using Microsoft.AspNetCore.Identity;
 namespace Streetcode.WebApi.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static void AddIdentityService(this IServiceCollection services)
+    {
+        services.AddIdentity<User, IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<StreetcodeDbContext>();
+    }
+
     public static void AddRepositoryServices(this IServiceCollection services)
     {
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();

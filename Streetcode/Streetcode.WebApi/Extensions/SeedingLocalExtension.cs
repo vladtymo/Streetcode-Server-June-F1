@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Streetcode.BLL.Services.BlobStorageService;
@@ -15,6 +16,7 @@ using Streetcode.DAL.Entities.Streetcode.Types;
 using Streetcode.DAL.Entities.Team;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Entities.Transactions;
+using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Enums;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Realizations.Base;
@@ -266,23 +268,7 @@ namespace Streetcode.WebApi.Extensions
                             }
                         }
                     }
-
-                    if (!dbContext.Users.Any())
-                    {
-                        dbContext.Users.AddRange(
-                            new DAL.Entities.Users.User
-                            {
-                                Email = "admin",
-                                Role = UserRole.MainAdministrator,
-                                Login = "admin",
-                                Name = "admin",
-                                Password = "admin",
-                                Surname = "admin",
-                            });
-
-                        await dbContext.SaveChangesAsync();
-                    }
-
+                    
                     if (!dbContext.News.Any())
                     {
                         dbContext.News.AddRange(
