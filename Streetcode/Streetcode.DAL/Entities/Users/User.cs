@@ -4,7 +4,7 @@ using Streetcode.DAL.Enums;
 
 namespace Streetcode.DAL.Entities.Users
 {
-    public class User : IEntityId
+    public class User : IEntityId<int>
     {
         public int Id { get; set; }
 

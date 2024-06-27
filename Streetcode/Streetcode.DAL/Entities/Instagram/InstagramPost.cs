@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Streetcode.DAL.Entities.Instagram
 {
-    public class InstagramPost : IEntity
+    public class InstagramPost : IEntityId<string>
     {
         /// <summary>
         /// The Media's caption text. Not returnable for Media in albums.

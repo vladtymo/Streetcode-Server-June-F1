@@ -3,7 +3,7 @@ using Streetcode.DAL.Enums;
 
 namespace Streetcode.DAL.Entities.Team
 {
-    public class TeamMemberLink : IEntityId
+    public class TeamMemberLink : IEntityId<int>
     {
         public int Id { get; set; }
 

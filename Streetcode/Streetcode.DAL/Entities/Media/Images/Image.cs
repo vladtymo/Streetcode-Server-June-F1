@@ -7,7 +7,7 @@ using Streetcode.DAL.Entities.Team;
 
 namespace Streetcode.DAL.Entities.Media.Images;
 
-public class Image : IEntityId
+public class Image : IEntityId<int>
 {
     public int Id { get; set; }
 

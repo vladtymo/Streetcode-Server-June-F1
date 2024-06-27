@@ -2,7 +2,7 @@
 
 namespace Streetcode.DAL.Entities.Team
 {
-    public class Positions : IEntityId
+    public class Positions : IEntityId<int>
     {
         public int Id { get; set; }
 

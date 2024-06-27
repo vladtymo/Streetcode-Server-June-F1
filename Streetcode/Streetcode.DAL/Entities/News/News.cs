@@ -3,7 +3,7 @@ using Streetcode.DAL.Entities.Media.Images;
 
 namespace Streetcode.DAL.Entities.News
 {
-    public class News : IEntityId
+    public class News : IEntityId<int>
     { 
         public int Id { get; set; }
 

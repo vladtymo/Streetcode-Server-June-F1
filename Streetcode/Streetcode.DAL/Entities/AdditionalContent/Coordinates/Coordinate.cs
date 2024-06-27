@@ -2,7 +2,7 @@ using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.AdditionalContent.Coordinates;
 
-public class Coordinate : IEntityId
+public class Coordinate : IEntityId<int>
 {
     public int Id { get; set; }
 

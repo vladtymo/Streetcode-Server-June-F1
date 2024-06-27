@@ -3,7 +3,7 @@ using Streetcode.DAL.Entities.Media.Images;
 
 namespace Streetcode.DAL.Entities.Streetcode.TextContent;
 
-public class Fact : IEntityId
+public class Fact : IEntityId<int>
 {
     public int Id { get; set; }
 

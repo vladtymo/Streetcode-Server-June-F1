@@ -4,7 +4,7 @@ using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Sources;
 
-public class SourceLinkCategory : IEntityId
+public class SourceLinkCategory : IEntityId<int>
 {
     public int Id { get; set; }
 

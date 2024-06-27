@@ -2,7 +2,7 @@
 
 namespace Streetcode.DAL.Entities.Feedback;
 
-public class Response : IEntityId
+public class Response : IEntityId<int>
 {
     public int Id { get; set; }
 

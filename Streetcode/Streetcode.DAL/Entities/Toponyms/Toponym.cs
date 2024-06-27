@@ -4,7 +4,7 @@ using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Toponyms;
 
-public class Toponym : IEntityId
+public class Toponym : IEntityId<int>
 {
     public int Id { get; set; }
 

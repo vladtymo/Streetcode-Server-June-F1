@@ -4,7 +4,7 @@ using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Analytics
 {
-    public class StatisticRecord : IEntityId
+    public class StatisticRecord : IEntityId<int>
     {
         public int Id { get; set; }
         public int QrId { get; set; }

@@ -3,7 +3,7 @@ using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Transactions;
 
-public class TransactionLink : IEntityId
+public class TransactionLink : IEntityId<int>
 {
     public int Id { get; set; }
 

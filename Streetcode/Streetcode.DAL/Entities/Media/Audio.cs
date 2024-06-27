@@ -3,7 +3,7 @@ using Streetcode.DAL.Entities.Base;
 
 namespace Streetcode.DAL.Entities.Media;
 
-public class Audio : IEntityId
+public class Audio : IEntityId<int>
 {
     public int Id { get; set; }
 

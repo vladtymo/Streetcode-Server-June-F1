@@ -4,7 +4,7 @@ using Streetcode.DAL.Entities.Base;
 namespace Streetcode.BLL.Util
 {
     public class IdComparer<T> : IEqualityComparer<T> 
-        where T : IEntityId
+        where T : IEntityId<int>
     {
         public bool Equals(T? x, T? y)
             {

@@ -2,7 +2,7 @@
 
 namespace Streetcode.DAL.Entities.Media.Images
 {
-    public class ImageDetails : IEntityId
+    public class ImageDetails : IEntityId<int>
     {
         public int Id { get; set; }
 

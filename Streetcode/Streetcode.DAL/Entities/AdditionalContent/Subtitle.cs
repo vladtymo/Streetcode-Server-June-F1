@@ -3,7 +3,7 @@
 
 namespace Streetcode.DAL.Entities.AdditionalContent;
 
-public class Subtitle : IEntityId
+public class Subtitle : IEntityId<int>
 {
     public int Id { get; set; }
 

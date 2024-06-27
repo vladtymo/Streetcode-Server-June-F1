@@ -2,7 +2,7 @@
 
 namespace Streetcode.DAL.Entities.Streetcode.TextContent;
 
-public class Text : IEntityId
+public class Text : IEntityId<int>
 {
     public int Id { get; set; }
 

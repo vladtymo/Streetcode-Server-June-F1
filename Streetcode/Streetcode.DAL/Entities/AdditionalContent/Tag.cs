@@ -3,7 +3,7 @@ using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.AdditionalContent;
 
-public class Tag : IEntityId
+public class Tag : IEntityId<int>
 {
     public int Id { get; set; }
 

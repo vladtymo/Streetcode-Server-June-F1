@@ -4,7 +4,7 @@ using Streetcode.DAL.Enums;
 
 namespace Streetcode.DAL.Entities.Timeline;
 
-public class TimelineItem : IEntityId
+public class TimelineItem : IEntityId<int>
 {
     public int Id { get; set; }
 

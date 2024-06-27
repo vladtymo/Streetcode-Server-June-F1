@@ -4,7 +4,7 @@ using Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.DAL.Entities.Partners;
 
-public class Partner : IEntityId
+public class Partner : IEntityId<int>
 {
     public int Id { get; set; }
 

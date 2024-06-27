@@ -14,7 +14,7 @@ using Streetcode.DAL.Enums;
 
 namespace Streetcode.DAL.Entities.Streetcode;
 
-public class StreetcodeContent : IEntityId
+public class StreetcodeContent : IEntityId<int>
 {
     public int Id { get; set; }
 
