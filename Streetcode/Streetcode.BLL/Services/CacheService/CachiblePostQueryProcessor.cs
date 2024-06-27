@@ -24,6 +24,6 @@ public class CachiblePostQueryProcessor<TRequest, TResponse> : IRequestPostProce
         var jsonObject = JObject.Parse(serializeObject);
 
         var valueToken = jsonObject["Value"];
-        _cacheService.SetCacheAsync(request.ToResult().ValueOrDefault.ToString() !, valueToken!);
+        await _cacheService.SetCacheAsync(request.ToResult().ValueOrDefault.ToString() !, valueToken!);
     }
 }
