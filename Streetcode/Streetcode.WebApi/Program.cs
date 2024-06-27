@@ -16,6 +16,8 @@ builder.Services.ConfigureBlob(builder);
 builder.Services.ConfigurePayment(builder);
 builder.Services.ConfigureInstagram(builder);
 builder.Services.ConfigureSerilog(builder);
+builder.Services.AddIdentityService();
+
 var app = builder.Build();
 
 if (app.Environment.EnvironmentName == "Local")
@@ -32,7 +34,7 @@ app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 await app.ApplyMigrations();
 
-// await app.SeedDataAsync(); // uncomment for seeding data in local
+await app.SeedDataAsync(); // uncomment for seeding data in local
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseRouting();
