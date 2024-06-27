@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Fact.GetAll;
@@ -27,6 +28,13 @@ public class GetAllFactsHandler : IRequestHandler<GetAllFactsQuery, Result<IEnum
         }
 
         var facts = await _repositoryWrapper.FactRepository.GetAllAsync();
+
+        if (facts is null)
+        {
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request);
+            _logger.LogError(request, errorMsg);
+            return Result.Fail(new Error(errorMsg));
+        }
 
         return Result.Ok(_mapper.Map<IEnumerable<FactDto>>(facts));
     }

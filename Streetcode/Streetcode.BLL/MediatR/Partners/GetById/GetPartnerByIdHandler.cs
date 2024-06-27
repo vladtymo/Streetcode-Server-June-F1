@@ -28,21 +28,20 @@ public class GetPartnerByIdHandler : IRequestHandler<GetPartnerByIdQuery, Result
         {
             return request.CachedResponse;
         }
-
+        
         var partner = await _repositoryWrapper
             .PartnersRepository
-            .GetFirstOrDefaultAsync(
+            .GetSingleOrDefaultAsync(
                 predicate: p => p.Id == request.Id,
                 include: p => p
                     .Include(pl => pl.PartnerSourceLinks));
-
         if (partner is null)
         {
             var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
-        
+
         return Result.Ok(_mapper.Map<PartnerDTO>(partner));
     }
 }

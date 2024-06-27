@@ -4,18 +4,19 @@ using Newtonsoft.Json;
 
 namespace Streetcode.BLL.Services.CacheService
 {
-    public class CachiblePreQueryProcessor<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : ICachibleQueryPreProcessor<TResponse> where TResponse : class
+    public class CachibleQueryBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : ICachibleQueryBehavior<TResponse>
     {
         private readonly ICacheService _cacheService;
 
-        public CachiblePreQueryProcessor(ICacheService cacheService)
+        public CachibleQueryBehavior(ICacheService cacheService)
         {
             _cacheService = cacheService;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            var key = request.ToResult().Value.ToString()!;
+            var key = request.ToResult().Value.ToString() !;
             var cachedValue = await _cacheService.GetCacheAsync(key);
 
             if (!string.IsNullOrEmpty(cachedValue))

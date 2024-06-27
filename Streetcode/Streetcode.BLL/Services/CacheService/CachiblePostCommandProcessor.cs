@@ -4,7 +4,8 @@ using MediatR.Pipeline;
 
 namespace Streetcode.BLL.Services.CacheService;
 
-public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostProcessor<TRequest, TResponse> where TRequest : ICachibleCommandPostProcessor<TResponse>
+public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostProcessor<TRequest, TResponse>
+    where TRequest : ICachibleCommandPostProcessor<TResponse>
 {
     private readonly ICacheService _cacheService;
     public CachiblePostCommandProcessor(ICacheService cacheService)
@@ -14,16 +15,16 @@ public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostPro
 
     public async Task Process(TRequest request, TResponse response, CancellationToken cancellationToken)
     {
-        if (response.ToResult().IsFailed)
+        if (response != null && response.ToString() !.Contains("IsSuccess='False'"))
         {
-            return;
+           return;
         }
 
-        var resultString = SplitCamelCase(request.ToResult().ValueOrDefault.ToString()!);
+        var resultString = SplitCamelCase(request.ToResult().ValueOrDefault.ToString() !);
         var sharedKeyForEntity = EraseLastCharIfThatEndLetterS(resultString);
         if (!await _cacheService.CacheKeyPatternExist(sharedKeyForEntity))
         {
-            return;    
+            return;  
         }
         
         await _cacheService.InvalidateCacheAsync(sharedKeyForEntity);

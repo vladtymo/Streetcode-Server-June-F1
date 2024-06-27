@@ -4,7 +4,7 @@ using Streetcode.BLL.Services.CacheService;
 
 namespace Streetcode.BLL.MediatR.Partners.GetAll;
 
-public record GetAllPartnersQuery : ICachibleQueryPreProcessor<Result<IEnumerable<PartnerDTO>>>
+public record GetAllPartnersQuery : ICachibleQueryBehavior<Result<IEnumerable<PartnerDTO>>>
 {
     public Result<IEnumerable<PartnerDTO>>? CachedResponse { get; set; }
 }

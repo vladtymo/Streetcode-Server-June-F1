@@ -4,9 +4,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Streetcode.BLL.Services.CacheService;
 
-public class CachiblePostQueryProcessor<TRequest, TResponse> : IRequestPostProcessor<TRequest, TResponse> where TRequest : ICachibleQueryPreProcessor<TResponse>
+public class CachiblePostQueryProcessor<TRequest, TResponse> : IRequestPostProcessor<TRequest, TResponse>
+    where TRequest : ICachibleQueryBehavior<TResponse>
 {
     private readonly ICacheService _cacheService;
+
     public CachiblePostQueryProcessor(ICacheService cacheService)
     {
         _cacheService = cacheService;
@@ -25,17 +27,14 @@ public class CachiblePostQueryProcessor<TRequest, TResponse> : IRequestPostProce
             return;
         }
 
-        if (response != null && response.ToString()!.Contains("IsSuccess='True'"))
+        if (response != null && response.ToString() !.Contains("IsSuccess='True'"))
         {
             var valueToken = JObject.FromObject(response)["Value"];
-            if (valueToken == null)
+            if (valueToken != null)
             {
-                return;
+                var value = valueToken.ToString();
+                await _cacheService.SetCacheAsync(cacheKey, value);
             }
-
-            var value = valueToken.ToString();
-
-            await _cacheService.SetCacheAsync(cacheKey, value);
         }
     }
 }

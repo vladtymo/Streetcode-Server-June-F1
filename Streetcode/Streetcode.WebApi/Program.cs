@@ -1,4 +1,3 @@
-using FluentValidation;
 using Hangfire;
 using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.WebApi.Extensions;

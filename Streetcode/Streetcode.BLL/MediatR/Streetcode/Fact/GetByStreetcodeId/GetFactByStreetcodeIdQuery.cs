@@ -4,7 +4,7 @@ using Streetcode.BLL.Services.CacheService;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Fact.GetByStreetcodeId;
 
-public record GetFactByStreetcodeIdQuery(int StreetcodeId) : ICachibleQueryPreProcessor<Result<IEnumerable<FactDto>>>
+public record GetFactByStreetcodeIdQuery(int StreetcodeId) : ICachibleQueryBehavior<Result<IEnumerable<FactDto>>>
 {
     public Result<IEnumerable<FactDto>>? CachedResponse { get; set; }
 }
