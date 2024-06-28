@@ -15,7 +15,7 @@ public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostPro
 
     public async Task Process(TRequest request, TResponse response, CancellationToken cancellationToken)
     {
-        if (response != null && response.ToString() !.Contains("IsSuccess='False'"))
+        if (response!.ToString() !.Contains("IsSuccess='False'"))
         {
            return;
         }
