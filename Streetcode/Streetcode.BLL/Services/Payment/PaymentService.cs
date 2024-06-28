@@ -65,11 +65,5 @@ namespace Streetcode.BLL.Services.Payment
         {
             public const string XToken = "X-Token";
         }
-
-        private static class Validation
-        {
-            public const int MaxStatementTimeSpanInSeconds = 2682000;
-            public const int StatementTimeoutBetweenCallsInSeconds = 60;
-        }
     }
 }
