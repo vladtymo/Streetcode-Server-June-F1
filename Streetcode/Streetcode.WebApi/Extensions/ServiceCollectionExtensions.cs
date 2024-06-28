@@ -1,9 +1,11 @@
 using FluentValidation;
 using Hangfire;
 using MediatR;
-using MediatR.Pipeline;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.FeatureManagement;
+using StackExchange.Redis;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Services.Logging;
 using Streetcode.DAL.Persistence;
@@ -14,21 +16,26 @@ using Streetcode.BLL.Services.Email;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Services.BlobStorageService;
-using Microsoft.FeatureManagement;
 using Streetcode.BLL.Interfaces.Payment;
 using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
-using StackExchange.Redis;
 using Streetcode.BLL.Behavior;
 using Streetcode.BLL.Services.CacheService;
+using Streetcode.DAL.Entities.Users;
 
 namespace Streetcode.WebApi.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static void AddIdentityService(this IServiceCollection services)
+    {
+        services.AddIdentity<User, IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<StreetcodeDbContext>();
+    }
+    
     public static void AddRepositoryServices(this IServiceCollection services)
     {
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
@@ -63,9 +70,7 @@ public static class ServiceCollectionExtensions
     public static void AddPipelineBehaviors(this IServiceCollection services)
     {
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachiblePreQueryProcessor<,>));
-        services.AddTransient(typeof(IRequestPostProcessor<,>), typeof(CachiblePostQueryProcessor<,>));
-        services.AddTransient(typeof(IRequestPostProcessor<,>), typeof(CachiblePostCommandProcessor<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachibleQueryBehavior<,>));
     }
 
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
