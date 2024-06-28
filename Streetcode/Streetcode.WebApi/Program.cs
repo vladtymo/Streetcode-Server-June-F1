@@ -15,7 +15,7 @@ builder.Services.ConfigureBlob(builder);
 builder.Services.ConfigurePayment(builder);
 builder.Services.ConfigureInstagram(builder);
 builder.Services.ConfigureSerilog(builder);
-builder.Services.CachingService(builder.Configuration);
+builder.Services.AddCachingService(builder.Configuration);
 var app = builder.Build();
 
 if (app.Environment.EnvironmentName == "Local")

@@ -58,7 +58,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICacheService, CacheService>();
     }
 
-    public static void CachingService(this IServiceCollection services, ConfigurationManager configuration)
+    public static void AddCachingService(this IServiceCollection services, ConfigurationManager configuration)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
 
