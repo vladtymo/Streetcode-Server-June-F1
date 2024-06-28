@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using SoftServerCinema.Security.Interfaces;
 using Streetcode.DAL.Entities.Users;
 
-namespace Streetcode.BLL.Services.Users;
+namespace Streetcode.BLL.Services.Tokens;
 
 public class TokenService : ITokenService
 {
