@@ -6,6 +6,7 @@ using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
+
 namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 {
     public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand, Result<RelatedTermDTO>>
@@ -36,14 +37,14 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
                 .GetAllAsync(
                 predicate: rt => rt.TermId == request.RelatedTerm.TermId && rt.Word == request.RelatedTerm.Word);
 
-            if (existingTerms is null || existingTerms.Any())
+            if (existingTerms.Any())
             {
                 const string errorMsg = "Word already exists for this term!";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
-            var createdRelatedTerm = _repository.RelatedTermRepository.Create(relatedTerm);
+            var createdRelatedTerm = await _repository.RelatedTermRepository.CreateAsync(relatedTerm);
 
             var isSuccessResult = await _repository.SaveChangesAsync() > 0;
 
@@ -54,11 +55,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
                 return Result.Fail(new Error(errorMsg));
             }
 
-            var createdRelatedTermDTO = _mapper.Map<RelatedTermDTO>(createdRelatedTerm);
+            var createdRelatedTermDto = _mapper.Map<RelatedTermDTO>(createdRelatedTerm);
 
-            if(createdRelatedTermDTO != null)
+            if(createdRelatedTermDto != null)
             {
-                return Result.Ok(createdRelatedTermDTO);
+                return Result.Ok(createdRelatedTermDto);
             }
             else
             {

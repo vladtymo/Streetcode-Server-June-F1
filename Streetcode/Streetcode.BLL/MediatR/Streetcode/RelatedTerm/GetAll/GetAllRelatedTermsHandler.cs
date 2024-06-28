@@ -6,34 +6,25 @@ using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId
+namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAll
 {
-    public record GetAllRelatedTermsByTermIdHandler : IRequestHandler<GetAllRelatedTermsByTermIdQuery, Result<IEnumerable<RelatedTermDTO>>>
+    public record GetAllRelatedTermsHandler : IRequestHandler<GetAllRelatedTermsQuery, Result<IEnumerable<RelatedTermDTO>>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repository;
         private readonly ILoggerService _logger;
 
-        public GetAllRelatedTermsByTermIdHandler(IMapper mapper, IRepositoryWrapper repositoryWrapper, ILoggerService logger)
+        public GetAllRelatedTermsHandler(IMapper mapper, IRepositoryWrapper repositoryWrapper, ILoggerService logger)
         {
             _mapper = mapper;
             _repository = repositoryWrapper;
             _logger = logger;
         }
 
-        public async Task<Result<IEnumerable<RelatedTermDTO>>> Handle(GetAllRelatedTermsByTermIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<RelatedTermDTO>>> Handle(GetAllRelatedTermsQuery request, CancellationToken cancellationToken)
         {
             var relatedTerms = await _repository.RelatedTermRepository
-                .GetAllAsync(
-                predicate: rt => rt.TermId == request.Id,
-                include: rt => rt.Include(rt => rt.Term));
-
-            if (!relatedTerms.Any())
-            {
-                const string errorMsg = "Cannot get words by term id";
-                _logger.LogError(request, errorMsg);
-                return new Error(errorMsg);
-            }
+                .GetAllAsync(include: rt => rt.Include(rt => rt.Term));
 
             var relatedTermsDto = _mapper.Map<IEnumerable<RelatedTermDTO>>(relatedTerms);
 
