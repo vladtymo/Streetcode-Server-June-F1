@@ -22,7 +22,7 @@ public class TokenService : ITokenService
     
     public async Task<string> GenerateAccessToken(User user, List<Claim> claims)
     {
-        DateTime expiration = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_accessTokenConfiguration.AccessTokenExpirationMinutes));
+        DateTime expiration = DateTime.UtcNow.AddMinutes(_accessTokenConfiguration.AccessTokenExpirationMinutes);
 
         SymmetricSecurityKey securityKey = new (Encoding.UTF8.GetBytes(_accessTokenConfiguration.SecretKey!));
 
