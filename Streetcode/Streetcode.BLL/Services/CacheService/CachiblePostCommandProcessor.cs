@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using FluentResults;
 using MediatR.Pipeline;
 
@@ -20,8 +21,9 @@ public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostPro
            return;
         }
 
-        var resultString = SplitCamelCase(request.ToResult().ValueOrDefault.ToString() !);
+        var resultString = GetEntityName(request.ToResult().ValueOrDefault.ToString() !);
         var sharedKeyForEntity = EraseLastCharIfThatEndLetterS(resultString);
+        
         if (!await _cacheService.CacheKeyPatternExist(sharedKeyForEntity))
         {
             return;  
@@ -30,37 +32,51 @@ public class CachiblePostCommandProcessor<TRequest, TResponse> : IRequestPostPro
         await _cacheService.InvalidateCacheAsync(sharedKeyForEntity);
     }
 
-    private static string EraseLastCharIfThatEndLetterS(string[] input)
+    private static string EraseLastCharIfThatEndLetterS(string input)
     {
-            var entity = input[1];
-            if (entity.EndsWith("s"))
-            {
-                entity = entity.Substring(0, entity.Length - 1);
-                var sharedKeyForEntity = entity;
-                return sharedKeyForEntity;
-            }
-
-            return input[1];
+        if (input.EndsWith("s"))
+        {
+            return input.Substring(0, input.Length - 1);
+        }
+            
+        return input;
     }
     
-    private static string[] SplitCamelCase(string input)
+    private static string GetEntityName(string input)
     {
-        if (string.IsNullOrEmpty(input))
+        if (string.IsNullOrWhiteSpace(input))
         {
-            return new[] { input };
+            return string.Empty;
         }
-
-        StringBuilder result = new StringBuilder();
-        foreach (char c in input)
+    
+        const string commandSuffix = "Command";
+    
+        input = Regex.Replace(input, @"\{.*?\}", "").Trim();
+    
+        if (input.EndsWith(commandSuffix))
         {
-            if (char.IsUpper(c) && result.Length > 0)
+            string trimmedInput = input.Substring(0, input.Length - commandSuffix.Length).Trim();
+            StringBuilder result = new StringBuilder();
+            foreach (char c in trimmedInput)
             {
-                result.Append(' ');
+                if (char.IsUpper(c) && result.Length > 0)
+                {
+                    result.Append(' ');
+                }
+    
+                result.Append(c);
             }
-
-            result.Append(c);
+    
+            if (result.Length > 2)
+            {
+                List<string> resultList = result.ToString().Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+                resultList.RemoveAt(0);
+                return string.Join("", resultList);
+            }
+            
+            return result.ToString().Split(' ')[1];
         }
-
-        return result.ToString().Split(' ');
+    
+        return string.Empty;
     }
 }
