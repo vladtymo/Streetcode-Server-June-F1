@@ -14,7 +14,6 @@ using Streetcode.DAL.Repositories.Interfaces.Team;
 using Streetcode.DAL.Repositories.Interfaces.Timeline;
 using Streetcode.DAL.Repositories.Interfaces.Toponyms;
 using Streetcode.DAL.Repositories.Interfaces.Transactions;
-using Streetcode.DAL.Repositories.Interfaces.Users;
 using Streetcode.DAL.Repositories.Realizations.AdditionalContent;
 using Streetcode.DAL.Repositories.Realizations.Analytics;
 using Streetcode.DAL.Repositories.Realizations.Media;
@@ -28,7 +27,6 @@ using Streetcode.DAL.Repositories.Realizations.Team;
 using Streetcode.DAL.Repositories.Realizations.Timeline;
 using Streetcode.DAL.Repositories.Realizations.Toponyms;
 using Streetcode.DAL.Repositories.Realizations.Transactions;
-using Streetcode.DAL.Repositories.Realizations.Users;
 
 namespace Streetcode.DAL.Repositories.Realizations.Base;
 
@@ -87,9 +85,7 @@ public class RepositoryWrapper : IRepositoryWrapper
     private IHistoricalContextRepository? _historyContextRepository = null;
 
     private IPartnerSourceLinkRepository? _partnerSourceLinkRepository = null;
-
-    private IUserRepository? _userRepository = null;
-
+   
     private IStreetcodeTagIndexRepository? _streetcodeTagIndexRepository = null;
 
     private IPartnerStreetcodeRepository? _partnerStreetcodeRepository = null;
@@ -188,10 +184,7 @@ public class RepositoryWrapper : IRepositoryWrapper
 
     public IRelatedTermRepository RelatedTermRepository =>
           GetRepository(_relatedTermRepository as RelatedTermRepository);
-
-    public IUserRepository UserRepository =>
-          GetRepository(_userRepository as UserRepository);
-
+    
     public IStreetcodeTagIndexRepository StreetcodeTagIndexRepository =>
           GetRepository(_streetcodeTagIndexRepository as StreetcodeTagIndexRepository);
 

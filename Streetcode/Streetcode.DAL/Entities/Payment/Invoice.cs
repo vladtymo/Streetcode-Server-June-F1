@@ -1,8 +1,9 @@
+using Streetcode.DAL.Entities.Base;
 using Newtonsoft.Json;
 
 namespace Streetcode.DAL.Entities.Payment
 {
-    public class Invoice
+    public class Invoice : IEntity
     {
         public Invoice(long amount, int? ccy, MerchantPaymentInfo merchantPaymentInfo, string redirectUrl)
          {
