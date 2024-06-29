@@ -1,36 +1,32 @@
+using System.Net.Http;
 using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Streetcode.BLL.Behavior;
+using Streetcode.BLL.Interfaces.BlobStorage;
+using Streetcode.BLL.Interfaces.Email;
+using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Interfaces.Payment;
+using Streetcode.BLL.Interfaces.Text;
+using Streetcode.BLL.Services.BlobStorageService;
+using Streetcode.BLL.Services.Email;
+using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Services.Logging;
+using Streetcode.BLL.Services.Payment;
+using Streetcode.BLL.Services.Text;
+using Streetcode.BLL.Services.Tokens;
+using Streetcode.DAL.Entities.AdditionalContent.Email;
+using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Streetcode.DAL.Repositories.Realizations.Base;
-using Streetcode.BLL.Interfaces.Email;
-using Streetcode.BLL.Services.Email;
-using Streetcode.DAL.Entities.AdditionalContent.Email;
-using Streetcode.BLL.Interfaces.BlobStorage;
-using Streetcode.BLL.Services.BlobStorageService;
-using Streetcode.BLL.Behavior;
-using Streetcode.BLL.Interfaces.Payment;
-using Streetcode.BLL.Services.Payment;
-using Streetcode.BLL.Interfaces.Instagram;
-using Streetcode.BLL.Services.Instagram;
-using Streetcode.BLL.Interfaces.Text;
-using Streetcode.BLL.Services.Text;
-<<<<<<< HEAD
-using System.Net.Http;
-=======
-using Streetcode.DAL.Entities.Users;
-using Streetcode.BLL.Services.Tokens;
-
->>>>>>> origin/dev
 namespace Streetcode.WebApi.Extensions;
 
 public static class ServiceCollectionExtensions
@@ -146,13 +142,6 @@ public static class ServiceCollectionExtensions
             opt.MaxAge = TimeSpan.FromDays(30);
         });
 
-        services.AddHttpClient("InstagramClient", client =>
-        {
-            var settings = configuration.GetSection("Instagram").Get<InstagramEnvirovmentVariables>();
-            client.BaseAddress = new Uri(settings.BaseAddress);
-        });
-
-   
         services.AddLogging();
         services.AddControllers();
     }
