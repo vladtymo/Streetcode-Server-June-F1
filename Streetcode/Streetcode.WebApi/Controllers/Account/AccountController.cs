@@ -12,5 +12,10 @@ namespace Streetcode.WebApi.Controllers.Account
         {
             return HandleResult(await Mediator.Send(new RegisterUserCommand(newUser)));
         }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            return HandleResult(await Mediator.Send(new LogoutUserCommand()));
+        }
     }
 }
