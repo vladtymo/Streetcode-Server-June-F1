@@ -2,6 +2,7 @@
 using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
+using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.DeleteById;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAll;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetById;
@@ -45,6 +46,12 @@ namespace Streetcode.WebApi.Controllers.Streetcode.TextContent
         public async Task<IActionResult> Delete([FromRoute] string word)
         {
             return HandleResult(await Mediator.Send(new DeleteRelatedTermCommand(word)));
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteById([FromRoute] int id)
+        {
+            return HandleResult(await Mediator.Send(new DeleteRelatedTermByIdCommand(id)));
         }
     }
 }
