@@ -1,9 +1,12 @@
 using FluentValidation;
 using Hangfire;
 using MediatR;
-using MediatR.Pipeline;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.FeatureManagement;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Services.Logging;
 using Streetcode.DAL.Persistence;
@@ -14,7 +17,6 @@ using Streetcode.BLL.Services.Email;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Services.BlobStorageService;
-using Microsoft.FeatureManagement;
 using Streetcode.BLL.Behavior;
 using Streetcode.BLL.Interfaces.Payment;
 using Streetcode.BLL.Services.Payment;
@@ -22,11 +24,24 @@ using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
+<<<<<<< HEAD
 using System.Net.Http;
+=======
+using Streetcode.DAL.Entities.Users;
+using Streetcode.BLL.Services.Tokens;
+
+>>>>>>> origin/dev
 namespace Streetcode.WebApi.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static void AddIdentityService(this IServiceCollection services)
+    {
+        services.AddIdentity<User, IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<StreetcodeDbContext>()
+            .AddDefaultTokenProviders();
+    }
+
     public static void AddRepositoryServices(this IServiceCollection services)
     {
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
@@ -48,7 +63,36 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IInstagramService, InstagramService>();
         services.AddScoped<ITextService, AddTermsToTextService>();
     }
+    
+    public static void AddAccessTokenConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["AccessToken:SecretKey"] !));
 
+        var tokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = configuration["AccessToken:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = configuration["AccessToken:Audience"],
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
+            IssuerSigningKey = key
+        };
+
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = tokenValidationParameters;
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+            });
+    }
+    
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
@@ -61,7 +105,13 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton(emailConfig);
         }
-
+        
+        var accessTokenConfig = configuration.GetSection("AccessToken").Get<AccessTokenConfiguration>();
+        if(accessTokenConfig != null)
+        {
+            services.AddSingleton(accessTokenConfig);
+        }
+        
         services.AddDbContext<StreetcodeDbContext>(options =>
         {
             options.UseSqlServer(connectionString, opt =>

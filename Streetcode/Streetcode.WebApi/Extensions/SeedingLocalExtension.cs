@@ -1,6 +1,8 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
@@ -15,6 +17,7 @@ using Streetcode.DAL.Entities.Streetcode.Types;
 using Streetcode.DAL.Entities.Team;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Entities.Transactions;
+using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Enums;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Realizations.Base;
@@ -23,6 +26,70 @@ namespace Streetcode.WebApi.Extensions
 {
     public static class SeedingLocalExtension
     {
+        private static async Task SeedIdentityDataAsync(IServiceProvider serviceProvider)
+        {
+            // Constants for roles
+            const string adminRoleName = "admin";
+            const string userRoleName = "user";
+            const string adminRoleId = "563b4777-0615-4c3c-8a7d-8858412b6562";
+            const string userRoleId = "12444183-0753-495b-a34f-c5a622d8fc6d";
+
+            // Constants for Admin
+            const string adminUserName = "SuperAdmin";
+            const string adminId = "4eb10d27-a950-45ef-9ebe-f730a07ce5e9";
+            const string adminPass = "*Superuser18";
+            
+            StreetcodeDbContext? context = serviceProvider.GetService<StreetcodeDbContext>();
+
+            ILoggerService? logger = serviceProvider.GetService<ILoggerService>();
+
+            RoleManager<IdentityRole<Guid>> rm = serviceProvider.GetService<RoleManager<IdentityRole<Guid>>>();
+
+            UserManager<User> um = serviceProvider.GetService<UserManager<User>>();
+            
+            try
+            {
+                // Seed Roles
+                if (!context.Roles.Any())
+                {
+                    await rm.CreateAsync(
+                        new IdentityRole<Guid>(adminRoleName)
+                        {
+                            Id = Guid.Parse(adminRoleId)
+                        });
+
+                    await rm.CreateAsync(
+                        new IdentityRole<Guid>(userRoleName)
+                        {
+                            Id = Guid.Parse(userRoleId)
+                        });                    
+                }
+
+                // Seed Admin
+                if (!context.Users.Any())
+                {
+                    var r = await um.CreateAsync(
+                        new User()
+                        {
+                            UserName = adminUserName,
+                            Id = Guid.Parse(adminId),
+                        }, adminPass);
+                }
+
+                if (!context.UserRoles.Any())
+                {
+                    await um.AddToRoleAsync(context.Users.First(u => u.Id.Equals(Guid.Parse(adminId))),
+                        context.Roles.First(r => r.Id.Equals(Guid.Parse(adminRoleId))).Name);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(new { um, rm }, $"Error occured when trying to seed Identity Data. \n\tMessage:\n {ex.Message}");
+
+                throw;
+            }                        
+        }
+
         public static async Task SeedDataAsync(this WebApplication app)
         {
             using (var scope = app.Services.CreateScope())
@@ -266,23 +333,7 @@ namespace Streetcode.WebApi.Extensions
                             }
                         }
                     }
-
-                    if (!dbContext.Users.Any())
-                    {
-                        dbContext.Users.AddRange(
-                            new DAL.Entities.Users.User
-                            {
-                                Email = "admin",
-                                Role = UserRole.MainAdministrator,
-                                Login = "admin",
-                                Name = "admin",
-                                Password = "admin",
-                                Surname = "admin",
-                            });
-
-                        await dbContext.SaveChangesAsync();
-                    }
-
+                    
                     if (!dbContext.News.Any())
                     {
                         dbContext.News.AddRange(
@@ -1416,6 +1467,8 @@ namespace Streetcode.WebApi.Extensions
 
                     await dbContext.SaveChangesAsync();
                 }
+
+                await SeedIdentityDataAsync(scope.ServiceProvider);
             }
         }
     }
