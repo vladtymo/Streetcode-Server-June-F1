@@ -37,7 +37,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Term.Create
 
             if (existingTerms.Any())
             {
-                const string errorMsg = "Title already exists for this term!";
+                const string errorMsg = "Term with this title already exists!";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

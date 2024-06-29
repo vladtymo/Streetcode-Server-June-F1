@@ -25,7 +25,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId
         {
             var relatedTerms = await _repository.RelatedTermRepository
                 .GetAllAsync(
-                predicate: rt => rt.TermId == request.Id,
+                predicate: rt => rt.TermId == request.TermId,
                 include: rt => rt.Include(rt => rt.Term));
 
             if (!relatedTerms.Any())

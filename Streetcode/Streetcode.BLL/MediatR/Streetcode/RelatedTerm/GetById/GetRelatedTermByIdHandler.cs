@@ -30,7 +30,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetById
 
             if (relatedTerm == null)
             {
-                const string errorMsg = "Cannot get RelatedTerm by term Id";
+                const string errorMsg = "Cannot get RelatedTerm by term TermId";
                 _logger.LogError(request, errorMsg);
                 return new Error(errorMsg);
             }
