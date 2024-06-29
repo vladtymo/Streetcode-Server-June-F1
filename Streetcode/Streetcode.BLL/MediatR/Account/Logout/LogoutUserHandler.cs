@@ -6,7 +6,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Account.Logout
 {
-    public class LogoutUserHandler : IRequestHandler<LogoutUserCommand, Result>
+    public class LogoutUserHandler : IRequestHandler<LogoutUserCommand, Result<string>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -19,7 +19,7 @@ namespace Streetcode.BLL.MediatR.Account.Logout
             _logger = logger;
         }
 
-        public async Task<Result> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
         {
             return Result.Ok();
         }
