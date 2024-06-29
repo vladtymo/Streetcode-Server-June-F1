@@ -22,6 +22,7 @@ using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
+using System.Net.Http;
 namespace Streetcode.WebApi.Extensions;
 
 public static class ServiceCollectionExtensions
@@ -95,6 +96,13 @@ public static class ServiceCollectionExtensions
             opt.MaxAge = TimeSpan.FromDays(30);
         });
 
+        services.AddHttpClient("InstagramClient", client =>
+        {
+            var settings = configuration.GetSection("Instagram").Get<InstagramEnvirovmentVariables>();
+            client.BaseAddress = new Uri(settings.BaseAddress);
+        });
+
+   
         services.AddLogging();
         services.AddControllers();
     }

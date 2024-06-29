@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Runtime;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.DAL.Entities.Instagram;
@@ -13,9 +15,9 @@ namespace Streetcode.BLL.Services.Instagram
         private readonly string _accessToken;
         private static int postLimit = 10;
 
-        public InstagramService(IOptions<InstagramEnvirovmentVariables> instagramEnvirovment)
+        public InstagramService(IHttpClientFactory httpFactory, IOptions<InstagramEnvirovmentVariables> instagramEnvirovment)
         {
-            _httpClient = new HttpClient();
+            _httpClient = httpFactory.CreateClient("InstagramClient");
             _envirovment = instagramEnvirovment.Value;
             _userId = _envirovment.InstagramID;
             _accessToken = _envirovment.InstagramToken;
@@ -23,7 +25,10 @@ namespace Streetcode.BLL.Services.Instagram
 
         public async Task<IEnumerable<InstagramPost>> GetPostsAsync()
         {
-            string apiUrl = $"https://graph.instagram.com/{_userId}/media?fields=id,caption,media_type,media_url,permalink,thumbnail_url&limit={2 * postLimit}&access_token={_accessToken}";
+            string apiUrl = _envirovment.MediaRequestUrl
+            .Replace("{InstagramID}", _userId)
+            .Replace("{InstagramToken}", _accessToken)
+            .Replace("{postLimit}", (2 * postLimit).ToString());
 
             HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
             response.EnsureSuccessStatusCode();
@@ -33,12 +38,16 @@ namespace Streetcode.BLL.Services.Instagram
             var jsonOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                IgnoreNullValues = true
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
 
             var postResponse = JsonSerializer.Deserialize<InstagramPostResponse>(jsonResponse, jsonOptions);
 
-            IEnumerable<InstagramPost> posts = RemoveVideoMediaType(postResponse.Data);
+            IEnumerable<InstagramPost> posts = new List<InstagramPost>();   
+            if (postResponse?.Data != null) 
+            {
+              posts = RemoveVideoMediaType(postResponse.Data);
+            }
 
             return posts;
         }
