@@ -6,36 +6,35 @@ using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAll
+namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAll;
+
+public record GetAllRelatedTermsHandler : IRequestHandler<GetAllRelatedTermsQuery, Result<IEnumerable<RelatedTermDTO>>>
 {
-    public record GetAllRelatedTermsHandler : IRequestHandler<GetAllRelatedTermsQuery, Result<IEnumerable<RelatedTermDTO>>>
+    private readonly IMapper _mapper;
+    private readonly IRepositoryWrapper _repository;
+    private readonly ILoggerService _logger;
+
+    public GetAllRelatedTermsHandler(IMapper mapper, IRepositoryWrapper repositoryWrapper, ILoggerService logger)
     {
-        private readonly IMapper _mapper;
-        private readonly IRepositoryWrapper _repository;
-        private readonly ILoggerService _logger;
+        _mapper = mapper;
+        _repository = repositoryWrapper;
+        _logger = logger;
+    }
 
-        public GetAllRelatedTermsHandler(IMapper mapper, IRepositoryWrapper repositoryWrapper, ILoggerService logger)
+    public async Task<Result<IEnumerable<RelatedTermDTO>>> Handle(GetAllRelatedTermsQuery request, CancellationToken cancellationToken)
+    {
+        var relatedTerms = await _repository.RelatedTermRepository
+            .GetAllAsync(include: rt => rt.Include(rt => rt.Term));
+
+        var relatedTermsDto = _mapper.Map<IEnumerable<RelatedTermDTO>>(relatedTerms);
+
+        if (relatedTermsDto is null)
         {
-            _mapper = mapper;
-            _repository = repositoryWrapper;
-            _logger = logger;
+            const string errorMsg = "Cannot map DTOs for related words!";
+            _logger.LogError(request, errorMsg);
+            return new Error(errorMsg);
         }
 
-        public async Task<Result<IEnumerable<RelatedTermDTO>>> Handle(GetAllRelatedTermsQuery request, CancellationToken cancellationToken)
-        {
-            var relatedTerms = await _repository.RelatedTermRepository
-                .GetAllAsync(include: rt => rt.Include(rt => rt.Term));
-
-            var relatedTermsDto = _mapper.Map<IEnumerable<RelatedTermDTO>>(relatedTerms);
-
-            if (relatedTermsDto is null)
-            {
-                const string errorMsg = "Cannot map DTOs for related words!";
-                _logger.LogError(request, errorMsg);
-                return new Error(errorMsg);
-            }
-
-            return Result.Ok(relatedTermsDto);
-        }
+        return Result.Ok(relatedTermsDto);
     }
 }

@@ -1,40 +1,40 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
+namespace Streetcode.BLL.MediatR.Streetcode.Term.Delete;
 
-public class DeleteRelatedTermHandler : IRequestHandler<DeleteRelatedTermCommand, Result<RelatedTermDTO>>
+public class DeleteTermHandler : IRequestHandler<DeleteTermCommand, Result<TermDTO>>
 {
     private readonly IRepositoryWrapper _repository;
     private readonly IMapper _mapper;
     private readonly ILoggerService _logger;
 
-    public DeleteRelatedTermHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger)
+    public DeleteTermHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger)
     {
         _repository = repository;
         _mapper = mapper;
         _logger = logger;
     }
 
-    public async Task<Result<RelatedTermDTO>> Handle(DeleteRelatedTermCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TermDTO>> Handle(DeleteTermCommand request, CancellationToken cancellationToken)
     {
-        var relatedTerm = await _repository.RelatedTermRepository.GetFirstOrDefaultAsync(rt => rt.Word != null && rt.Word.ToLower().Equals(request.Word.ToLower()));
+        var term = await _repository.TermRepository.GetFirstOrDefaultAsync(rt => rt.Title != null && rt.Title.ToLower().Equals(request.Title.ToLower()));
 
-        if (relatedTerm is null)
+        if (term is null)
         {
-            var errorMsg = $"Cannot find a related term: {request.Word}";
+            var errorMsg = $"Cannot find a related term: {request.Title}";
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        _repository.RelatedTermRepository.Delete(relatedTerm);
+        _repository.TermRepository.Delete(term);
 
         var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
-        var relatedTermDto = _mapper.Map<RelatedTermDTO>(relatedTerm);
+        var relatedTermDto = _mapper.Map<TermDTO>(term);
         if(resultIsSuccess && relatedTermDto != null)
         {
             return Result.Ok(relatedTermDto);

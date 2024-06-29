@@ -4,46 +4,45 @@ using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update;
+namespace Streetcode.BLL.MediatR.Streetcode.Term.Update;
 
-public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand, Result<RelatedTermDTO>>
+public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermDTO>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repository;
     private readonly ILoggerService _logger;
 
-    public UpdateRelatedTermHandler(IMapper mapper, IRepositoryWrapper repository, ILoggerService logger)
+    public UpdateTermHandler(IMapper mapper, IRepositoryWrapper repository, ILoggerService logger)
     {
         _mapper = mapper;
         _repository = repository;
         _logger = logger;
     }
 
-    public async Task<Result<RelatedTermDTO>> Handle(UpdateRelatedTermCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TermDTO>> Handle(UpdateTermCommand request, CancellationToken cancellationToken)
     {
-        var relatedTerm = await _repository.RelatedTermRepository
-            .GetFirstOrDefaultAsync(rt => rt.Id == request.RelatedTerm.Id);
+        var term = await _repository.TermRepository
+            .GetFirstOrDefaultAsync(rt => rt.Id == request.Term.Id);
 
-        if (relatedTerm == null)
+        if (term == null)
         {
-            const string errorMsg = "Cannot get RelatedTerm by term TermId";
+            const string errorMsg = "Cannot get Term by term TermId";
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }
 
-        var relatedTermToUpdate = _mapper.Map<Entity>(request.RelatedTerm);
+        var termToUpdate = _mapper.Map<Entity>(request.Term);
 
-        if (relatedTermToUpdate is null)
+        if (termToUpdate is null)
         {
-            const string errorMsg = "Cannot map new related word for a term!";
+            const string errorMsg = "Cannot map new term!";
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        var updatedRelatedTerm = _repository.RelatedTermRepository.Update(relatedTerm);
+        var updatedTerm = _repository.TermRepository.Update(term);
 
         var isSuccessResult = await _repository.SaveChangesAsync() > 0;
 
@@ -54,11 +53,11 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
             return Result.Fail(new Error(errorMsg));
         }
 
-        var updatedRelatedTermDto = _mapper.Map<RelatedTermDTO>(updatedRelatedTerm.Entity);
+        var updatedTermDto = _mapper.Map<TermDTO>(updatedTerm.Entity);
 
-        if (updatedRelatedTermDto != null)
+        if (updatedTermDto != null)
         {
-            return Result.Ok(updatedRelatedTermDto);
+            return Result.Ok(updatedTermDto);
         }
         else
         {
