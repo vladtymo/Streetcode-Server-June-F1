@@ -1,11 +1,14 @@
 using FluentValidation;
 using Hangfire;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Microsoft.FeatureManagement;
 using StackExchange.Redis;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Services.Logging;
 using Streetcode.DAL.Persistence;
@@ -24,7 +27,8 @@ using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
 using Streetcode.BLL.Behavior;
 using Streetcode.BLL.Services.CacheService;
-using Streetcode.DAL.Entities.Users;
+using Streetcode.BLL.Services.Tokens;
+
 
 namespace Streetcode.WebApi.Extensions;
 
@@ -33,7 +37,8 @@ public static class ServiceCollectionExtensions
     public static void AddIdentityService(this IServiceCollection services)
     {
         services.AddIdentity<User, IdentityRole<Guid>>()
-            .AddEntityFrameworkStores<StreetcodeDbContext>();
+            .AddEntityFrameworkStores<StreetcodeDbContext>()
+            .AddDefaultTokenProviders();
     }
     
     public static void AddRepositoryServices(this IServiceCollection services)
@@ -72,7 +77,36 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachibleQueryBehavior<,>));
     }
+    
+    public static void AddAccessTokenConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["AccessToken:SecretKey"] !));
 
+        var tokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = configuration["AccessToken:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = configuration["AccessToken:Audience"],
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
+            IssuerSigningKey = key
+        };
+
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = tokenValidationParameters;
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+            });
+    }
+    
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
@@ -85,7 +119,13 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton(emailConfig);
         }
-
+        
+        var accessTokenConfig = configuration.GetSection("AccessToken").Get<AccessTokenConfiguration>();
+        if(accessTokenConfig != null)
+        {
+            services.AddSingleton(accessTokenConfig);
+        }
+        
         services.AddDbContext<StreetcodeDbContext>(options =>
         {
             options.UseSqlServer(connectionString, opt =>
