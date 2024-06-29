@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.Streetcode.TextContent.Term;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -44,13 +44,21 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
 
         var createdTerm = await _repository.TermRepository.CreateAsync(newTerm);
 
-        var isSuccessResult = await _repository.SaveChangesAsync() > 0;
-
-        if(!isSuccessResult)
+        try
         {
-            const string errorMsg = "Cannot save changes in the database after new Term creation!";
-            _logger.LogError(request, errorMsg);
-            return Result.Fail(new Error(errorMsg));
+            var isSuccessResult = await _repository.SaveChangesAsync() > 0;
+
+            if(!isSuccessResult)
+            {
+                const string errorMsg = "Cannot save changes in the database after new Term creation!";
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(new Error(errorMsg));
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
 
         var createdTermDto = _mapper.Map<TermDTO>(createdTerm);

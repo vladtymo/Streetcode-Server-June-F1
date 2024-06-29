@@ -1,7 +1,7 @@
 ﻿using FluentResults;
 using Streetcode.BLL.Behavior;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.Streetcode.TextContent.Term;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Term.Create;
 
-public record CreateTermCommand(TermDTO Term) : IValidatableRequest<Result<TermDTO>>;
+public record CreateTermCommand(TermCreateDTO Term) : IValidatableRequest<Result<TermDTO>>;

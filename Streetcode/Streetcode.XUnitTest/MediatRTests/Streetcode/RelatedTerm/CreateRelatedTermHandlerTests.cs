@@ -5,14 +5,14 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
 using BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Xunit;
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
+using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 
-    public class CreateRelatedTermHandlerTests
+public class CreateRelatedTermHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> _mockRepositoryWrapper;
         private readonly Mock<ILoggerService> _mockLogger;

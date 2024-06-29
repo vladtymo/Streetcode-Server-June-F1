@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -46,13 +46,21 @@ public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand
 
         var createdRelatedTerm = await _repository.RelatedTermRepository.CreateAsync(relatedTerm);
 
-        var isSuccessResult = await _repository.SaveChangesAsync() > 0;
-
-        if(!isSuccessResult)
+        try
         {
-            const string errorMsg = "Cannot save changes in the database after related word creation!";
-            _logger.LogError(request, errorMsg);
-            return Result.Fail(new Error(errorMsg));
+            var isSuccessResult = await _repository.SaveChangesAsync() > 0;
+
+            if(!isSuccessResult)
+            {
+                const string errorMsg = "Cannot save changes in the database after related word creation!";
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(new Error(errorMsg));
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
 
         var createdRelatedTermDto = _mapper.Map<RelatedTermDTO>(createdRelatedTerm);

@@ -2,7 +2,7 @@
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -30,7 +30,7 @@ public record GetRelatedTermByIdHandler : IRequestHandler<GetRelatedTermByIdQuer
 
         if (relatedTerm == null)
         {
-            const string errorMsg = "Cannot get RelatedTerm by term TermId";
+            const string errorMsg = "Cannot get RelatedTerm by Id";
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }

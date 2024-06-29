@@ -2,8 +2,8 @@
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 
 namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
 

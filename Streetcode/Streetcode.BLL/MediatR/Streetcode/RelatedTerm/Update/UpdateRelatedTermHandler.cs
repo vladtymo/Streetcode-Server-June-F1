@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -43,7 +43,7 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
             return Result.Fail(new Error(errorMsg));
         }
 
-        var updatedRelatedTerm = _repository.RelatedTermRepository.Update(relatedTerm);
+        var updatedRelatedTerm = _repository.RelatedTermRepository.Update(relatedTermToUpdate);
 
         var isSuccessResult = await _repository.SaveChangesAsync() > 0;
 

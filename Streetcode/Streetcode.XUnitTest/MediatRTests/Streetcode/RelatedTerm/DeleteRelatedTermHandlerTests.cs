@@ -3,7 +3,7 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using Moq;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
 using Streetcode.DAL.Entities.Streetcode.TextContent;

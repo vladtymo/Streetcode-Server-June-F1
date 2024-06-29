@@ -5,13 +5,12 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Xunit;
-
-using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
+using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 
 public class GetAllRelatedTermsByTermIdHandlerTests
 {
