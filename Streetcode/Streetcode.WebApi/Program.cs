@@ -5,12 +5,14 @@ using Streetcode.BLL.Resources;
 using Streetcode.WebApi.Extensions;
 using Streetcode.WebApi.Utils;
 using Streetcode.WebApi.Middlewares;
+using Streetcode.WebApi.HttpClients.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureApplication();
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddSwaggerServices();
+builder.Services.AddHttpClients(builder.Configuration);
 builder.Services.AddCustomServices();
 builder.Services.ConfigureBlob(builder);
 builder.Services.ConfigurePayment(builder);
