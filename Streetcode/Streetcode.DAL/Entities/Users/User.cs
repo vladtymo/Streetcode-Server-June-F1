@@ -12,5 +12,8 @@ namespace Streetcode.DAL.Entities.Users
         public string? FirstName { get; set; }
 
         public string? LastName { get; set; }
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime Created { get; set; }
+        public DateTime Expires { get; set; }
     }
 }
