@@ -23,6 +23,9 @@ public record GetAllRelatedTermsByTermIdHandler : IRequestHandler<GetAllRelatedT
 
     public async Task<Result<IEnumerable<RelatedTermDTO>>> Handle(GetAllRelatedTermsByTermIdQuery request, CancellationToken cancellationToken)
     {
+        var test = _repository.RelatedTermRepository
+            .GetAllAsync().Result;
+
         var relatedTerms = await _repository.RelatedTermRepository
             .GetAllAsync(
                 predicate: rt => rt.TermId == request.TermId,

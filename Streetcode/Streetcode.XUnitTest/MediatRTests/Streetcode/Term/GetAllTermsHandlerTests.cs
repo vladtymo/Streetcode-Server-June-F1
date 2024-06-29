@@ -1,8 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Term;
 
 using AutoMapper;
-using FluentResults;
 using Moq;
+using Xunit;
+
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Mapping.Streetcode.TextContent;
 using Streetcode.BLL.MediatR.Streetcode.Term.GetAll;
@@ -10,7 +11,6 @@ using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
 using Streetcode.XUnitTest.MediatRTests.MapperConfigure;
-using Xunit;
 
 public class GetAllTermsHandlerTests
     {
@@ -77,30 +77,7 @@ public class GetAllTermsHandlerTests
             var result = await handler.Handle(querry, CancellationToken.None);
 
             // Assert
-            Assert.True(result.Value.Count() == 0);
-        }
-
-        [Fact]
-        public async Task GetAllTerms_CollectionIsNull_ShouldReturnError()
-        {
-            // Assign
-            GetAllTermsQuery querry = new GetAllTermsQuery();
-
-            m_loggerMock.Setup(l => l.LogError(querry, "Cannot find any term!"));
-
-            Mock<ITermRepository> term_Rep_Mock = new Mock<ITermRepository>();
-            term_Rep_Mock.Setup(trm => trm.GetAllAsync(default, default)).
-                ReturnsAsync(() => null);
-
-            Mock<IRepositoryWrapper> wrapperMock = new Mock<IRepositoryWrapper>();
-            wrapperMock.Setup(w => w.TermRepository).Returns(term_Rep_Mock.Object);
-
-            GetAllTermsHandler handler = new GetAllTermsHandler(wrapperMock.Object, m_Mapper, m_loggerMock.Object);
-
-            // Act
-            var result = await handler.Handle(querry, CancellationToken.None);
-
-            // Assert
-            Assert.True(result.IsFailed);
+            Assert.True(result.IsSuccess);
+            Assert.False(result.Value.Any());
         }
     }

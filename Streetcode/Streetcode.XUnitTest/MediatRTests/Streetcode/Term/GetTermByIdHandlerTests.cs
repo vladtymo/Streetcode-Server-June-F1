@@ -3,18 +3,19 @@ using AutoMapper;
 using FluentResults;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Xunit;
+
 using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Mapping.Streetcode.TextContent;
 using Streetcode.BLL.MediatR.Streetcode.Term.GetById;
-using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
 using Streetcode.XUnitTest.MediatRTests.MapperConfigure;
-using Xunit;
+
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.Term;
 
 namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.Term;
+
 public class GetTermByIdHandlerTests
 {
     private static IEnumerable<Entity> m_Terms = new List<Entity>()
@@ -65,7 +66,7 @@ public class GetTermByIdHandlerTests
 
         // Assert
         Assert.Multiple(
-            () => Assert.IsType<Result<TermDTO>>(result),
+            () => Assert.IsType<Result<TermWithRelatedTermsDTO>>(result),
             () => Assert.True(result.Value.Id == id));
     }
 
