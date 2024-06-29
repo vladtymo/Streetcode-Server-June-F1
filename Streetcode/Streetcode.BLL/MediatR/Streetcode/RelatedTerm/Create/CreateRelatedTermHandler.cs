@@ -35,7 +35,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 
             var existingTerms = await _repository.RelatedTermRepository
                 .GetAllAsync(
-                predicate: rt => rt.TermId == request.RelatedTerm.TermId && rt.Word == request.RelatedTerm.Word);
+                predicate: rt => rt.Word != null && rt.TermId == request.RelatedTerm.TermId && rt.Word.ToLower().Equals(request.RelatedTerm.Word.ToLower()));
 
             if (existingTerms.Any())
             {
