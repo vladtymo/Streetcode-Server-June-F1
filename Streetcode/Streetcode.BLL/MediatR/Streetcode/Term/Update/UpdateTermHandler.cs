@@ -34,6 +34,15 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
             return new Error(errorMsg);
         }
 
+        var existingTerms = await _repository.TermRepository.GetAllAsync(t => t.Title == request.Term.Title);
+
+        if (existingTerms.Any())
+        {
+            const string errorMsg = "Term with this title already exists!";
+            _logger.LogError(request, errorMsg);
+            return Result.Fail(new Error(errorMsg));
+        }
+
         var termToUpdate = _mapper.Map<Entity>(request.Term);
 
         if (termToUpdate is null)
@@ -43,7 +52,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
             return Result.Fail(new Error(errorMsg));
         }
 
-        var updatedTerm = _repository.TermRepository.Update(term);
+        var updatedTerm = _repository.TermRepository.Update(termToUpdate);
 
         var isSuccessResult = await _repository.SaveChangesAsync() > 0;
 
