@@ -4,7 +4,8 @@ using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Term;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
+
+using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.Term;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Term.Update;
 

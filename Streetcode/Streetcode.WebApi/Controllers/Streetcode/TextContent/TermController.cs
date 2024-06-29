@@ -35,7 +35,7 @@ public class TermController : BaseApiController
         return HandleResult(await Mediator.Send(new UpdateTermCommand(term)));
     }
 
-    [HttpDelete("{word}")]
+    [HttpDelete("{title}")]
     public async Task<IActionResult> Delete([FromRoute] string title)
     {
         return HandleResult(await Mediator.Send(new DeleteTermCommand(title)));

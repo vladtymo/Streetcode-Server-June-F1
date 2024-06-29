@@ -121,9 +121,9 @@ public class CreateRelatedTermHandlerTests
                 .ReturnsAsync((IEnumerable<Entity>?)null);
         }
 
-        private void SetupMockForExistingTerm(RelatedTermDTO request)
+        private void SetupMockForExistingTerm(RelatedTermCreateDTO request)
         {
-            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermCreateDTO>())).Returns(new Entity());
 
             _mockRepositoryWrapper.Setup(x => x.RelatedTermRepository
                     .GetAllAsync(
@@ -134,16 +134,16 @@ public class CreateRelatedTermHandlerTests
                 {
                     new Entity()
                     {
-                        Id = request.Id,
+                        Id = 1,
                         TermId = request.TermId,
                         Word = request.Word,
                     },
                 });
         }
 
-        private void SetupMockForSaveChangesFail(RelatedTermDTO request)
+        private void SetupMockForSaveChangesFail(RelatedTermCreateDTO request)
         {
-            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermCreateDTO>())).Returns(new Entity());
 
             _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
                     .GetAllAsync(It.IsAny<Expression<Func<Entity, bool>>>(), It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
@@ -154,9 +154,9 @@ public class CreateRelatedTermHandlerTests
             _mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(0);
         }
 
-        private void SetupMockForMappingFail(RelatedTermDTO request)
+        private void SetupMockForMappingFail(RelatedTermCreateDTO request)
         {
-            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(new Entity());
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermCreateDTO>())).Returns(new Entity());
 
             _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
                     .GetAllAsync(It.IsAny<Expression<Func<Entity, bool>>>(), It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
@@ -169,16 +169,23 @@ public class CreateRelatedTermHandlerTests
             _mockMapper.Setup(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>())).Returns((RelatedTermDTO)null!);
         }
 
-        private void SetupMockForSuccess(RelatedTermDTO request)
+        private void SetupMockForSuccess(RelatedTermCreateDTO request)
         {
             var relatedTermEntity = new Entity
             {
-                Id = request.Id,
+                Id = 1,
                 TermId = request.TermId,
                 Word = request.Word,
             };
 
-            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>())).Returns(relatedTermEntity);
+            var relatedTermDto = new RelatedTermDTO
+            {
+                Id = 1,
+                TermId = request.TermId,
+                Word = request.Word,
+            };
+
+            _mockMapper.Setup(m => m.Map<Entity>(It.IsAny<RelatedTermCreateDTO>())).Returns(relatedTermEntity);
 
             _mockRepositoryWrapper.Setup(r => r.RelatedTermRepository
                     .GetAllAsync(It.IsAny<Expression<Func<Entity, bool>>>(), It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
@@ -188,14 +195,13 @@ public class CreateRelatedTermHandlerTests
 
             _mockRepositoryWrapper.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
 
-            _mockMapper.Setup(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>())).Returns(request);
-        }
+            _mockMapper.Setup(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>())).Returns(relatedTermDto);
+    }
 
-        private RelatedTermDTO GetValidCreateRelatedTermRequest()
+        private RelatedTermCreateDTO GetValidCreateRelatedTermRequest()
         {
-            return new RelatedTermDTO
+            return new RelatedTermCreateDTO
             {
-                Id = 1,
                 TermId = 1,
                 Word = "Test",
             };
