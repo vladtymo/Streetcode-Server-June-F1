@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
@@ -28,7 +29,7 @@ public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand
 
         if (relatedTerm is null)
         {
-            const string errorMsg = "Cannot create new related word for a term!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -39,28 +40,20 @@ public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand
 
         if (existingTerms.Any())
         {
-            const string errorMsg = "Word already exists for this term!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
         var createdRelatedTerm = await _repository.RelatedTermRepository.CreateAsync(relatedTerm);
 
-        try
-        {
-            var isSuccessResult = await _repository.SaveChangesAsync() > 0;
+        var isSuccessResult = await _repository.SaveChangesAsync() > 0;
 
-            if(!isSuccessResult)
-            {
-                const string errorMsg = "Cannot save changes in the database after related word creation!";
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(new Error(errorMsg));
-            }
-        }
-        catch (Exception e)
+        if (!isSuccessResult)
         {
-            Console.WriteLine(e);
-            throw;
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.CanNotCreate, request);
+            _logger.LogError(request, errorMsg);
+            return Result.Fail(new Error(errorMsg));
         }
 
         var createdRelatedTermDto = _mapper.Map<RelatedTermDTO>(createdRelatedTerm);
@@ -71,7 +64,7 @@ public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand
         }
         else
         {
-            const string errorMsg = "Cannot map entity!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, createdRelatedTerm);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

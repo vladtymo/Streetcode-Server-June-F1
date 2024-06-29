@@ -284,5 +284,14 @@ namespace Streetcode.BLL.Resources {
                 return ResourceManager.GetString("StreetcodeUrlNotFound", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot add word because such term already exists.
+        /// </summary>
+        public static string TermAlreadyExist {
+            get {
+                return ResourceManager.GetString("TermAlreadyExist", resourceCulture);
+            }
+        }
     }
 }
