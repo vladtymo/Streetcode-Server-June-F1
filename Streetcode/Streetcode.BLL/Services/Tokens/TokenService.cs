@@ -1,11 +1,17 @@
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using FluentResults;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Serilog;
 using SoftServerCinema.Security.Interfaces;
+using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.Users;
@@ -17,11 +23,15 @@ public class TokenService : ITokenService
     private readonly UserManager<User> _userManager;
     private readonly AccessTokenConfiguration _accessTokenConfiguration;
     private readonly ILoggerService _logger;
-    public TokenService(UserManager<User> userManager, AccessTokenConfiguration accessTokenConfiguration, ILoggerService logger)
+    private readonly HttpRequest _httpRequest;
+    public readonly IResponseCookies _responseCookies;
+
+    public TokenService(HttpRequest request, UserManager<User> userManager, AccessTokenConfiguration accessTokenConfiguration, ILoggerService logger)
     {
         _userManager = userManager;
         _accessTokenConfiguration = accessTokenConfiguration;
         _logger = logger;
+        _httpRequest = request;
     }
     
     public async Task<string> GenerateAccessToken(User user, List<Claim> claims)
@@ -119,4 +129,59 @@ public class TokenService : ITokenService
 
         return principal;
     }
+
+    public async Task<RefreshTokenDTO> GenerateRefreshToken()
+    {
+        var refreshToken = new RefreshTokenDTO
+        {
+            Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+            Expires = DateTime.Now.AddDays(7)
+        };
+
+        return refreshToken;
+    }
+
+    public async Task SetRefreshToken(RefreshTokenDTO newRefreshToken, User user)
+    {
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = newRefreshToken.Expires,
+        };
+
+        _responseCookies.Append("refreshToken", newRefreshToken.Token);
+
+        user.RefreshToken = newRefreshToken.Token;
+        user.Created = newRefreshToken.Created;
+        user.Expires = newRefreshToken.Expires;
+        await _userManager.UpdateAsync(user);
+    }
+
+
+    public async Task<TokenResponseDTO> GenerateTokens(User user)
+    {
+        var refreshToken = _httpRequest.Cookies["refreshToken"];
+        if (!user.RefreshToken.Equals(refreshToken))
+        {
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.InvalidToken);
+            _logger.LogError(refreshToken, errorMsg);
+            throw new ArgumentNullException(errorMsg);
+        }
+        else if (user.Expires < DateTime.Now)
+        {
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.ExpiredToken);
+            _logger.LogError(refreshToken, errorMsg);
+            throw new ArgumentNullException(errorMsg);
+        }
+
+        var userClaims = await GetUserClaimsAsync(user);
+        var tokenResponse = new TokenResponseDTO();
+        tokenResponse.AccessToken = await GenerateAccessToken(user, userClaims);
+        tokenResponse.RefreshToken = await GenerateRefreshToken();
+
+        await SetRefreshToken(tokenResponse.RefreshToken, user);
+
+        return tokenResponse;
+    }
+
 }
