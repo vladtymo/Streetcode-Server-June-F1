@@ -2,7 +2,6 @@
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Term;
-using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Term.GetAll;
@@ -11,13 +10,11 @@ public class GetAllTermsHandler : IRequestHandler<GetAllTermsQuery, Result<IEnum
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
-    private readonly ILoggerService _logger;
 
-    public GetAllTermsHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
+    public GetAllTermsHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper)
     {
         _repositoryWrapper = repositoryWrapper;
         _mapper = mapper;
-        _logger = logger;
     }
 
     public async Task<Result<IEnumerable<TermDTO>>> Handle(GetAllTermsQuery request, CancellationToken cancellationToken)

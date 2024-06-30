@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.DeleteById;
@@ -26,7 +27,7 @@ public class DeleteRelatedTermByIdHandler : IRequestHandler<DeleteRelatedTermByI
 
         if (relatedTerm is null)
         {
-            var errorMsg = $"Cannot find a related term: {request.Id}";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -41,7 +42,7 @@ public class DeleteRelatedTermByIdHandler : IRequestHandler<DeleteRelatedTermByI
         }
         else
         {
-            const string errorMsg = "Failed to delete a related term";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToDeleteA, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

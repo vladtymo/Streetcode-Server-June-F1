@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetById;
@@ -30,7 +31,7 @@ public record GetRelatedTermByIdHandler : IRequestHandler<GetRelatedTermByIdQuer
 
         if (relatedTerm == null)
         {
-            const string errorMsg = "Cannot get RelatedTerm by Id";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request.Id);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }
@@ -39,7 +40,7 @@ public record GetRelatedTermByIdHandler : IRequestHandler<GetRelatedTermByIdQuer
 
         if (relatedTermDto is null)
         {
-            const string errorMsg = "Cannot map DTO for related term!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }

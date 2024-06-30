@@ -4,7 +4,6 @@ using AutoMapper;
 using Moq;
 using Xunit;
 
-using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Mapping.Streetcode.TextContent;
 using Streetcode.BLL.MediatR.Streetcode.Term.GetAll;
 using Streetcode.DAL.Entities.Streetcode.TextContent;
@@ -23,13 +22,9 @@ public class GetAllTermsHandlerTests
 
         private readonly IMapper? m_Mapper;
 
-        private readonly Mock<ILoggerService> m_loggerMock;
-
         public GetAllTermsHandlerTests()
         {
             m_Mapper = Mapper_Configurator.Create<TermProfile>();
-
-            m_loggerMock = new Mock<ILoggerService>();
         }
 
         [Fact]
@@ -45,9 +40,7 @@ public class GetAllTermsHandlerTests
             Mock<IRepositoryWrapper> wrapperMock = new Mock<IRepositoryWrapper>();
             wrapperMock.Setup(w => w.TermRepository).Returns(term_Rep_Mock.Object);
 
-            m_loggerMock.Setup(l => l.LogError(querry, "Cannot find any term!"));
-
-            GetAllTermsHandler handler = new GetAllTermsHandler(wrapperMock.Object, m_Mapper, m_loggerMock.Object);
+            GetAllTermsHandler handler = new GetAllTermsHandler(wrapperMock.Object, m_Mapper);
 
             // Act
             var result = await handler.Handle(querry, CancellationToken.None);
@@ -62,8 +55,6 @@ public class GetAllTermsHandlerTests
             // Assign
             GetAllTermsQuery querry = new GetAllTermsQuery();
 
-            m_loggerMock.Setup(l => l.LogError(querry, "Cannot find any term!"));
-
             Mock<ITermRepository> term_Rep_Mock = new Mock<ITermRepository>();
             term_Rep_Mock.Setup(trm => trm.GetAllAsync(default, default)).
                 ReturnsAsync(new List<Term>());
@@ -71,7 +62,7 @@ public class GetAllTermsHandlerTests
             Mock<IRepositoryWrapper> wrapperMock = new Mock<IRepositoryWrapper>();
             wrapperMock.Setup(w => w.TermRepository).Returns(term_Rep_Mock.Object);
 
-            GetAllTermsHandler handler = new GetAllTermsHandler(wrapperMock.Object, m_Mapper, m_loggerMock.Object);
+            GetAllTermsHandler handler = new GetAllTermsHandler(wrapperMock.Object, m_Mapper);
 
             // Act
             var result = await handler.Handle(querry, CancellationToken.None);

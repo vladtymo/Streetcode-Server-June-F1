@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
@@ -29,16 +30,26 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
 
         if (relatedTerm == null)
         {
-            const string errorMsg = "Cannot get RelatedTerm by term TermId";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request.RelatedTerm.Id);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }
+
+        var existingTerms = await _repository.RelatedTermRepository.GetAllAsync(t => t.Word!.ToLower().Equals(request.RelatedTerm.Word.ToLower()));
+
+        if (existingTerms.Any())
+        {
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist);
+            _logger.LogError(request, errorMsg);
+            return Result.Fail(new Error(errorMsg));
+        }
+
 
         var relatedTermToUpdate = _mapper.Map<Entity>(request.RelatedTerm);
 
         if (relatedTermToUpdate is null)
         {
-            const string errorMsg = "Cannot map new related word for a term!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -49,7 +60,7 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
 
         if (!isSuccessResult)
         {
-            const string errorMsg = "Cannot save changes in the database after related word creation!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToUpdate);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -62,7 +73,7 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
         }
         else
         {
-            const string errorMsg = "Cannot map entity!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

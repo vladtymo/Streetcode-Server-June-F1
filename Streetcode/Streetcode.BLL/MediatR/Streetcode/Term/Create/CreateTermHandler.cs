@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Term;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.Term;
@@ -28,7 +29,7 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
 
         if (newTerm is null)
         {
-            const string errorMsg = "Cannot map new word for a term!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -37,7 +38,7 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
 
         if (existingTerms.Any())
         {
-            const string errorMsg = "Term with this title already exists!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -50,7 +51,7 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
 
             if(!isSuccessResult)
             {
-                const string errorMsg = "Cannot save changes in the database after new Term creation!";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.CanNotCreate, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -69,7 +70,7 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
         }
         else
         {
-            const string errorMsg = "Cannot map entity!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

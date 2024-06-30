@@ -3,6 +3,7 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Term;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.Term;
@@ -29,7 +30,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
 
         if (term == null)
         {
-            const string errorMsg = "Cannot get Term by term TermId";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request.Term.Id);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }
@@ -38,7 +39,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
 
         if (existingTerms.Any())
         {
-            const string errorMsg = "Term with this title already exists!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
