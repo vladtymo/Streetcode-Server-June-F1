@@ -1,15 +1,11 @@
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using FluentResults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Org.BouncyCastle.Asn1.Ocsp;
-using Serilog;
 using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
