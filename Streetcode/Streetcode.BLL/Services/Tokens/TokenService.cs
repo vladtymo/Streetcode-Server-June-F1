@@ -19,15 +19,13 @@ public class TokenService : ITokenService
     private readonly UserManager<User> _userManager;
     private readonly AccessTokenConfiguration _accessTokenConfiguration;
     private readonly ILoggerService _logger;
-    private readonly HttpRequest _httpRequest;
     public readonly IResponseCookies _responseCookies;
 
-    public TokenService(HttpRequest request, UserManager<User> userManager, AccessTokenConfiguration accessTokenConfiguration, ILoggerService logger)
+    public TokenService(UserManager<User> userManager, AccessTokenConfiguration accessTokenConfiguration, ILoggerService logger)
     {
         _userManager = userManager;
         _accessTokenConfiguration = accessTokenConfiguration;
         _logger = logger;
-        _httpRequest = request;
     }
     
     public async Task<string> GenerateAccessToken(User user, List<Claim> claims)
@@ -149,26 +147,10 @@ public class TokenService : ITokenService
 
     public async Task<TokenResponseDTO> GenerateTokens(User user)
     {
-        var refreshToken = _httpRequest.Cookies["refreshToken"];
-        if (!user.RefreshToken.Equals(refreshToken))
-        {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.InvalidToken);
-            _logger.LogError(refreshToken, errorMsg);
-            throw new ArgumentNullException(errorMsg);
-        }
-        else if (user.Expires < DateTime.Now)
-        {
-            /* var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.ExpiredToken);
-            _logger.LogError(refreshToken, errorMsg);
-            throw new ArgumentNullException(errorMsg); */
-        }
-
-        var userClaims = await GetUserClaimsAsync(user);
         var tokenResponse = new TokenResponseDTO();
+        var userClaims = await GetUserClaimsAsync(user);
         tokenResponse.AccessToken = await GenerateAccessToken(user, userClaims);
         tokenResponse.RefreshToken = GenerateRefreshToken();
-        
-        await SetRefreshToken(tokenResponse.RefreshToken, user);
 
         return tokenResponse;
     }

@@ -27,7 +27,6 @@ using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.Services.Text;
 using Streetcode.DAL.Entities.Users;
 using Streetcode.BLL.Services.Tokens;
-using SoftServerCinema.Security.Interfaces;
 
 namespace Streetcode.WebApi.Extensions;
 

@@ -1,43 +1,73 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using Castle.Core.Internal;
 using FluentResults;
 using MediatR;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using SoftServerCinema.Security.Interfaces;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
 using Streetcode.BLL.Services.Tokens;
 using Streetcode.DAL.Entities.Users;
 
-namespace Streetcode.BLL.MediatR.Account.RefreshToken
+namespace Streetcode.BLL.MediatR.Account.RefreshTokens
 {
-    public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, Result<string>>
+    public class RefreshTokensHandler : IRequestHandler<RefreshTokensCommand, Result<User>>
     {
         private readonly ILoggerService _logger;
-        private readonly IMapper _mapper;
         private readonly TokenService _tokenService;
+        private readonly UserManager<User> _userManager;
 
-        public RefreshTokenHandler(ILoggerService logger, TokenService tokenService, IMapper mapper)
+        public RefreshTokensHandler(ILoggerService logger)
         {
             _logger = logger;
-            _tokenService = tokenService;
-            _mapper = mapper;
         }
 
-        public async Task<Result<string>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+        public async Task<Result<User>> Handle(RefreshTokensCommand request, CancellationToken cancellationToken)
         {
-            var user = _mapper.Map<User>(request.user);
-            if(user == null)
+            // Get token response
+            if(request.tokenResponse == null)
             {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound);
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(new Error(errorMsg));
+                var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request);
+                _logger.LogError(request, errorMsgNull);
+                return Result.Fail(new Error(errorMsgNull));
             }
 
-            _tokenService.GenerateTokens(user);
+            var tokens = request.tokenResponse;
 
-            return Result.Ok();
+            string accessToken = tokens.AccessToken;
+
+            // Find user
+            var claims = _tokenService.GetPrincipalFromAccessToken(accessToken);
+
+            string email = claims.FindFirstValue(ClaimTypes.Email);
+            if (email == null)
+            {
+                var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request);
+                _logger.LogError(request, errorMsgNull);
+                return Result.Fail(new Error(errorMsgNull));
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user == null)
+            {
+                var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound, request);
+                _logger.LogError(request, errorMsgNull);
+                return Result.Fail(new Error(errorMsgNull));
+            }
+
+            // Generate and implement new tokens
+            tokens = await _tokenService.GenerateTokens(user);
+            if(tokens.AccessToken.IsNullOrEmpty() || tokens.RefreshToken.Token.IsNullOrEmpty())
+            {
+                var errorMsgNull = MessageResourceContext.GetMessage(ErrorMessages.InvalidToken, request);
+                _logger.LogError(request, errorMsgNull);
+                return Result.Fail(new Error(errorMsgNull));
+            }
+
+            await _tokenService.SetRefreshToken(tokens.RefreshToken, user);
+            user.Token = tokens.AccessToken;
+            await _userManager.UpdateAsync(user);
+
+            return Result.Ok(user);
         }
     }
 }

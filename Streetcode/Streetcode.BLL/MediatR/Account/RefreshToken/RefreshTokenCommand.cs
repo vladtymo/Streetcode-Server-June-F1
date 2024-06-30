@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Streetcode.BLL.MediatR.Account.RefreshToken
+namespace Streetcode.BLL.MediatR.Account.RefreshTokens
 {
-    public record RefreshTokenCommand(UserDTO user) : IValidatableRequest<Result<string>>;
+    public record RefreshTokensCommand(TokenResponseDTO tokenResponse) : IValidatableRequest<Result<User>>;
 }

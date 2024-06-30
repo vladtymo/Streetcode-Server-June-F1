@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Users;
-using Streetcode.BLL.MediatR.Account.RefreshToken;
+using Streetcode.BLL.MediatR.Account.RefreshTokens;
 using Streetcode.BLL.MediatR.Account.Register;
-using Streetcode.BLL.MediatR.Partners.Create;
-using Streetcode.BLL.Services.Tokens;
-using Streetcode.DAL.Entities.Users;
 
 namespace Streetcode.WebApi.Controllers.Account
 {
@@ -18,9 +15,9 @@ namespace Streetcode.WebApi.Controllers.Account
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> RefreshToken(User user)
+        public async Task<ActionResult<string>> RefreshTokens(TokenResponseDTO response)
         {
-            return HandleResult(await Mediator.Send(new RefreshTokenCommand(user)));
+            return HandleResult(await Mediator.Send(new RefreshTokensCommand(response)));
         }
     }
 }
