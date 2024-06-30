@@ -1,22 +1,24 @@
-using FluentValidation;
 using Hangfire;
 using Streetcode.BLL.Services.BlobStorageService;
-using Streetcode.BLL.Resources;
 using Streetcode.WebApi.Extensions;
 using Streetcode.WebApi.Utils;
 using Streetcode.WebApi.Middlewares;
+using Streetcode.WebApi.HttpClients.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureApplication();
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddSwaggerServices();
+builder.Services.AddHttpClients(builder.Configuration);
 builder.Services.AddCustomServices();
 builder.Services.ConfigureBlob(builder);
 builder.Services.ConfigurePayment(builder);
 builder.Services.ConfigureInstagram(builder);
 builder.Services.ConfigureSerilog(builder);
 builder.Services.AddIdentityService();
+builder.Services.AddAccessTokenConfiguration(builder.Configuration);
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -33,7 +35,6 @@ else
 app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 await app.ApplyMigrations();
-
 
 //await app.SeedDataAsync(); // uncomment for seeding data in local
 app.UseCors();

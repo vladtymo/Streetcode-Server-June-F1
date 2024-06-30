@@ -61,6 +61,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status code {0} from Instagram API: {1}.
+        /// </summary>
+        public static string BadRequestToInstagram {
+            get {
+                return ResourceManager.GetString("BadRequestToInstagram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string BigCustomError {
@@ -75,6 +84,24 @@ namespace Streetcode.BLL.Resources {
         public static string CanNotCreate {
             get {
                 return ResourceManager.GetString("CanNotCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instagram settings are not configured properly..
+        /// </summary>
+        public static string EmptyInstagramSettings {
+            get {
+                return ResourceManager.GetString("EmptyInstagramSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment settings are not configured properly.
+        /// </summary>
+        public static string EmptyPaymentSettings {
+            get {
+                return ResourceManager.GetString("EmptyPaymentSettings", resourceCulture);
             }
         }
         
@@ -291,6 +318,30 @@ namespace Streetcode.BLL.Resources {
         public static string TermAlreadyExist {
             get {
                 return ResourceManager.GetString("TermAlreadyExist", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
+        /// </summary>
+        public static string UserNotFound {
+            get {
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
+        /// </summary>
+        public static string RolesNotFound {
+            get {
+                return ResourceManager.GetString("RolesNotFound", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
+        /// </summary>
+        public static string InvalidToken {
+            get {
+                return ResourceManager.GetString("InvalidToken", resourceCulture);
             }
         }
     }

@@ -10,4 +10,6 @@ namespace Streetcode.BLL.Services.Instagram;
     {
          public string InstagramID { get; set; } = string.Empty;
          public string InstagramToken { get; set; } = string.Empty;
-}
+         public string BaseAddress { get; set; } = string.Empty;
+         public string MediaRequestUrl { get; set; } = string.Empty;
+} 
