@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Serilog;
-using SoftServerCinema.Security.Interfaces;
+using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
@@ -130,7 +130,7 @@ public class TokenService : ITokenService
         return principal;
     }
 
-    public async Task<RefreshTokenDTO> GenerateRefreshToken()
+    public RefreshTokenDTO GenerateRefreshToken()
     {
         var refreshToken = new RefreshTokenDTO
         {
@@ -143,12 +143,6 @@ public class TokenService : ITokenService
 
     public async Task SetRefreshToken(RefreshTokenDTO newRefreshToken, User user)
     {
-        var cookieOptions = new CookieOptions
-        {
-            HttpOnly = true,
-            Expires = newRefreshToken.Expires,
-        };
-
         _responseCookies.Append("refreshToken", newRefreshToken.Token);
 
         user.RefreshToken = newRefreshToken.Token;
@@ -156,7 +150,6 @@ public class TokenService : ITokenService
         user.Expires = newRefreshToken.Expires;
         await _userManager.UpdateAsync(user);
     }
-
 
     public async Task<TokenResponseDTO> GenerateTokens(User user)
     {
@@ -169,19 +162,18 @@ public class TokenService : ITokenService
         }
         else if (user.Expires < DateTime.Now)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.ExpiredToken);
+            /* var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.ExpiredToken);
             _logger.LogError(refreshToken, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(errorMsg); */
         }
 
         var userClaims = await GetUserClaimsAsync(user);
         var tokenResponse = new TokenResponseDTO();
         tokenResponse.AccessToken = await GenerateAccessToken(user, userClaims);
-        tokenResponse.RefreshToken = await GenerateRefreshToken();
-
+        tokenResponse.RefreshToken = GenerateRefreshToken();
+        
         await SetRefreshToken(tokenResponse.RefreshToken, user);
 
         return tokenResponse;
     }
-
 }

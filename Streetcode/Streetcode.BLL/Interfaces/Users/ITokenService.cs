@@ -2,15 +2,15 @@
 using Streetcode.BLL.DTO.Users;
 using Streetcode.DAL.Entities.Users;
 
-namespace SoftServerCinema.Security.Interfaces
+namespace Streetcode.BLL.Interfaces.Users
 {
     public interface ITokenService
     {
         Task<string> GenerateAccessToken(User user, List<Claim> claims);
         Task<List<Claim>> GetUserClaimsAsync(User user);
         ClaimsPrincipal GetPrincipalFromAccessToken(string? token);
-        Task<RefreshTokenDTO> GenerateRefreshToken();
+        RefreshTokenDTO GenerateRefreshToken();
         Task SetRefreshToken(RefreshTokenDTO newRefreshToken, User user);
-        Task<string> GenerateTokens(User user);
+        Task<TokenResponseDTO> GenerateTokens(User user);
     }
 }
