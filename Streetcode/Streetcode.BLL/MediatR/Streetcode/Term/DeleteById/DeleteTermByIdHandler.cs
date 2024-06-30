@@ -27,7 +27,7 @@ public class DeleteTermByIdHandler : IRequestHandler<DeleteTermByIdCommand, Resu
 
         if (term is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request.Id);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -42,7 +42,7 @@ public class DeleteTermByIdHandler : IRequestHandler<DeleteTermByIdCommand, Resu
         }
         else
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToDeleteA, request.Id);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToDeleteA, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
