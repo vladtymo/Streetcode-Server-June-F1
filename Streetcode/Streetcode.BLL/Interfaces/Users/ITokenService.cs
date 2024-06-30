@@ -1,7 +1,8 @@
 ﻿using System.Security.Claims;
+using Streetcode.BLL.DTO.Users;
 using Streetcode.DAL.Entities.Users;
 
-namespace SoftServerCinema.Security.Interfaces
+namespace Streetcode.BLL.Interfaces.Users
 {
     public interface ITokenService
     {

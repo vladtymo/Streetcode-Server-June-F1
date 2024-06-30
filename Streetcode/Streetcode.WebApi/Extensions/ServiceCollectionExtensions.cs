@@ -24,6 +24,7 @@ using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Interfaces.Text;
+using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.Services.Text;
 using Streetcode.DAL.Entities.Users;
 using Streetcode.BLL.Services.CacheService;
@@ -61,6 +62,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IInstagramService, InstagramService>();
         services.AddScoped<ITextService, AddTermsToTextService>(); 
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<ITokenService, TokenService>();
     }
 
     public static void AddCachingService(this IServiceCollection services, ConfigurationManager configuration)
@@ -105,6 +107,7 @@ public static class ServiceCollectionExtensions
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
             });
+        
     }
     
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
@@ -171,6 +174,30 @@ public static class ServiceCollectionExtensions
         {
             opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyApi", Version = "v1" });
             opt.CustomSchemaIds(x => x.FullName);
+            opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = JwtBearerDefaults.AuthenticationScheme
+            });
+
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = JwtBearerDefaults.AuthenticationScheme,
+                        },
+                        Scheme = JwtBearerDefaults.AuthenticationScheme,
+                        In = ParameterLocation.Header
+                    },
+                    new List<string>()
+                }
+            });
         });
     }
 
