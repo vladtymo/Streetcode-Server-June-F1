@@ -8,13 +8,13 @@ using AutoMapper;
 using Moq;
 using Xunit;
 
+using Streetcode.BLL.Resources;
 using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.DeleteById;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
-using Streetcode.BLL.Resources;
 
 public class DeleteRelatedTermByIdHandlerTests
 {
@@ -36,9 +36,7 @@ public class DeleteRelatedTermByIdHandlerTests
     {
         // Arrange
         var request = new DeleteRelatedTermByIdCommand(1);
-        _mockRepository.Setup(x => x.RelatedTermRepository
-                .GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Entity, bool>>>(), null))
-            .ReturnsAsync((Entity?)null);
+        SetupRepositoryToReturnNull();
         var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request);
 
         // Act
@@ -55,12 +53,9 @@ public class DeleteRelatedTermByIdHandlerTests
         // Arrange
         var relatedTerm = new Entity { Id = 1, Word = "Test" };
         var relatedTermDto = new RelatedTermDTO { Id = 1, Word = "Test" };
-
-        _mockRepository.Setup(x => x.RelatedTermRepository
-                .GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Entity, bool>>>(), null))
-            .ReturnsAsync(relatedTerm);
-        _mockRepository.Setup(repo => repo.SaveChangesAsync()).ReturnsAsync(1);
-        _mockMapper.Setup(mapper => mapper.Map<RelatedTermDTO>(relatedTerm)).Returns(relatedTermDto);
+        SetupRepositoryToReturnEntity(relatedTerm);
+        SetupRepositoryToSaveChanges(true);
+        SetupMapper(relatedTerm, relatedTermDto);
 
         // Act
         var result = await _handler.Handle(new DeleteRelatedTermByIdCommand(1), CancellationToken.None);
@@ -77,12 +72,9 @@ public class DeleteRelatedTermByIdHandlerTests
         var relatedTerm = new Entity { Id = 1, Word = "Test" };
         var relatedTermDto = new RelatedTermDTO { Id = 1, Word = "Test" };
         var request = new DeleteRelatedTermByIdCommand(1);
-
-        _mockRepository.Setup(x => x.RelatedTermRepository
-                .GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Entity, bool>>>(), null))
-            .ReturnsAsync(relatedTerm);
-        _mockRepository.Setup(repo => repo.SaveChangesAsync()).ReturnsAsync(0);
-        _mockMapper.Setup(mapper => mapper.Map<RelatedTermDTO>(relatedTerm)).Returns(relatedTermDto);
+        SetupRepositoryToReturnEntity(relatedTerm);
+        SetupRepositoryToSaveChanges(false);
+        SetupMapper(relatedTerm, relatedTermDto);
         var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToDeleteA, request);
 
         // Act
@@ -91,5 +83,29 @@ public class DeleteRelatedTermByIdHandlerTests
         // Assert
         Assert.True(result.IsFailed);
         Assert.Equal(errorMsg, result.Errors.First().Message);
+    }
+
+    private void SetupRepositoryToReturnNull()
+    {
+        _mockRepository.Setup(x => x.RelatedTermRepository
+                .GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Entity, bool>>>(), null))
+            .ReturnsAsync((Entity?)null);
+    }
+
+    private void SetupRepositoryToReturnEntity(Entity relatedTerm)
+    {
+        _mockRepository.Setup(x => x.RelatedTermRepository
+                .GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Entity, bool>>>(), null))
+            .ReturnsAsync(relatedTerm);
+    }
+
+    private void SetupRepositoryToSaveChanges(bool isSuccess)
+    {
+        _mockRepository.Setup(repo => repo.SaveChangesAsync()).ReturnsAsync(isSuccess ? 1 : 0);
+    }
+
+    private void SetupMapper(Entity relatedTerm, RelatedTermDTO relatedTermDto)
+    {
+        _mockMapper.Setup(mapper => mapper.Map<RelatedTermDTO>(relatedTerm)).Returns(relatedTermDto);
     }
 }
