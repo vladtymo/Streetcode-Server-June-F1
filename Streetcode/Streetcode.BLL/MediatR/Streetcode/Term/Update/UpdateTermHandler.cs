@@ -30,7 +30,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
 
         if (term == null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request.Term.Id);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }
@@ -39,7 +39,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
 
         if (existingTerms.Any())
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist, request.Term.Title);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
