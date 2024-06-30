@@ -3,13 +3,14 @@
 using System.Linq.Expressions;
 using AutoMapper;
 using Moq;
+using Xunit;
+
 using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
 using Streetcode.BLL.Resources;
-using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Xunit;
+
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
 public class DeleteRelatedTermHandlerTests

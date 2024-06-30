@@ -5,12 +5,15 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Xunit;
+
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
-using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
+using Org.BouncyCastle.Asn1.Ocsp;
+using Streetcode.BLL.Resources;
 
 public class GetAllRelatedTermsByTermIdHandlerTests
 {
@@ -31,7 +34,29 @@ public class GetAllRelatedTermsByTermIdHandlerTests
         // Arrange
         int id = 1;
         MockRepositorySetup(true);
+        var request = new GetAllRelatedTermsByTermIdQuery(id);
+        var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
+        var handler = new GetAllRelatedTermsByTermIdHandler(
+            _mockMapper.Object,
+            _mockRepository.Object,
+            _mockLogger.Object);
 
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
+    }
+
+    [Fact]
+    public async Task GetAllRelatedTermsByTermId_ShouldReturnError_IfRelatedTermsDTOIsNull()
+    {
+        // Arrange
+        int id = 3;
+        MockRepositorySetup(false);
+        MockMapperSetup(true);
+        var request = new GetAllRelatedTermsByTermIdQuery(id);
+        var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request);
         var handler = new GetAllRelatedTermsByTermIdHandler(
             _mockMapper.Object,
             _mockRepository.Object,
@@ -41,7 +66,7 @@ public class GetAllRelatedTermsByTermIdHandlerTests
         var result = await handler.Handle(new GetAllRelatedTermsByTermIdQuery(id), CancellationToken.None);
 
         // Assert
-        Assert.True(result.HasError(e => e.Message == "Cannot get words by term id"));
+        Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
     }
 
     [Fact]
