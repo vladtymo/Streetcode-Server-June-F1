@@ -137,8 +137,6 @@ public class TokenService : ITokenService
 
     public async Task SetRefreshToken(RefreshTokenDTO newRefreshToken, User user)
     {
-        _responseCookies.Append("refreshToken", newRefreshToken.Token);
-
         user.RefreshToken = newRefreshToken.Token;
         user.Created = newRefreshToken.Created;
         user.Expires = newRefreshToken.Expires;
