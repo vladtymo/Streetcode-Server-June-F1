@@ -6,14 +6,13 @@ using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Xunit;
 
+using Streetcode.BLL.Resources;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Streetcode.BLL.DTO.Streetcode.TextContent.RelatedTerm;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
-using Org.BouncyCastle.Asn1.Ocsp;
-using Streetcode.BLL.Resources;
 
 public class GetAllRelatedTermsByTermIdHandlerTests
 {
@@ -32,10 +31,9 @@ public class GetAllRelatedTermsByTermIdHandlerTests
     public async Task GetAllRelatedTermsByTermId_ShouldReturnError_IfRelatedTermsIsNull()
     {
         // Arrange
-        int id = 1;
         MockRepositorySetup(true);
-        var request = new GetAllRelatedTermsByTermIdQuery(id);
-        var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
+        var request = new GetAllRelatedTermsByTermIdQuery(1);
+        var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request);
         var handler = new GetAllRelatedTermsByTermIdHandler(
             _mockMapper.Object,
             _mockRepository.Object,
@@ -52,10 +50,9 @@ public class GetAllRelatedTermsByTermIdHandlerTests
     public async Task GetAllRelatedTermsByTermId_ShouldReturnError_IfRelatedTermsDTOIsNull()
     {
         // Arrange
-        int id = 3;
         MockRepositorySetup(false);
         MockMapperSetup(true);
-        var request = new GetAllRelatedTermsByTermIdQuery(id);
+        var request = new GetAllRelatedTermsByTermIdQuery(3);
         var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request);
         var handler = new GetAllRelatedTermsByTermIdHandler(
             _mockMapper.Object,
@@ -63,7 +60,7 @@ public class GetAllRelatedTermsByTermIdHandlerTests
             _mockLogger.Object);
 
         // Act
-        var result = await handler.Handle(new GetAllRelatedTermsByTermIdQuery(id), CancellationToken.None);
+        var result = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
@@ -73,7 +70,6 @@ public class GetAllRelatedTermsByTermIdHandlerTests
     public async Task GetAllRelatedTermsByTermId_ShouldReturnOk_WhenArgumentsPassedCorrectly()
     {
         // Arrange
-        int id = 1;
         MockRepositorySetup(false);
         MockMapperSetup(false);
 
@@ -83,7 +79,7 @@ public class GetAllRelatedTermsByTermIdHandlerTests
             _mockLogger.Object);
 
         // Act
-        var result = await handler.Handle(new GetAllRelatedTermsByTermIdQuery(id), CancellationToken.None);
+        var result = await handler.Handle(new GetAllRelatedTermsByTermIdQuery(1), CancellationToken.None);
 
         // Assert
         Assert.True(result.IsSuccess);
@@ -93,7 +89,6 @@ public class GetAllRelatedTermsByTermIdHandlerTests
     public async Task GetAllRelatedTermsByTermId_MapperShouldCallMapOnlyOnce()
     {
         // Arrange
-        int id = 1;
         MockRepositorySetup(false);
         MockMapperSetup(false);
 
@@ -103,7 +98,7 @@ public class GetAllRelatedTermsByTermIdHandlerTests
             _mockLogger.Object);
 
         // Act
-        await handler.Handle(new GetAllRelatedTermsByTermIdQuery(id), CancellationToken.None);
+        await handler.Handle(new GetAllRelatedTermsByTermIdQuery(1), CancellationToken.None);
 
         // Assert
         _mockMapper.Verify(
