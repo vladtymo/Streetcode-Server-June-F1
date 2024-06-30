@@ -1,11 +1,10 @@
+using System.Net.Http;
 using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using StackExchange.Redis;
 using Streetcode.BLL.Interfaces.Logging;
@@ -18,18 +17,19 @@ using Streetcode.BLL.Services.Email;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Services.BlobStorageService;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Streetcode.BLL.Behavior;
-using Streetcode.BLL.Interfaces.Payment;
-using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Services.Instagram;
+using Streetcode.BLL.Interfaces.Payment;
+using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Interfaces.Text;
-using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.Services.Text;
+using Streetcode.BLL.Interfaces.Users;
 using Streetcode.DAL.Entities.Users;
 using Streetcode.BLL.Services.CacheService;
 using Streetcode.BLL.Services.Tokens;
-
 
 namespace Streetcode.WebApi.Extensions;
 
