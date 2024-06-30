@@ -38,7 +38,7 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
 
         if (existingTerms.Any())
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist, request.Term.Title);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -70,7 +70,7 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
         }
         else
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

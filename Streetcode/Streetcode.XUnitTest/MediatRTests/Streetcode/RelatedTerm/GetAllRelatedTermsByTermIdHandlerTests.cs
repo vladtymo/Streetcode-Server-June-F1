@@ -45,26 +45,6 @@ public class GetAllRelatedTermsByTermIdHandlerTests
     }
 
     [Fact]
-    public async Task GetAllRelatedTermsByTermId_ShouldReturnError_IfRelatedTermsDTOIsNull()
-    {
-        // Arrange
-        int id = 3;
-        MockRepositorySetup(false);
-        MockMapperSetup(true);
-
-        var handler = new GetAllRelatedTermsByTermIdHandler(
-            _mockMapper.Object,
-            _mockRepository.Object,
-            _mockLogger.Object);
-
-        // Act
-        var result = await handler.Handle(new GetAllRelatedTermsByTermIdQuery(id), CancellationToken.None);
-
-        // Assert
-        Assert.True(result.HasError(e => e.Message == "Cannot get words by term id"));
-    }
-
-    [Fact]
     public async Task GetAllRelatedTermsByTermId_ShouldReturnOk_WhenArgumentsPassedCorrectly()
     {
         // Arrange

@@ -40,7 +40,7 @@ public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand
 
         if (existingTerms.Any())
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist, request.RelatedTerm);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

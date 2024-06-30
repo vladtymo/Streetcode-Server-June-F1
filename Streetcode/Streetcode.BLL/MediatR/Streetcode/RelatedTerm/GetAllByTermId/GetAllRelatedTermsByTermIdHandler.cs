@@ -31,7 +31,7 @@ public record GetAllRelatedTermsByTermIdHandler : IRequestHandler<GetAllRelatedT
 
         if (!relatedTerms.Any())
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request.TermId);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }
@@ -40,7 +40,7 @@ public record GetAllRelatedTermsByTermIdHandler : IRequestHandler<GetAllRelatedT
 
         if (relatedTermsDto is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }

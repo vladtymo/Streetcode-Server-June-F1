@@ -27,7 +27,7 @@ public class DeleteRelatedTermHandler : IRequestHandler<DeleteRelatedTermCommand
 
         if (relatedTerm is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request.Word);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -42,7 +42,7 @@ public class DeleteRelatedTermHandler : IRequestHandler<DeleteRelatedTermCommand
         }
         else
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToDeleteA, request.Word);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToDeleteA, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

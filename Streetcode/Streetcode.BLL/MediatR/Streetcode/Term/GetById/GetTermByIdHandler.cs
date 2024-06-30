@@ -36,7 +36,7 @@ public class GetTermByIdHandler : IRequestHandler<GetTermByIdQuery, Result<TermD
 
         if (termDto is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }

@@ -39,7 +39,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
 
         if (existingTerms.Any())
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist, request.Term.Title);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -48,7 +48,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
 
         if (termToUpdate is null)
         {
-            const string errorMsg = "Cannot map new term!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -59,7 +59,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
 
         if (!isSuccessResult)
         {
-            const string errorMsg = "Cannot save changes in the database after related word creation!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToUpdate, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -72,7 +72,7 @@ public class UpdateTermHandler : IRequestHandler<UpdateTermCommand, Result<TermD
         }
         else
         {
-            const string errorMsg = "Cannot map entity!";
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

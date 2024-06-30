@@ -1,3 +1,5 @@
+using Streetcode.BLL.Resources;
+
 namespace Streetcode.XUnitTest.MediatRTests.StreetcodeTests.RelatedTerm;
 
 using System.Linq.Expressions;
@@ -32,12 +34,13 @@ public class CreateRelatedTermHandlerTests
             MockRepositorySetupNullOrEmptyArrOffIds();
             var command = new CreateRelatedTermCommand(null!);
             var handler = new CreateRelatedTermHandler(_mockRepositoryWrapper.Object, _mockMapper.Object, _mockLogger.Object);
-
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, command);
+            
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.Equal("Cannot create new related word for a term!", result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
         }
 
         [Fact]
@@ -48,12 +51,13 @@ public class CreateRelatedTermHandlerTests
             SetupMockForExistingTerm(request);
             var handler = CreateHandler();
             var command = new CreateRelatedTermCommand(request);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist, request);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.Equal("Word already exists for this term!", result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
         }
 
         [Fact]
@@ -64,12 +68,13 @@ public class CreateRelatedTermHandlerTests
             SetupMockForSaveChangesFail(request);
             var handler = CreateHandler();
             var command = new CreateRelatedTermCommand(request);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.CanNotCreate, request);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.Equal("Cannot save changes in the database after related word creation!", result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
         }
 
         [Fact]
@@ -80,12 +85,13 @@ public class CreateRelatedTermHandlerTests
             SetupMockForMappingFail(request);
             var handler = CreateHandler();
             var command = new CreateRelatedTermCommand(request);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
 
-            // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+        // Act
+        var result = await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.Equal("Cannot map entity!", result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
         }
 
         [Fact]

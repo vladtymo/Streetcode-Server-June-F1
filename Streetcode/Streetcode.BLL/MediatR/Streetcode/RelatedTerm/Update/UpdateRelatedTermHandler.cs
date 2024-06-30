@@ -39,7 +39,7 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
 
         if (existingTerms.Any())
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.TermAlreadyExist, request.RelatedTerm.Word);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -49,7 +49,7 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
 
         if (relatedTermToUpdate is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -60,7 +60,7 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
 
         if (!isSuccessResult)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToUpdate);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToUpdate, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -73,7 +73,7 @@ public class UpdateRelatedTermHandler : IRequestHandler<UpdateRelatedTermCommand
         }
         else
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToMap, request);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
