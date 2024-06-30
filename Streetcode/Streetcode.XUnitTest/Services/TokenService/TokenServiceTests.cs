@@ -2,7 +2,6 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
@@ -21,24 +20,38 @@ public class TokenServiceTests
       private readonly Mock<UserManager<User>> _userManagerMock;
       private readonly AccessTokenConfiguration _accessTokenConfiguration;
       private readonly BLL.Services.Tokens.TokenService _tokenService;
-      private readonly HttpRequest _request;
       private readonly ILoggerService _logger;
 
       public TokenServiceTests()
       {
-        
+        var userStoreMock = new Mock<IUserStore<User>>();
+        _userManagerMock = new Mock<UserManager<User>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        _accessTokenConfiguration = new AccessTokenConfiguration
+        {
+            SecretKey = "supersecretkeythatshouldbeatleast32characters-long",
+            AccessTokenExpirationMinutes = 30,
+            Issuer = "Streetcode",
+            Audience = "StreetcodeClient"
+        };
+        _logger = new LoggerService(new LoggerConfiguration().CreateLogger());
+        _tokenService = new BLL.Services.Tokens.TokenService(_userManagerMock.Object, _accessTokenConfiguration, _logger);
       }
 
       [Fact]
       public async Task GenerateAccessToken_ShouldReturnToken_WhenUserValid()
       {
         // Arrange
+        var user = new User { Id = Guid.NewGuid(), UserName = "testUser", Email = "testuser@example.com" };
+        _userManagerMock.Setup(um => um.GetRolesAsync(user)).ReturnsAsync(new List<string> { "Admin" });
 
         // Act
+        var token = await _tokenService.GenerateAccessToken(user, new List<Claim>());
 
         // Assert
+        Assert.NotNull(token);
+        Assert.IsType<string>(token);
       }
- 
+      
       [Fact]
       public void GetPrincipalFromAccessToken_ShouldReturnClaimsPrincipal_WhenTokenValid()
       {
