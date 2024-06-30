@@ -31,7 +31,7 @@ public record GetRelatedTermByIdHandler : IRequestHandler<GetRelatedTermByIdQuer
 
         if (relatedTerm == null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request.Id);
+            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityWithIdNotFound, request);
             _logger.LogError(request, errorMsg);
             return new Error(errorMsg);
         }
