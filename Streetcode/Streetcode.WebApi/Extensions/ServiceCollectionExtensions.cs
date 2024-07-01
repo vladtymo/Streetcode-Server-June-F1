@@ -123,7 +123,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton(emailConfig);
         }
         
-        var accessTokenConfig = configuration.GetSection("AccessToken").Get<AccessTokenConfiguration>();
+        var accessTokenConfig = configuration.GetSection("AccessToken").Get<TokensConfiguration>();
         if(accessTokenConfig != null)
         {
             services.AddSingleton(accessTokenConfig);
