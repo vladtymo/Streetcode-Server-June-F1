@@ -22,12 +22,11 @@ namespace Streetcode.BLL.MediatR.Account.RefreshTokens
             _logger = logger;
             _userManager = userManager;
             _accessTokenConfiguration = accessTokenConfiguration;
+            _tokenService = new(_userManager, _accessTokenConfiguration, _logger);
         }
 
         public async Task<Result<User>> Handle(RefreshTokensCommand request, CancellationToken cancellationToken)
         {
-            _tokenService = new(_userManager, _accessTokenConfiguration, _logger);
-
             // Get token response
             if(request.tokenResponse == null)
             {
