@@ -58,7 +58,7 @@ if (app.Environment.EnvironmentName != "Local")
     RecurringJob.AddOrUpdate<BlobService>(
         b => b.CleanBlobStorage(), Cron.Monthly);
     RecurringJob.AddOrUpdate<TokenService>(
-        wp => wp.RemoveExpiredRefreshToken(), Cron.Weekly);
+        ts => ts.RemoveExpiredRefreshToken(), Cron.Weekly);
 }
 
 app.MapControllers();
