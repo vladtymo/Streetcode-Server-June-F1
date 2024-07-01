@@ -129,7 +129,7 @@ public class TokenService : ITokenService
         var refreshToken = new RefreshTokenDTO
         {
             Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-            Expires = DateTime.Now.AddDays(7)
+            Expires = DateTime.UtcNow.AddDays(7)
         };
 
         return refreshToken;
@@ -151,5 +151,15 @@ public class TokenService : ITokenService
         tokenResponse.RefreshToken = GenerateRefreshToken();
 
         return tokenResponse;
+    }
+
+    public async Task RemoveExpiredRefreshToken()
+    {
+        var users = _userManager.Users.Where(u => u.Expires < DateTime.UtcNow);
+        foreach (var user in users)
+        {
+            user.RefreshToken = null;
+            await _userManager.UpdateAsync(user);
+        }
     }
 }

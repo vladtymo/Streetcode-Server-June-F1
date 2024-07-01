@@ -4,6 +4,7 @@ using Streetcode.WebApi.Extensions;
 using Streetcode.WebApi.Utils;
 using Streetcode.WebApi.Middlewares;
 using Streetcode.WebApi.HttpClients.Configuration;
+using Streetcode.BLL.Services.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureApplication();
 
@@ -56,6 +57,8 @@ if (app.Environment.EnvironmentName != "Local")
         wp => wp.ParseZipFileFromWebAsync(), Cron.Monthly);
     RecurringJob.AddOrUpdate<BlobService>(
         b => b.CleanBlobStorage(), Cron.Monthly);
+    RecurringJob.AddOrUpdate<TokenService>(
+        wp => wp.RemoveExpiredRefreshToken(), Cron.Weekly);
 }
 
 app.MapControllers();
