@@ -4,26 +4,29 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Streetcode.BLL.Interfaces.Payment;
 using Streetcode.BLL.Services.Payment.Exceptions;
+using Streetcode.BLL.Services.Payment.PaymentEnviroment;
 using Streetcode.DAL.Entities.Payment;
 
 namespace Streetcode.BLL.Services.Payment
 {
     public class PaymentService : IPaymentService
     {
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly PaymentEnvirovmentVariables _paymentEnvirovment;
         private readonly HttpClient _httpClient;
-        public PaymentService(IOptions<PaymentEnvirovmentVariables> paymentEnvirovment)
+        private readonly string _createInvoice;
+        public PaymentService(IOptions<PaymentEnvirovmentVariables> paymentEnvirovment, IHttpClientFactory httpClientFactory)
         {
             _paymentEnvirovment = paymentEnvirovment.Value;
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri(Api.Production);
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.Add(RequestHeaders.XToken, _paymentEnvirovment.Token);
+            _createInvoice = _paymentEnvirovment.Api.Merchant.Invoice.Create;
+            _httpClientFactory = httpClientFactory;
+            _httpClient = _httpClientFactory.CreateClient("PaymentClient");
         }
 
-        public async Task<InvoiceInfo> CreateInvoiceAsync(Invoice invoice)
+        public async Task<InvoiceInfo> CreateInvoiceAsync(DAL.Entities.Payment.Invoice invoice)
         {
-            var (code, body) = await PostAsync(Api.Merchant.Invoice.Create, invoice);
+            var (code, body) = await PostAsync(_createInvoice, invoice);
+
             return code switch
             {
                 200 => JsonToObject<InvoiceInfo>(body),
@@ -45,25 +48,9 @@ namespace Streetcode.BLL.Services.Payment
 
         private T JsonToObject<T>(string body)
         {
-            return JsonConvert.DeserializeObject<T>(body);
-        }
+            var result = JsonConvert.DeserializeObject<T>(body);
 
-        private static class Api
-        {
-            public const string Production = "https://api.monobank.ua";
-
-            public static class Merchant
-            {
-                public static class Invoice
-                {
-                    public const string Create = "/api/merchant/invoice/create";
-                }
-            }
-        }
-
-        private static class RequestHeaders
-        {
-            public const string XToken = "X-Token";
+            return result ?? throw new InvalidOperationException($"Failed to deserialize JSON to {typeof(T).Name}");
         }
     }
 }
