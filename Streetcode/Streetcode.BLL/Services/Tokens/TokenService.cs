@@ -3,7 +3,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Streetcode.BLL.Interfaces.Users;
@@ -53,7 +52,7 @@ public class TokenService : ITokenService
             signingCredentials: signingCredentials);
 
         JwtSecurityTokenHandler jwtSecurityTokenHandler = new();
-        string token = jwtSecurityTokenHandler.WriteToken(tokenGenerator);
+        var token = jwtSecurityTokenHandler.WriteToken(tokenGenerator);
 
         return token;
     }
