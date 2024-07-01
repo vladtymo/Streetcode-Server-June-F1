@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoMapper;
 using FluentResults;
 using MediatR;
@@ -41,7 +42,7 @@ namespace Streetcode.BLL.MediatR.Account.Logout
                 return Result.Fail(new Error(errorMsg));
             }
             
-            var claims = _httpContextAccessor.HttpContext?.User.Claims.Select(c => c.Value).ToList();
+            var claims = _httpContextAccessor.HttpContext?.User.Claims.ToList();
             if(!claims!.Any())
             {
                 var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.ClaimsNotExist, request);
@@ -49,7 +50,8 @@ namespace Streetcode.BLL.MediatR.Account.Logout
                 return Result.Fail(new Error(errorMsg));
             }
             
-            var user = await _userManager.FindByEmailAsync(claims!.FirstOrDefault(c => c.Contains(ClaimTypes.Email)));
+            var userIdClaim = claims!.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+            var user = await _userManager.FindByIdAsync(userIdClaim);
             if (user == null)
             {
                 var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound, request);

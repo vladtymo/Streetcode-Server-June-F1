@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
 using FluentAssertions;
@@ -42,63 +43,61 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Logout;
                 _mapperMock.Object);
         }
 
-    [Fact]
-    public async Task Handle_ShouldLogoutUserSuccessfully()
-    {
-        // Arrange
-        var userId = "d0d3c3b1-4b3e-4b3e-8b3e-4b3e8b3e4b3e";
-        var userEmail = "test@example.com";
-        var accessToken = "valid-access-token";
+        [Fact]
+        public async Task Handle_ShouldFail_WhenAccessTokenIsNotProvided()
+        {
+            // Arrange
+            var httpContext = new DefaultHttpContext();
+            _httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
 
-        var user = new User { Id = Guid.Parse(userId), Email = userEmail, RefreshToken = "refresh-token" };
+            var request = new LogoutUserCommand();
 
-        var claims = new List<Claim> 
-        { 
-            new Claim(ClaimTypes.Email, userEmail) 
-        };
-        var identity = new ClaimsIdentity(claims);
-        var principal = new ClaimsPrincipal(identity);
+            // Act
+            var result = await _handler.Handle(request, CancellationToken.None);
 
-        var httpContext = new DefaultHttpContext();
-        httpContext.Request.Headers["Authorization"] = $"Bearer {accessToken}";
-        httpContext.User = principal;
+            // Assert
+            result.IsFailed.Should().BeTrue();
+            _loggerMock.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+        }
+        
+        [Fact]
+        public async Task Handle_ShouldLogoutUserSuccessfully()
+        {
+            // Arrange
+            var userId = "563b4777-0615-4c3c-8a7d-8858412b6562";
+            var userEmail = "test@example.com";
+            var accessToken = "valid-access-token";
 
-        _httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
-        _userManagerMock.Setup(x => x.FindByEmailAsync(userEmail)).ReturnsAsync(user);
-        _userManagerMock.Setup(x => x.UpdateAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success);
-        _cacheServiceMock.Setup(x => x.SetBlacklistedTokenAsync(accessToken, userId)).ReturnsAsync(true);
-        _mapperMock.Setup(x => x.Map<UserDTO>(It.IsAny<User>())).Returns(new UserDTO { Email = userEmail });
+            var user = new User { Id = Guid.Parse(userId), Email = userEmail, RefreshToken = "refresh-token" };
 
-        var request = new LogoutUserCommand();
+            var claims = new List<Claim> 
+            { 
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()) 
+            };
+            var identity = new ClaimsIdentity(claims);
+            var principal = new ClaimsPrincipal(identity);
 
-        // Act
-        var result = await _handler.Handle(request, CancellationToken.None);
+            var httpContext = new DefaultHttpContext();
+            httpContext.Request.Headers["Authorization"] = $"Bearer {accessToken}";
+            httpContext.User = principal;
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
-        result.Value.Email.Should().Be(userEmail);
+            _httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
+            _userManagerMock.Setup(x => x.FindByIdAsync(userId)).ReturnsAsync(user);
+            _userManagerMock.Setup(x => x.UpdateAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success);
+            _cacheServiceMock.Setup(x => x.SetBlacklistedTokenAsync(accessToken, userId)).ReturnsAsync(true);
+            _mapperMock.Setup(x => x.Map<UserDTO>(It.IsAny<User>())).Returns(new UserDTO { Email = userEmail });
 
-        _httpContextAccessorMock.Verify(x => x.HttpContext, Times.Once);
-        _userManagerMock.Verify(x => x.FindByEmailAsync(userEmail), Times.Once);
-        _userManagerMock.Verify(x => x.UpdateAsync(It.Is<User>(u => u.Email == userEmail && u.RefreshToken == null!)), Times.Once);
-        _cacheServiceMock.Verify(x => x.SetBlacklistedTokenAsync(accessToken, userId), Times.Once);
-    }
+            var request = new LogoutUserCommand();
 
-    [Fact]
-    public async Task Handle_ShouldFail_WhenAccessTokenIsNotProvided()
-    {
-        // Arrange
-        var httpContext = new DefaultHttpContext();
-        _httpContextAccessorMock.Setup(x => x.HttpContext).Returns(httpContext);
+            // Act
+            var result = await _handler.Handle(request, CancellationToken.None);
 
-        var request = new LogoutUserCommand();
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Should().NotBeNull();
+            result.Value.Email.Should().Be(userEmail);
 
-        // Act
-        var result = await _handler.Handle(request, CancellationToken.None);
-
-        // Assert
-        result.IsFailed.Should().BeTrue();
-        _loggerMock.Verify(x => x.LogError(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-    }
+            _userManagerMock.Verify(x => x.UpdateAsync(It.Is<User>(u => u.Email == userEmail && u.RefreshToken == null!)), Times.Once);
+            _cacheServiceMock.Verify(x => x.SetBlacklistedTokenAsync(accessToken, userId), Times.Once);
+        }
 }
