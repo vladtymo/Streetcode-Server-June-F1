@@ -344,5 +344,15 @@ namespace Streetcode.BLL.Resources {
                 return ResourceManager.GetString("InvalidToken", resourceCulture);
             }
         }
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
+        /// </summary>
+        public static string ExpiredToken
+        {
+            get
+            {
+                return ResourceManager.GetString("TokenExpired", resourceCulture);
+            }
+        }
     }
 }
