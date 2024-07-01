@@ -20,7 +20,7 @@ builder.Services.ConfigureInstagram(builder);
 builder.Services.ConfigureSerilog(builder);
 builder.Services.AddCachingService(builder.Configuration);
 builder.Services.AddIdentityService();
-builder.Services.AddAccessTokenConfiguration(builder.Configuration);
+builder.Services.AddTokensConfiguration(builder.Configuration);
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
