@@ -1,11 +1,9 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using AutoMapper;
 using Moq;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Partners.Delete;
-using Streetcode.BLL.MediatR.Toponyms.StreetCodeRecord.Delete;
 using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Entities.Toponyms;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Xunit;
 
@@ -60,4 +58,5 @@ namespace Streetcode.XUnitTest.MediatRTests.Partners
             Assert.False(result.IsSuccess);
         }
     }
+
 }

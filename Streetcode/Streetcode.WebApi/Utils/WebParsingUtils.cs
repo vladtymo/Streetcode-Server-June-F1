@@ -1,8 +1,10 @@
 ﻿using System.Globalization;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Http;
 using System.Net.Security;
 using System.Text;
+using Microsoft.Extensions.Http;
 using Newtonsoft.Json;
 using Polly;
 using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
@@ -28,14 +30,15 @@ public class WebParsingUtils
 
     private readonly IRepositoryWrapper _repository;
     private readonly StreetcodeDbContext _streetcodeContext;
-
-    public WebParsingUtils(StreetcodeDbContext streetcodeContext)
+    private readonly IHttpClientFactory _httpClientFactory;
+    public WebParsingUtils(StreetcodeDbContext streetcodeContext, IHttpClientFactory httpClientFactory)
     {
         _repository = new RepositoryWrapper(streetcodeContext);
         _streetcodeContext = streetcodeContext;
+        _httpClientFactory = httpClientFactory;
     }
 
-    public static async Task DownloadAndExtractAsync(
+    public async Task DownloadAndExtractAsync(
         string fileUrl,
         string zipPath,
         string extractTo,
@@ -56,46 +59,11 @@ public class WebParsingUtils
             throw new ArgumentException("extractTo cannot be null or empty", nameof(extractTo));
         }
 
-        var clientHandler = new HttpClientHandler();
-        clientHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-        clientHandler.ServerCertificateCustomValidationCallback += (message, cert, chain, errors) =>
-            {
-                // Anything that would have been accepted by default is OK
-                if (errors == SslPolicyErrors.None)
-                {
-                    return true;
-                }
-
-                // If there is something wrong other than a chain processing error, don't trust it.
-                if (errors != SslPolicyErrors.RemoteCertificateChainErrors)
-                {
-                    return false;
-                }
-
-                // If the reason for RemoteCertificateChainError is that the chain built empty, don't trust it.
-                if (chain.ChainStatus.Length == 0)
-                {
-                    return false;
-                }
-
-                return true;
-            };
-
-        var retryPolicy = Policy.Handle<Exception>().WaitAndRetryAsync(
-            3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-
-        var circuitBreakerPolicy = Policy.Handle<Exception>().CircuitBreakerAsync(5, TimeSpan.FromMinutes(1));
-
-        using var client = new HttpClient(clientHandler, false)
-        {
-            DefaultRequestHeaders = { },
-            Timeout = TimeSpan.FromSeconds(60)
-        };
-
+        var client = _httpClientFactory.CreateClient("DownloadFileClient");
         try
         {
-            using var response = await retryPolicy.WrapAsync(circuitBreakerPolicy).ExecuteAsync(async () => await client
-                .GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken));
+            using var response = await client
+                .GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             response.EnsureSuccessStatusCode();
             response.Content.Headers.ContentType!.CharSet = Encoding.GetEncoding(1251).WebName;
@@ -296,24 +264,14 @@ public class WebParsingUtils
     /// </summary>
     /// <param name="address">The address to fetch coordinates for.</param>
     /// <returns>A tuple containing the latitude and longitude of the address.</returns>
-    public static async Task<(string?, string?)> FetchCoordsByAddressAsync(string address)
+    public async Task<(string?, string?)> FetchCoordsByAddressAsync(string address)
     {
-        var retryPolicy = Policy.Handle<Exception>().WaitAndRetryAsync(
-            3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-
-        var circuitBreakerPolicy = Policy.Handle<Exception>().CircuitBreakerAsync(5, TimeSpan.FromMinutes(1));
-
         try
         {
-            using var client = new HttpClient();
-
-            // Add user-agent and referer headers to request
-            client.DefaultRequestHeaders.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-            client.DefaultRequestHeaders.Add("Referer", "http://www.microsoft.com");
+            var client = _httpClientFactory.CreateClient("FetchCoordsClient");
 
             // Send GET request to Nominatim API and retrieve JSON data
-            var jsonData = await retryPolicy.WrapAsync(circuitBreakerPolicy).ExecuteAsync(async () =>
-                await client.GetByteArrayAsync($"https://nominatim.openstreetmap.org/search?q={address}, Україна&format=json&limit=1&addressdetails=1"));
+            var jsonData = await client.GetByteArrayAsync($"https://nominatim.openstreetmap.org/search?q={address}, Україна&format=json&limit=1&addressdetails=1");
 
             return ParseJsonToCoordinateTuple(Encoding.UTF8.GetString(jsonData));
         }
