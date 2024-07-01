@@ -100,6 +100,7 @@ public static class ServiceCollectionExtensions
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
@@ -107,7 +108,6 @@ public static class ServiceCollectionExtensions
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
             });
-        
     }
     
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
