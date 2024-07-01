@@ -2,6 +2,7 @@
 using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Streetcode.BLL.Interfaces.Logging;
@@ -56,10 +57,17 @@ namespace Streetcode.BLL.MediatR.Account.Logout
                 return Result.Fail(new Error(errorMsg));
             }
 
-            user.RefreshToken = null;
+            user.RefreshToken = null!;
 
             await _signInManager.SignOutAsync();
             await _httpContextAccessor.HttpContext!.SignOutAsync();
+            //clear all cookies
+            foreach (var cookie in _httpContextAccessor.HttpContext!.Request.Cookies.Keys)
+            {
+                _httpContextAccessor.HttpContext!.Response.Cookies.Delete(cookie);
+            }
+            
+            await _httpContextAccessor.HttpContext!.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {

@@ -149,7 +149,6 @@ public class TokenService : ITokenService
         var userClaims = await GetUserClaimsAsync(user);
         tokenResponse.AccessToken = await GenerateAccessToken(user, userClaims);
         tokenResponse.RefreshToken = GenerateRefreshToken();
-
         return tokenResponse;
     }
 }

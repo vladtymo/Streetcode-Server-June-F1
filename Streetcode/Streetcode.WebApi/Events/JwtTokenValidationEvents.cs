@@ -4,7 +4,7 @@ using Streetcode.BLL.Services.CacheService;
 
 namespace Streetcode.WebApi.Events;
 
-public class JwtTokenValidationEvents  : JwtBearerEvents
+public class JwtTokenValidationEvents : JwtBearerEvents
 {
     private readonly ILogger<JwtTokenValidationEvents> _logger;
     private readonly ICacheService _cacheService;
