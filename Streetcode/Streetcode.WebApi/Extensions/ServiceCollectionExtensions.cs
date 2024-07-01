@@ -61,7 +61,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInstagramService, InstagramService>();
-        services.AddScoped<ITextService, AddTermsToTextService>(); 
+        services.AddScoped<ITextService, AddTermsToTextService>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<ITokenService, TokenService>();
     }
@@ -97,6 +97,7 @@ public static class ServiceCollectionExtensions
             IssuerSigningKey = key
         };
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

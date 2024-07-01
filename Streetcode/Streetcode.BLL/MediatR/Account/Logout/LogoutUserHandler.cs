@@ -1,42 +1,42 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
 using FluentResults;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.BLL.Services.CacheService;
 using Streetcode.DAL.Entities.Users;
 
 namespace Streetcode.BLL.MediatR.Account.Logout
 {
-    public class LogoutUserHandler : IRequestHandler<LogoutUserCommand, Result<string>>
+    public class LogoutUserHandler : IRequestHandler<LogoutUserCommand, Result<UserDTO>>
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         private readonly ICacheService _cacheService;
         private readonly ILoggerService _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public LogoutUserHandler(UserManager<User> userManager, SignInManager<User> signInManager,
+        private readonly IMapper _mapper;
+        public LogoutUserHandler(UserManager<User> userManager,
             ICacheService cacheService, ILoggerService logger,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
+            _mapper = mapper;
             _userManager = userManager;
-            _signInManager = signInManager;
             _cacheService = cacheService;
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<Result<string>> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<UserDTO>> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
         {
             var accessToken = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             
             if (string.IsNullOrEmpty(accessToken))
             {
-                const string errorMsg = "Cannot find access token";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.AccessTokenNotFound, request);
                 _logger.LogError(accessToken!, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -44,7 +44,7 @@ namespace Streetcode.BLL.MediatR.Account.Logout
             var claims = _httpContextAccessor.HttpContext?.User.Claims.Select(c => c.Value).ToList();
             if(!claims!.Any())
             {
-                const string errorMsg = "Cannot find claims";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.ClaimsNotExist, request);
                 _logger.LogError(claims!, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -52,26 +52,19 @@ namespace Streetcode.BLL.MediatR.Account.Logout
             var user = await _userManager.FindByEmailAsync(claims!.FirstOrDefault(c => c.Contains(ClaimTypes.Email)));
             if (user == null)
             {
-                const string errorMsg = "Cannot find a user with this id";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound, request);
                 _logger.LogError(user!, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
             user.RefreshToken = null!;
 
-            await _signInManager.SignOutAsync();
-            await _httpContextAccessor.HttpContext!.SignOutAsync();
-            //clear all cookies
-            foreach (var cookie in _httpContextAccessor.HttpContext!.Request.Cookies.Keys)
-            {
-                _httpContextAccessor.HttpContext!.Response.Cookies.Delete(cookie);
-            }
+            await ClearCookies();
             
-            await _httpContextAccessor.HttpContext!.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                const string errorMsg = "Failed to update user information";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserUpdateFailed, request);
                 _logger.LogError(result!, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -79,12 +72,28 @@ namespace Streetcode.BLL.MediatR.Account.Logout
             var cacheResult = await _cacheService.SetBlacklistedTokenAsync(accessToken, user.Id.ToString());
             if (!cacheResult)
             {
-                const string errorMsg = "Failed to blacklist access token";
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailedToSetTokenInBlackList, request);
                 _logger.LogError(cacheResult, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
+            
+            return Result.Ok(_mapper.Map<UserDTO>(user));
+        }
+        
+        private Task ClearCookies()
+        {
+            foreach (var cookie in _httpContextAccessor.HttpContext!.Request.Cookies.Keys)
+            {
+                _httpContextAccessor.HttpContext!.Response.Cookies.Delete(cookie, new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddDays(-1),
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None
+                });
+            }
 
-            return Result.Ok("User logged out successfully");
+            return Task.CompletedTask;
         }
     }
 }

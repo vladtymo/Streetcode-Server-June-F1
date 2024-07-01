@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.MediatR.Account.RefreshTokens;
 using Streetcode.BLL.MediatR.Account.Logout;
