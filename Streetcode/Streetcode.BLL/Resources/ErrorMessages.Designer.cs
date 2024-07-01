@@ -259,11 +259,38 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid token.
+        /// </summary>
+        public static string InvalidToken {
+            get {
+                return ResourceManager.GetString("InvalidToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid username or password.
+        /// </summary>
+        public static string InvalidUsernameOrPassword {
+            get {
+                return ResourceManager.GetString("InvalidUsernameOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string NoCustomError {
             get {
                 return ResourceManager.GetString("NoCustomError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roles not found.
+        /// </summary>
+        public static string RolesNotFound {
+            get {
+                return ResourceManager.GetString("RolesNotFound", resourceCulture);
             }
         }
         
@@ -320,14 +347,16 @@ namespace Streetcode.BLL.Resources {
                 return ResourceManager.GetString("TermAlreadyExist", resourceCulture);
             }
         }
+        
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
+        ///   Looks up a localized string similar to User not found.
         /// </summary>
         public static string UserNotFound {
             get {
                 return ResourceManager.GetString("UserNotFound", resourceCulture);
             }
         }
+<<<<<<< HEAD
         /// <summary>
         ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
         /// </summary>
@@ -391,5 +420,7 @@ namespace Streetcode.BLL.Resources {
                 return ResourceManager.GetString("FailCreateUser", resourceCulture);
             }
         }
+=======
+>>>>>>> dev
     }
 }
