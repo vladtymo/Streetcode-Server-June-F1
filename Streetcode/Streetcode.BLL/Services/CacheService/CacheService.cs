@@ -9,9 +9,9 @@ namespace Streetcode.BLL.Services.CacheService
         private readonly IDatabase _cache;
         private readonly IConnectionMultiplexer _redis;
         private readonly ILogger<CacheService> _logger;
-        private readonly AccessTokenConfiguration _authSettings;
+        private readonly TokensConfiguration _authSettings;
 
-        public CacheService(IConnectionMultiplexer redis, ILogger<CacheService> logger, AccessTokenConfiguration authSettings)
+        public CacheService(IConnectionMultiplexer redis, ILogger<CacheService> logger, TokensConfiguration authSettings)
         {
             _redis = redis;
             _cache = _redis.GetDatabase();
