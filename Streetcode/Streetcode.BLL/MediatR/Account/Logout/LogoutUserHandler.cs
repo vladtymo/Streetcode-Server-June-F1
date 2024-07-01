@@ -61,7 +61,7 @@ namespace Streetcode.BLL.MediatR.Account.Logout
 
             user.RefreshToken = null!;
 
-            await ClearCookies();
+            ClearCookies();
             
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
@@ -82,7 +82,7 @@ namespace Streetcode.BLL.MediatR.Account.Logout
             return Result.Ok(_mapper.Map<UserDTO>(user));
         }
         
-        private Task ClearCookies()
+        private void ClearCookies()
         {
             foreach (var cookie in _httpContextAccessor.HttpContext!.Request.Cookies.Keys)
             {
@@ -95,7 +95,6 @@ namespace Streetcode.BLL.MediatR.Account.Logout
                 });
             }
 
-            return Task.CompletedTask;
         }
     }
 }
