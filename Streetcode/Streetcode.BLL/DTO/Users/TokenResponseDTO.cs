@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Streetcode.BLL.DTO.Users
 {
-    public class RefreshTokenResponce
+    public class TokenResponseDTO
     {
-        public string Token { get; set; } = string.Empty;
-        public DateTime ExpireAt { get; set; }
+        public RefreshTokenDTO RefreshToken { get; set; }
+        public string AccessToken { get; set; }
     }
 }
