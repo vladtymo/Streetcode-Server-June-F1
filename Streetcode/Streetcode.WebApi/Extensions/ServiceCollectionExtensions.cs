@@ -1,4 +1,3 @@
-using System.Net.Http;
 using FluentValidation;
 using Hangfire;
 using MediatR;
@@ -30,6 +29,7 @@ using Streetcode.BLL.Interfaces.Users;
 using Streetcode.DAL.Entities.Users;
 using Streetcode.BLL.Services.CacheService;
 using Streetcode.BLL.Services.Tokens;
+using Streetcode.WebApi.Events;
 
 namespace Streetcode.WebApi.Extensions;
 
@@ -60,9 +60,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInstagramService, InstagramService>();
-        services.AddScoped<ITextService, AddTermsToTextService>(); 
+        services.AddScoped<ITextService, AddTermsToTextService>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<ITokenService, TokenService>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     }
 
     public static void AddCachingService(this IServiceCollection services, ConfigurationManager configuration)
@@ -80,34 +81,37 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachibleQueryBehavior<,>));
     }
     
-    public static void AddAccessTokenConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static void AddTokensConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
-        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["AccessToken:SecretKey"] !));
+        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["TokensConfiguration:SecretKey"] !));
 
         var tokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuer = true,
-            ValidIssuer = configuration["AccessToken:Issuer"],
+            ValidIssuer = configuration["TokensConfiguration:Issuer"],
             ValidateAudience = true,
-            ValidAudience = configuration["AccessToken:Audience"],
+            ValidAudience = configuration["TokensConfiguration:Audience"],
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero,
             IssuerSigningKey = key
         };
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = tokenValidationParameters;
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
+                options.EventsType = typeof(JwtTokenValidationEvents);
             });
-        
+        services.AddScoped<JwtTokenValidationEvents>();
     }
     
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
@@ -123,10 +127,10 @@ public static class ServiceCollectionExtensions
             services.AddSingleton(emailConfig);
         }
         
-        var accessTokenConfig = configuration.GetSection("AccessToken").Get<AccessTokenConfiguration>();
-        if(accessTokenConfig != null)
+        var tokensConfig = configuration.GetSection("TokensConfiguration").Get<TokensConfiguration>();
+        if(tokensConfig != null)
         {
-            services.AddSingleton(accessTokenConfig);
+            services.AddSingleton(tokensConfig);
         }
         
         services.AddDbContext<StreetcodeDbContext>(options =>
