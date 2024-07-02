@@ -11,7 +11,9 @@ using Streetcode.BLL.Services.Tokens;
 using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Enums;
 
-namespace Streetcode.BLL.MediatR.Account.Register
+namespace Streetcode.BLL.MediatR.Account.Register;
+
+public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<UserDTO>>
 {
     public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<UserDTO>>
     {
