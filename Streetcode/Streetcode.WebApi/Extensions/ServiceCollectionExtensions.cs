@@ -1,9 +1,11 @@
 using FluentValidation;
 using Hangfire;
 using MediatR;
-using MediatR.Pipeline;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.FeatureManagement;
+using StackExchange.Redis;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Services.Logging;
 using Streetcode.DAL.Persistence;
@@ -14,17 +16,21 @@ using Streetcode.BLL.Services.Email;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Services.BlobStorageService;
-using Microsoft.FeatureManagement;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Streetcode.BLL.Behavior;
-using Streetcode.BLL.Interfaces.Payment;
-using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Services.Instagram;
+using Streetcode.BLL.Interfaces.Payment;
+using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Services.Text;
-using Microsoft.Extensions.DependencyInjection;
+using Streetcode.BLL.Interfaces.Users;
 using Streetcode.DAL.Entities.Users;
-using Microsoft.AspNetCore.Identity;
+using Streetcode.BLL.Services.CacheService;
+using Streetcode.BLL.Services.Tokens;
+using Streetcode.WebApi.Events;
+
 namespace Streetcode.WebApi.Extensions;
 
 public static class ServiceCollectionExtensions
@@ -32,9 +38,10 @@ public static class ServiceCollectionExtensions
     public static void AddIdentityService(this IServiceCollection services)
     {
         services.AddIdentity<User, IdentityRole<Guid>>()
-            .AddEntityFrameworkStores<StreetcodeDbContext>();
+            .AddEntityFrameworkStores<StreetcodeDbContext>()
+            .AddDefaultTokenProviders();
     }
-
+    
     public static void AddRepositoryServices(this IServiceCollection services)
     {
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
@@ -47,7 +54,6 @@ public static class ServiceCollectionExtensions
         var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(currentAssemblies);
         services.AddValidatorsFromAssemblies(currentAssemblies);
-        services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddMediatR(currentAssemblies);
         services.AddScoped<IBlobService, BlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
@@ -55,8 +61,59 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInstagramService, InstagramService>();
         services.AddScoped<ITextService, AddTermsToTextService>();
+        services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     }
 
+    public static void AddCachingService(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
+
+        var redisConnectionString = configuration.GetSection(environment).GetConnectionString("ReddisConnection");
+        var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
+        services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+    }
+
+    public static void AddPipelineBehaviors(this IServiceCollection services)
+    {
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachibleQueryBehavior<,>));
+    }
+    
+    public static void AddTokensConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["TokensConfiguration:SecretKey"] !));
+
+        var tokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = configuration["TokensConfiguration:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = configuration["TokensConfiguration:Audience"],
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
+            IssuerSigningKey = key
+        };
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = tokenValidationParameters;
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.EventsType = typeof(JwtTokenValidationEvents);
+            });
+        services.AddScoped<JwtTokenValidationEvents>();
+    }
+    
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
@@ -69,7 +126,13 @@ public static class ServiceCollectionExtensions
         {
             services.AddSingleton(emailConfig);
         }
-
+        
+        var tokensConfig = configuration.GetSection("TokensConfiguration").Get<TokensConfiguration>();
+        if(tokensConfig != null)
+        {
+            services.AddSingleton(tokensConfig);
+        }
+        
         services.AddDbContext<StreetcodeDbContext>(options =>
         {
             options.UseSqlServer(connectionString, opt =>
@@ -115,6 +178,30 @@ public static class ServiceCollectionExtensions
         {
             opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyApi", Version = "v1" });
             opt.CustomSchemaIds(x => x.FullName);
+            opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = JwtBearerDefaults.AuthenticationScheme
+            });
+
+            opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = JwtBearerDefaults.AuthenticationScheme,
+                        },
+                        Scheme = JwtBearerDefaults.AuthenticationScheme,
+                        In = ParameterLocation.Header
+                    },
+                    new List<string>()
+                }
+            });
         });
     }
 

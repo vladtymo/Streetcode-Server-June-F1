@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BadRequestToInstagram" xml:space="preserve">
+    <value>Status code {0} from Instagram API: {1}</value>
+  </data>
   <data name="BigCustomError" xml:space="preserve">
     <value />
   </data>
   <data name="CanNotCreate" xml:space="preserve">
     <value>Cannot create team link</value>
+  </data>
+  <data name="EmptyInstagramSettings" xml:space="preserve">
+    <value>Instagram settings are not configured properly.</value>
+  </data>
+  <data name="EmptyPaymentSettings" xml:space="preserve">
+    <value>Payment settings are not configured properly</value>
   </data>
   <data name="EntityNotFound" xml:space="preserve">
     <value>Cannot find any {0}</value>
@@ -180,6 +189,9 @@
   <data name="StreetcodeAlreadyExist" xml:space="preserve">
     <value>Cannot add records because such streetcode already exists</value>
   </data>
+  <data name="TermAlreadyExist" xml:space="preserve">
+    <value>Cannot add word because such term already exists</value>
+  </data>
   <data name="StreetcodeIndexNotFound" xml:space="preserve">
     <value>Cannot find any streetcode with corresponding index: {1}</value>
   </data>
@@ -191,5 +203,17 @@
   </data>
   <data name="StreetcodeUrlNotFound" xml:space="preserve">
     <value>Cannot find streetcode by transliteration url: {1}</value>
+  </data>
+  <data name="InvalidUsernameOrPassword" xml:space="preserve">
+    <value>Invalid username or password</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User not found</value>
+  </data>
+  <data name="InvalidToken" xml:space="preserve">
+    <value>Invalid token</value>
+  </data>
+  <data name="RolesNotFound" xml:space="preserve">
+    <value>Roles not found</value>
   </data>
 </root>
