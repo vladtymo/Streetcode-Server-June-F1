@@ -360,22 +360,6 @@ namespace Streetcode.BLL.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
         /// </summary>
-        public static string RolesNotFound {
-            get {
-                return ResourceManager.GetString("RolesNotFound", resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
-        /// </summary>
-        public static string InvalidToken {
-            get {
-                return ResourceManager.GetString("InvalidToken", resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
-        /// </summary>
         public static string ExpiredToken
         {
             get
