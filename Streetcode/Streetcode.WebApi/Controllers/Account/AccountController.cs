@@ -17,7 +17,6 @@ namespace Streetcode.WebApi.Controllers.Account
             return HandleResult(await Mediator.Send(new RegisterUserCommand(newUser)));
         }
         
-
         [HttpPost]
         public async Task<ActionResult<string>> RefreshTokens(TokenResponseDTO response)
         {
@@ -28,12 +27,6 @@ namespace Streetcode.WebApi.Controllers.Account
         public async Task<IActionResult> Logout()
         {
             return HandleResult(await Mediator.Send(new LogoutUserCommand()));
-        }
-        
-        [HttpGet]
-        public async Task<IActionResult> ConfirmEmail([FromRoute]string userId, [FromRoute]string token)
-        {
-            return HandleResult(await Mediator.Send(new ConfirmUserEmailCommand(userId, token)));
         }
 
         [HttpPost]
