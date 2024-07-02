@@ -426,6 +426,16 @@ namespace Streetcode.BLL.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
         /// </summary>
+        public static string RefreshTokenNotFound
+        {
+            get
+            {
+                return ResourceManager.GetString("RefreshTokenNotFound", resourceCulture);
+            }
+        }
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
+        /// </summary>
         public static string UserUpdateFailed
         {
             get
