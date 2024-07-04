@@ -182,7 +182,8 @@ public static class ServiceCollectionExtensions
             {
                 Name = "Authorization",
                 In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey,
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
                 Scheme = JwtBearerDefaults.AuthenticationScheme
             });
 
