@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using StackExchange.Redis;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
+using Streetcode.BLL.Services.CacheService;
+using Streetcode.BLL.Services.CookieService.Interfaces;
 using Streetcode.DAL.Entities.Users;
 
 namespace Streetcode.BLL.MediatR.Account.Delete
@@ -14,16 +18,40 @@ namespace Streetcode.BLL.MediatR.Account.Delete
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
         private readonly UserManager<User> _userManager;
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly ICacheService _cacheService;
+        private readonly ICookieService _cookieService;
 
-        public DeleteUserCommandHandler(IMapper mapper, ILoggerService logger, UserManager<User> userManager)
+        public DeleteUserCommandHandler(IMapper mapper, ILoggerService logger, UserManager<User> userManager, IHttpContextAccessor accesor, ICacheService cache, ICookieService cookieService)
         {
             _mapper = mapper;
             _logger = logger;
             _userManager = userManager;
+            _contextAccessor = accesor;
+            _cacheService = cache;
+            _cookieService = cookieService;
         }
 
         public async Task<Result<DeleteUserResponceDto>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
+            var httpContext = _contextAccessor.HttpContext;
+
+            if (!httpContext!.Request.Cookies.TryGetValue("accessToken", out var accessToken) && string.IsNullOrEmpty(accessToken))
+            {
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.AccessTokenNotFound, request);
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(new Error(errorMsg));
+            }
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.AccessTokenNotFound, request);
+                _logger.LogError(accessToken!, errorMsg);
+                return Result.Fail(new Error(errorMsg));
+            }
+
+            await _cookieService.ClearCookiesAsync(_contextAccessor.HttpContext);
+
             Guid userId = Guid.Parse(request.Dto.Id!);
 
             User? user = await _userManager.FindByIdAsync(userId.ToString());
@@ -46,6 +74,14 @@ namespace Streetcode.BLL.MediatR.Account.Delete
                 _logger.LogError(request, error);
 
                 return Result.Fail(error);
+            }
+
+            var cacheResult = await _cacheService.SetBlacklistedTokenAsync(accessToken, user.Id.ToString());
+            if (!cacheResult)
+            {
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailedToSetTokenInBlackList, request);
+                _logger.LogError(cacheResult, errorMsg);
+                return Result.Fail(new Error(errorMsg));
             }
 
             return Result.Ok(_mapper.Map<DeleteUserResponceDto>(user));
