@@ -230,5 +230,7 @@
   </data>
   <data name="UserWithIdNotFound" xml:space="preserve">
     <value>User with id {0} not found</value>
+  <data name="EmptyQuery" xml:space="preserve">
+    <value>Search query cannot be null or empty</value>
   </data>
 </root>
