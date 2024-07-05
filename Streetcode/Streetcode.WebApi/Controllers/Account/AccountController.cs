@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Users;
+using Streetcode.BLL.MediatR.Account.Delete;
 using Streetcode.BLL.MediatR.Account.Login;
 using Streetcode.BLL.MediatR.Account.Logout;
 using Streetcode.BLL.MediatR.Account.RefreshToken;
@@ -36,7 +37,7 @@ namespace Streetcode.WebApi.Controllers.Account
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] DeleteUserDto deleteUser)
         {
-            return null;
+            return HandleResult(await Mediator.Send(new DeleteUserCommand(deleteUser)));
         }
     }
 }

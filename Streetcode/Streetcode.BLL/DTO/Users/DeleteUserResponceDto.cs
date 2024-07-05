@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Streetcode.BLL.DTO.Users
 {
-    internal class DeleteUserResponceDto
+    public class DeleteUserResponceDto
     {
         public string? Firstname { get; set; }
 

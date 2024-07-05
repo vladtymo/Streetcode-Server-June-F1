@@ -204,7 +204,7 @@
   <data name="StreetcodeUrlNotFound" xml:space="preserve">
     <value>Cannot find streetcode by transliteration url: {1}</value>
   </data>
-=  <data name="EmailIsUse" xml:space="preserve">
+  <data name="EmailIsUse" xml:space="preserve">
     <value>A user with this email is already registered</value>
   </data>
   <data name="LoginIsUse" xml:space="preserve">
@@ -215,7 +215,7 @@
   </data>
   <data name="FailCreateUser" xml:space="preserve">
     <value>Failed to create user</value>
-    </data>
+  </data>
   <data name="InvalidUsernameOrPassword" xml:space="preserve">
     <value>Invalid username or password</value>
   </data>
@@ -227,5 +227,8 @@
   </data>
   <data name="RolesNotFound" xml:space="preserve">
     <value>Roles not found</value>
+  </data>
+  <data name="UserWithIdNotFound" xml:space="preserve">
+    <value>User with id {0} not found</value>
   </data>
 </root>
