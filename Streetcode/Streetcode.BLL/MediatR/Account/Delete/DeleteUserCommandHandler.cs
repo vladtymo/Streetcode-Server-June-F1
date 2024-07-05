@@ -30,7 +30,7 @@ namespace Streetcode.BLL.MediatR.Account.Delete
 
             if (user == null)
             {
-                var error = string.Format(MessageResourceContext.GetMessage("UserWithIdNotFound"), userId);
+                var error = string.Format(MessageResourceContext.GetMessage(ErrorMessages.UserWithIdNotFound), userId);
 
                 _logger.LogError(request, error);
 
@@ -40,8 +40,12 @@ namespace Streetcode.BLL.MediatR.Account.Delete
             var result = await _userManager.DeleteAsync(user);
 
             if (!result.Succeeded)
-            { 
-                
+            {
+                var error = result.Errors.Select(e => e.Description).Aggregate((e1, e2) => "- " + e1 + "\n" + "- " + e2 + "\n");
+
+                _logger.LogError(request, error);
+
+                return Result.Fail(error);
             }
 
             return Result.Ok(_mapper.Map<DeleteUserResponceDto>(user));
