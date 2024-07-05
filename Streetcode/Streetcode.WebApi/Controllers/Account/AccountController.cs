@@ -32,5 +32,11 @@ namespace Streetcode.WebApi.Controllers.Account
         {
             return HandleResult(await Mediator.Send(new LoginUserCommand(loginUser)));
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] DeleteUserDto deleteUser)
+        {
+            return null;
+        }
     }
 }
