@@ -234,4 +234,19 @@
   <data name="EmptyQuery" xml:space="preserve">
     <value>Search query cannot be null or empty</value>
   </data>
+  <data name="AccessTokenNotFound" xml:space="preserve">
+    <value>Access Token not found</value>
+  </data>
+  <data name="ClaimsNotExist" xml:space="preserve">
+    <value>Claims doesn't exist</value>
+  </data>
+  <data name="FailedToSetTokenInBlackList" xml:space="preserve">
+    <value>Failed to set Token to the Black List!</value>
+  </data>
+  <data name="RefreshTokenNotFound" xml:space="preserve">
+    <value>Refresh Token not found</value>
+  </data>
+  <data name="UserUpdateFailed" xml:space="preserve">
+    <value>Fail to Update user</value>
+  </data>
 </root>

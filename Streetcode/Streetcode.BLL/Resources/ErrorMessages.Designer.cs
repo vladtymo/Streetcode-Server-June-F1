@@ -61,6 +61,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access Token not found.
+        /// </summary>
+        public static string AccessTokenNotFound {
+            get {
+                return ResourceManager.GetString("AccessTokenNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status code {0} from Instagram API: {1}.
         /// </summary>
         public static string BadRequestToInstagram {
@@ -84,6 +93,15 @@ namespace Streetcode.BLL.Resources {
         public static string CanNotCreate {
             get {
                 return ResourceManager.GetString("CanNotCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Claims doesn&apos;t exist.
+        /// </summary>
+        public static string ClaimsNotExist {
+            get {
+                return ResourceManager.GetString("ClaimsNotExist", resourceCulture);
             }
         }
         
@@ -201,6 +219,15 @@ namespace Streetcode.BLL.Resources {
         public static string FailCreateUser {
             get {
                 return ResourceManager.GetString("FailCreateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to set Token to the Black List!.
+        /// </summary>
+        public static string FailedToSetTokenInBlackList {
+            get {
+                return ResourceManager.GetString("FailedToSetTokenInBlackList", resourceCulture);
             }
         }
         
@@ -331,6 +358,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh Token not found.
+        /// </summary>
+        public static string RefreshTokenNotFound {
+            get {
+                return ResourceManager.GetString("RefreshTokenNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roles not found.
         /// </summary>
         public static string RolesNotFound {
@@ -399,6 +435,15 @@ namespace Streetcode.BLL.Resources {
         public static string UserNotFound {
             get {
                 return ResourceManager.GetString("UserNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fail to Update user.
+        /// </summary>
+        public static string UserUpdateFailed {
+            get {
+                return ResourceManager.GetString("UserUpdateFailed", resourceCulture);
             }
         }
         
