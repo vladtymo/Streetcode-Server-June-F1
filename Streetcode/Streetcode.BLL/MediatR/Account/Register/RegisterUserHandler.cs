@@ -30,7 +30,8 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<U
         UserManager<User> userManager, 
         ITokenService tokenService, 
         IHttpContextAccessor contextAccessor,
-        ICookieService cookieService)
+        ICookieService cookieService,
+        TokensConfiguration tokensConfiguration)
     {
         _mapper = mapper;
         _logger = logger;
@@ -38,7 +39,7 @@ public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<U
         _tokenService = tokenService;
         _httpContextAccessor = contextAccessor;
         _cookieService = cookieService;  
-        _tokensConfiguration = _tokenService.TokensConf;
+        _tokensConfiguration = tokensConfiguration;
     }
 
     public async Task<Result<UserDTO>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)

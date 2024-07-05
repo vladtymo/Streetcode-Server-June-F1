@@ -7,9 +7,7 @@ using Streetcode.DAL.Entities.Users;
 namespace Streetcode.BLL.Interfaces.Users
 {
     public interface ITokenService
-    {
-        public TokensConfiguration TokensConf { get; }
-
+    {        
         string GenerateAccessToken(User user, List<Claim> claims);
         Task<List<Claim>> GetUserClaimsAsync(User user);
         ClaimsPrincipal GetPrincipalFromAccessToken(string? token);

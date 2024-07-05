@@ -20,9 +20,7 @@ public class TokenService : ITokenService
     private readonly UserManager<User> _userManager;
     private readonly TokensConfiguration _tokensConfiguration;
     private readonly ILoggerService _logger;
-
-    public TokensConfiguration TokensConf { get => _tokensConfiguration; }
-
+    
     public TokenService(UserManager<User> userManager, TokensConfiguration tokensConfiguration, ILoggerService logger)
     {
         _userManager = userManager;
