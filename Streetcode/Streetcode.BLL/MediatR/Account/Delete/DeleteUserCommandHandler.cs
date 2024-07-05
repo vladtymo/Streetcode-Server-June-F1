@@ -24,7 +24,7 @@ namespace Streetcode.BLL.MediatR.Account.Delete
 
         public async Task<Result<DeleteUserResponceDto>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            Guid userId = request.Dto.Id;
+            Guid userId = Guid.Parse(request.Dto.Id!);
 
             User? user = await _userManager.FindByIdAsync(userId.ToString());
 

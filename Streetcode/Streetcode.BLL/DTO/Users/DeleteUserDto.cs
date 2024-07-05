@@ -8,6 +8,6 @@ namespace Streetcode.BLL.DTO.Users
 {
     public class DeleteUserDto
     {
-        public Guid Id { get; set; }
+        public string? Id { get; set; }
     }
 }
