@@ -21,6 +21,8 @@ public class TokenService : ITokenService
     private readonly TokensConfiguration _tokensConfiguration;
     private readonly ILoggerService _logger;
 
+    public TokensConfiguration TokensConf { get => _tokensConfiguration; }
+
     public TokenService(UserManager<User> userManager, TokensConfiguration tokensConfiguration, ILoggerService logger)
     {
         _userManager = userManager;
@@ -140,8 +142,7 @@ public class TokenService : ITokenService
         var userClaims = await GetUserClaimsAsync(user);
         tokenResponse.AccessToken = GenerateAccessToken(user, userClaims);
         tokenResponse.RefreshToken = GenerateRefreshToken();
-        await SetRefreshToken(tokenResponse.RefreshToken, user);
-
+       
         return tokenResponse;
     }
 
@@ -154,28 +155,7 @@ public class TokenService : ITokenService
             await _userManager.UpdateAsync(user);
         }
     }
-
-    public async Task GenerateAndSetTokensAsync(User user, HttpResponse response)
-    {
-        var tokens = await GenerateTokens(user);
-
-        response.Cookies.Append("accessToken", tokens.AccessToken, new CookieOptions
-        {
-            Expires = DateTimeOffset.UtcNow.AddMinutes(_tokensConfiguration.AccessTokenExpirationMinutes),
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None
-        });
-
-        response.Cookies.Append("refreshToken", tokens.RefreshToken.Token, new CookieOptions
-        {
-            Expires = DateTimeOffset.UtcNow.AddDays(_tokensConfiguration.RefreshTokenExpirationDays),
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None
-        });
-    }
-
+    
     public RefreshTokenDTO GenerateRefreshToken()
     {
         var created = DateTime.UtcNow;
