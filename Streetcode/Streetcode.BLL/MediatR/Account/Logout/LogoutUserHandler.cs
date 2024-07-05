@@ -31,7 +31,7 @@ namespace Streetcode.BLL.MediatR.Account.Logout
         public async Task<Result<string>> Handle(LogoutUserCommand request, CancellationToken cancellationToken)
         {
             var httpContext = _httpContextAccessor.HttpContext;
-
+            
             if (!httpContext!.Request.Cookies.TryGetValue("accessToken", out var accessToken) && string.IsNullOrEmpty(accessToken))
             {
                 var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.AccessTokenNotFound, request);
