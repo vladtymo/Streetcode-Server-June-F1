@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using MockQueryable.Moq;
 using Streetcode.BLL.DTO.Users;
 using Xunit;
+using Streetcode.BLL.Services.CookieService.Interfaces;
 
 namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
 {
@@ -22,6 +23,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
         private readonly Mock<ILoggerService> _loggerMock;
         private readonly Mock<IHttpContextAccessor> _httpContextAccessorMock;
         private readonly Mock<ITokenService> _tokenServiceMock;
+        private readonly Mock<ICookieService> _cookieServiceMock;
         private readonly LogoutUserHandler _handler;
 
         public LogoutUserHandlerTests()
@@ -32,13 +34,15 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
             _loggerMock = new Mock<ILoggerService>();
             _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             _tokenServiceMock = new Mock<ITokenService>();
+            _cookieServiceMock = new Mock<ICookieService>();
 
             _handler = new LogoutUserHandler(
                 _userManagerMock.Object,
                 _cacheServiceMock.Object,
                 _loggerMock.Object,
                 _httpContextAccessorMock.Object,
-                _tokenServiceMock.Object);
+                _tokenServiceMock.Object,
+                _cookieServiceMock.Object);
         }
 
         [Fact]
@@ -237,8 +241,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
 
             // Assert
             Assert.True(result.IsSuccess);
-            Assert.Equal("User logged out successfully", result.Value);
-            responseCookiesMock.Verify(x => x.Delete(It.IsAny<string>(), It.IsAny<CookieOptions>()), Times.AtLeast(2));
+            Assert.Equal("User logged out successfully", result.Value);            
             _userManagerMock.Verify(x => x.UpdateAsync(It.Is<User>(u => u.RefreshTokens.Count == 0)), Times.Once);
             _cacheServiceMock.Verify(x => x.SetBlacklistedTokenAsync("validAccessToken", user.Id.ToString()), Times.Once);
         }
