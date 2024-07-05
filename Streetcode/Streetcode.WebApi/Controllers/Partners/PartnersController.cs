@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.MediatR.Partners.Create;
@@ -10,16 +11,19 @@ namespace Streetcode.WebApi.Controllers.Partners;
 
 public class PartnersController : BaseApiController
 {
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
         return HandleResult(await Mediator.Send(new GetAllPartnersQuery()));
     }
 
+    [Authorize(Roles = "User")]
     [HttpGet]
     public async Task<IActionResult> GetAllShort()
     {
         return HandleResult(await Mediator.Send(new GetAllPartnersShortQuery()));
+
     }
 
     [HttpGet("{id:int}")]
