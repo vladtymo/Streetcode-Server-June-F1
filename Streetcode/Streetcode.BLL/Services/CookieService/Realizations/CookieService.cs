@@ -5,7 +5,7 @@ namespace Streetcode.BLL.Services.CookieService.Realizations
 {
     public class CookieService : ICookieService
     {
-        public async Task AppendCookiesToResponse(HttpResponse httpResponse, params (string key, string value, CookieOptions options)[] values)
+        public async Task AppendCookiesToResponseAsync(HttpResponse httpResponse, params (string key, string value, CookieOptions options)[] values)
         {
             await Task.Run(() =>
             { 

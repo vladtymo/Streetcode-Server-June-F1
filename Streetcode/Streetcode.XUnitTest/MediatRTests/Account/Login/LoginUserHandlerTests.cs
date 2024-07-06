@@ -153,7 +153,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Login
             _tokenServiceMock.Setup(x => x.SetRefreshToken(It.IsAny<RefreshTokenDTO>(), It.IsAny<User>()))
                 .Callback<RefreshTokenDTO, User>((refTokenDto, user) => { user.RefreshTokens.Add(new DAL.Entities.Users.RefreshToken() { Token = refTokenDto.Token }); });
 
-            _ccokieServiceMock.Setup(x => x.AppendCookiesToResponse(It.IsAny<HttpResponse>()));
+            _ccokieServiceMock.Setup(x => x.AppendCookiesToResponseAsync(It.IsAny<HttpResponse>()));
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);

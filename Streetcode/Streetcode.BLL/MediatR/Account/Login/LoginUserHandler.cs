@@ -74,7 +74,7 @@ public class LoginUserHandler : IRequestHandler<LoginUserCommand, Result<UserDTO
 
         var tokens = await _tokenService.GenerateTokens(user);
 
-        await _cookieService.AppendCookiesToResponse(httpContext.Response,
+        await _cookieService.AppendCookiesToResponseAsync(httpContext.Response,
             ("accessToken", tokens.AccessToken, new CookieOptions
             {
                 Expires = DateTimeOffset.UtcNow.AddMinutes(_tokensConfiguration.AccessTokenExpirationMinutes),

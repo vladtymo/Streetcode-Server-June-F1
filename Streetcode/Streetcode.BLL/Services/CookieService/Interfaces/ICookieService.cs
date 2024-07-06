@@ -6,6 +6,6 @@ namespace Streetcode.BLL.Services.CookieService.Interfaces
     {
         Task ClearCookiesAsync(HttpContext httpContext);
 
-        Task AppendCookiesToResponse(HttpResponse httpResponse, params (string key, string value, CookieOptions options)[] values);
+        Task AppendCookiesToResponseAsync(HttpResponse httpResponse, params (string key, string value, CookieOptions options)[] values);
     }
 }
