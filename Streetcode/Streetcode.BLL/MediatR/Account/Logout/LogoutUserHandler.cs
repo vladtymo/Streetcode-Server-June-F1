@@ -61,7 +61,7 @@ namespace Streetcode.BLL.MediatR.Account.Logout
                 }
             }
 
-            await _cookieService.ClearCookiesAsync(_httpContextAccessor.HttpContext);
+            await _cookieService.ClearRequestCookiesAsync(_httpContextAccessor.HttpContext);
        
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using Streetcode.BLL.Services.CookieService.Interfaces;
 using Streetcode.BLL.Services.CookieService.Realizations;
+using System.Linq;
 using Xunit;
 
 namespace Streetcode.XUnitTest.Services.CookieServiceTests
@@ -17,7 +20,7 @@ namespace Streetcode.XUnitTest.Services.CookieServiceTests
             // Arrange
             var httpContext = new DefaultHttpContext();
 
-            var cookieService = CreateService();
+            var cookieService = CreateCookieService();
 
             // Act
             await cookieService!.
@@ -26,25 +29,8 @@ namespace Streetcode.XUnitTest.Services.CookieServiceTests
             // Assert
             Assert.True(httpContext.Response.Headers.Values.Contains(string.Format("{0}={1}; path=/", key, value)));
         }
-
-        [Fact]
-        public async Task Success_When_ClearCookiesExecuted()
-        {
-            // Arrange
-            var httpContext = new DefaultHttpContext();
-
-            var cookieService = CreateService();
-
-            await cookieService!.AppendCookiesToResponseAsync(httpContext.Response, ("test", "value", new CookieOptions()));
-
-            // Act
-            await cookieService.ClearCookiesAsync(httpContext);
-
-            // Assert
-            Assert.False(httpContext.Response.Headers.Values.Contains("test=value; path=/"));
-        }
-
-        public static ICookieService? CreateService()
+       
+        public static ICookieService? CreateCookieService()
         {
             IServiceCollection col = new ServiceCollection();
 

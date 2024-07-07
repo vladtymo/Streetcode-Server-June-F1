@@ -50,7 +50,7 @@ namespace Streetcode.BLL.MediatR.Account.Delete
                 return Result.Fail(new Error(errorMsg));
             }
 
-            await _cookieService.ClearCookiesAsync(_contextAccessor.HttpContext);
+            await _cookieService.ClearRequestCookiesAsync(_contextAccessor.HttpContext);
 
             Guid userId = Guid.Parse(request.Dto.Id!);
 

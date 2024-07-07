@@ -16,8 +16,8 @@ namespace Streetcode.BLL.Services.CookieService.Realizations
             });
         }
 
-        public async Task ClearCookiesAsync(HttpContext httpContext)
-        {
+        public async Task ClearRequestCookiesAsync(HttpContext httpContext)
+        {           
             await Task.Run(() =>
             {
                 foreach (var cookie in httpContext!.Request.Cookies.Keys)
@@ -31,6 +31,8 @@ namespace Streetcode.BLL.Services.CookieService.Realizations
                     });
                 }
             });
+
+            await Task.CompletedTask;
         }
     }
 }

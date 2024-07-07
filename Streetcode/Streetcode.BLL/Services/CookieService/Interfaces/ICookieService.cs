@@ -4,7 +4,7 @@ namespace Streetcode.BLL.Services.CookieService.Interfaces
 {
     public interface ICookieService
     {
-        Task ClearCookiesAsync(HttpContext httpContext);
+        Task ClearRequestCookiesAsync(HttpContext httpContext);
 
         Task AppendCookiesToResponseAsync(HttpResponse httpResponse, params (string key, string value, CookieOptions options)[] values);
     }
