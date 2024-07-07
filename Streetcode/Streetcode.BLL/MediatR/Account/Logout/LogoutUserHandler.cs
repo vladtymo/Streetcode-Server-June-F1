@@ -35,17 +35,17 @@ namespace Streetcode.BLL.MediatR.Account.Logout
         {
             var httpContext = _httpContextAccessor.HttpContext;
             
-            if (!httpContext!.Request.Cookies.TryGetValue("accessToken", out var accessToken) && string.IsNullOrEmpty(accessToken))
+            if (!httpContext!.Request.Cookies.TryGetValue("accessToken", out var accessToken))
             {
                 var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.AccessTokenNotFound, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
-            
+
             if (string.IsNullOrEmpty(accessToken))
             {
                 var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.AccessTokenNotFound, request);
-                _logger.LogError(accessToken!, errorMsg);
+                _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 

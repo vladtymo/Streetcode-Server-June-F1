@@ -13,8 +13,7 @@ namespace Streetcode.BLL.Interfaces.Users
         ClaimsPrincipal GetPrincipalFromAccessToken(string? token);
         RefreshTokenDTO GenerateRefreshToken();
         Task SetRefreshToken(RefreshTokenDTO newRefreshToken, User user);
-        Task<TokenResponseDTO> GenerateTokens(User user);
-        //Task GenerateAndSetTokensAsync(User user, HttpResponse httpContext);
+        Task<TokenResponseDTO> GenerateTokens(User user);        
         string? GetUserIdFromAccessToken(string accessToken);
     }
 }
