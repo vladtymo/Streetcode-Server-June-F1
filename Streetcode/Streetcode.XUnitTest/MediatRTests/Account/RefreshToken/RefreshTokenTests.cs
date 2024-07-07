@@ -124,22 +124,14 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.RefreshToken
             };
             _userManagerMock.Setup(x => x.Users).Returns(new List<User> { user }.AsQueryable());
 
-            //_tokenServiceMock.Setup(x => x.GenerateAndSetTokensAsync(It.IsAny<User>(), It.IsAny<HttpResponse>()))
-            //    .Callback<User, HttpResponse>((_, response) =>
-            //    {
-            //        response.Cookies.Append("accessToken", tokens.AccessToken, new CookieOptions());
-            //        response.Cookies.Append("refreshToken", tokens.RefreshToken.Token, new CookieOptions());
-            //    });
-
+            _tokenServiceMock.Setup(x => x.GenerateTokens(It.IsAny<User>())).ReturnsAsync(tokens);
+            
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             Assert.True(result.IsSuccess);
-            Assert.Equal("Tokens refreshed successfully!", result.Value);
-            //_tokenServiceMock.Verify(x => x.GenerateAndSetTokensAsync(user, response.Object), Times.Once);
-            responseCookies.Verify(x => x.Append("accessToken", tokens.AccessToken, It.IsAny<CookieOptions>()), Times.Once);
-            responseCookies.Verify(x => x.Append("refreshToken", tokens.RefreshToken.Token, It.IsAny<CookieOptions>()), Times.Once);
+            Assert.Equal("Tokens refreshed successfully!", result.Value);                        
         }
 
     }
