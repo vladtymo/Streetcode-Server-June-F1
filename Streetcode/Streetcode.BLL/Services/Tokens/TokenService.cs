@@ -138,8 +138,7 @@ public class TokenService : ITokenService
     {
         if (user is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound);
-            throw new ArgumentNullException(null, errorMsg);
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
         }
 
         var tokenResponse = new TokenResponseDTO();
@@ -173,16 +172,14 @@ public class TokenService : ITokenService
 
     public async Task SetRefreshToken(RefreshTokenDTO newRefreshToken, User user)
     {
-        if (user == null)
+        if (user is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound);
-            throw new ArgumentNullException(null, errorMsg);
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
         }
 
-        if (newRefreshToken == null)
+        if (newRefreshToken is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.InvalidToken);
-            throw new ArgumentNullException(null, errorMsg);
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
         }
 
         var refreshToken = new RefreshToken
