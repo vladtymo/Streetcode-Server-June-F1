@@ -40,18 +40,6 @@ namespace Streetcode.WebApi.Controllers.Account
         public async Task<IActionResult> Delete()
         {
             return HandleResult(await Mediator.Send(new DeleteUserCommand()));
-        }
-        
-        [HttpGet]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)
-        {
-            return HandleResult(await Mediator.Send(new ConfirmUserEmailCommand(userId, token)));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> SendEmail([FromQuery] string email)
-        {
-            return HandleResult(await Mediator.Send(new SendVerificationEmailCommand(email)));
-        }
+        }                
     }
 }

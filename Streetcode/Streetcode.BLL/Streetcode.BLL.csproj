@@ -42,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="MediatR\Account\EmailVerification\" />
     <Folder Include="MediatR\AdditionalContent\Tag\" />
     <Folder Include="Util\Account\" />
   </ItemGroup>

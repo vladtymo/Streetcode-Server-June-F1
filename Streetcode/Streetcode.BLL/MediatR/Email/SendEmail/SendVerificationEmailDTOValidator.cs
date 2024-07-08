@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail
+namespace Streetcode.BLL.MediatR.Email.SendEmail
 {
     public class SendVerificationEmailDTOValidator : AbstractValidator<SendVerificationEmailCommand>
     {
