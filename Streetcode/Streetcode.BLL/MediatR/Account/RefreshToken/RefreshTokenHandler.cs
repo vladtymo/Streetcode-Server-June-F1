@@ -72,9 +72,9 @@ namespace Streetcode.BLL.MediatR.Account.RefreshToken
                     Secure = true,
                     SameSite = SameSiteMode.None
                 }),
-                ("refreshToken", tokens.AccessToken, new CookieOptions
+                ("refreshToken", tokens.RefreshToken.Token, new CookieOptions
                 {
-                    Expires = DateTimeOffset.UtcNow.AddDays(_tokensConfiguration.RefreshTokenExpirationDays),
+                    Expires = tokens.RefreshToken.Expires,
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.None
