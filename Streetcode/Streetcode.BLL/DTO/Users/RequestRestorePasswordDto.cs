@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Streetcode.BLL.DTO.Users
 {
-    public class RestorePasswordDto
+    public class RequestRestorePasswordDto
     {
-        public string ReservEmail { get; set; }
+        // email for verification
+        public string? Email { get; set; }
     }
 }

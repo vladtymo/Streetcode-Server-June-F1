@@ -264,4 +264,10 @@
   <data name="UserUpdateFailed" xml:space="preserve">
     <value>Fail to Update user</value>
   </data>
+  <data name="FailToGenRestorePassToken" xml:space="preserve">
+    <value>Error occured while restore password token generation</value>
+  </data>
+  <data name="UserWithEmailNotFound" xml:space="preserve">
+    <value>User with {0} not found</value>
+  </data>
 </root>

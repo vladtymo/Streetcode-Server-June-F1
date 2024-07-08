@@ -12,7 +12,7 @@ namespace Streetcode.BLL.Services.Email
         private readonly ILoggerService _loggerService;
 
         public EmailService(EmailConfiguration emailConfig)
-        {
+        {            
             _emailConfig = emailConfig;
         }
 

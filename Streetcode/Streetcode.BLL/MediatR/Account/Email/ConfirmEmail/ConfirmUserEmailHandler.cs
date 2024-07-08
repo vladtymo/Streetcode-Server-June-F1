@@ -11,7 +11,7 @@ using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Email.ConfirmEmail
+namespace Streetcode.BLL.MediatR.Account.Email.ConfirmEmail
 {
     public class ConfirmUserEmailHandler : IRequestHandler<ConfirmUserEmailCommand, Result<string>>
     {
