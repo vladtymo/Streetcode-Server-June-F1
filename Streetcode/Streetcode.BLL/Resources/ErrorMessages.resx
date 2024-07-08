@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -230,6 +230,21 @@
   </data>
   <data name="UserWithIdNotFound" xml:space="preserve">
     <value>User with id {0} not found</value>
+  </data>
+  <data name="CanNotMap" xml:space="preserve">
+    <value>Cannot map entity</value>
+  </data>
+  <data name="CanNotParseText" xml:space="preserve">
+    <value>text was not parsed successfully</value>
+  </data>
+  <data name="FactNotFoundInListPosition" xml:space="preserve">
+    <value>Fact with id not found in list of new position</value>
+  </data>
+  <data name="FailSaveChangesDB" xml:space="preserve">
+    <value>Failed to save changes to the database.</value>
+  </data>
+  <data name="TitleNullEmpty" xml:space="preserve">
+    <value>Timeline item title is null or empty</value>
   </data>
   <data name="EmptyQuery" xml:space="preserve">
     <value>Search query cannot be null or empty</value>
