@@ -51,7 +51,7 @@ namespace Streetcode.WebApi.Controllers.Account
         [HttpPost]
         public async Task<IActionResult> SendEmail([FromQuery] string email)
         {
-            return HandleResult(await Mediator.Send(new SendVerificationEmailCommand(email, this.HttpContext)));
+            return HandleResult(await Mediator.Send(new SendVerificationEmailCommand(email)));
         }
     }
 }

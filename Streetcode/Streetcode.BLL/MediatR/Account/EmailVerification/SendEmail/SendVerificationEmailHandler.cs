@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Streetcode.BLL.Interfaces.Email;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.Util.Account;
+using Streetcode.BLL.Services.Email;
 using Streetcode.DAL.Entities.Users;
 
 namespace Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail
@@ -16,14 +16,12 @@ namespace Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail
     public class SendVerificationEmailHandler : IRequestHandler<SendVerificationEmailCommand, Result<string>>
     {
         private readonly ILoggerService _logger;
-        private readonly SendVerificationEmail _sender;
+        private readonly ISendVerificationEmail _sender;
         public SendVerificationEmailHandler(
-            UserManager<User> userManager,
-            IEmailService emailSender,
-            ILoggerService logger,
-            LinkGenerator linkGenerator)
+            ISendVerificationEmail sender,
+            ILoggerService logger)
         {
-            _sender = new SendVerificationEmail(userManager, emailSender, linkGenerator);
+            _sender = sender;
             _logger = logger;
         }
 
@@ -31,7 +29,7 @@ namespace Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail
         {
             try
             {
-                await _sender.SendVerification(request.email, request.httpContext);
+                await _sender.SendVerification(request.email);
                 return Result.Ok(request.email);
             }
             catch (Exception ex)

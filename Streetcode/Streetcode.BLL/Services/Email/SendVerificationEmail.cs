@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Routing;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Streetcode.BLL.Interfaces.Email;
+using Streetcode.BLL.Interfaces.URL;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.DAL.Entities.Users;
-using System.Net.Http;
 
-namespace Streetcode.BLL.Util.Account
+namespace Streetcode.BLL.Services.Email
 {
-    public class SendVerificationEmail
+    public class SendVerificationEmail : ISendVerificationEmail
     {
         private const string ACTION = "ConfirmEmail";
         private const string CONTROLLER = "Account";
@@ -18,33 +16,35 @@ namespace Streetcode.BLL.Util.Account
 
         private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailSender;
-        private readonly LinkGenerator _linkGenerator;
+        private readonly IURLGenerator _urlGenerator;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public SendVerificationEmail(UserManager<User> userManager, IEmailService emailSender, LinkGenerator linkGenerator)
+        public SendVerificationEmail(
+            UserManager<User> userManager, 
+            IEmailService emailSender, 
+            IURLGenerator urlGenerator, 
+            IHttpContextAccessor contextAccessor)
         {
             _userManager = userManager;
             _emailSender = emailSender;
-            _linkGenerator = linkGenerator;   
+            _urlGenerator = urlGenerator;
+            _contextAccessor = contextAccessor;
         }
 
-        public async Task SendVerification(string email, HttpContext httpContext)
+        public async Task SendVerification(string email)
         {
-            string url = await CreateUrl(email, httpContext);
+            string url = await CreateUrl(email);
             await SendEmail(email, url);
         }
 
-        public async Task<string> CreateUrl(string email, HttpContext httpContext)
+        private async Task<string> CreateUrl(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user != null)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var url = _linkGenerator.GetPathByAction(
-                     ACTION, CONTROLLER, new { userId = user.Id, token = token });
-                var fullUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}{url}";
-
-                return fullUrl!;
+                return _urlGenerator.Url(ACTION, CONTROLLER, new { userId = user.Id, token }, _contextAccessor.HttpContext!);
             }
             else
             {
@@ -52,7 +52,7 @@ namespace Streetcode.BLL.Util.Account
             }
         }
 
-        public async Task SendEmail(string email, string url)
+        private async Task SendEmail(string email, string url)
         {
             await _emailSender
                     .SendEmailAsync(
