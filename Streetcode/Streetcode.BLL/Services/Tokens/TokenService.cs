@@ -21,13 +21,6 @@ public class TokenService : ITokenService
     private readonly TokensConfiguration _tokensConfiguration;
     private readonly ILoggerService _logger;
     private readonly IMapper _mapper;
-    
-    enum objType
-    {
-        user,
-        token,
-        tokenStr,
-    }
 
     public TokenService(UserManager<User> userManager, TokensConfiguration tokensConfiguration, ILoggerService logger, IMapper mapper)
     {
@@ -39,7 +32,10 @@ public class TokenService : ITokenService
     
     public string GenerateAccessToken(User user, List<Claim> claims)
     {
-        NullCheck(user, objType.user);
+        if (user is null)
+        {
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
+        }
 
         if (!claims.Any())
         {
@@ -65,7 +61,10 @@ public class TokenService : ITokenService
 
     public async Task<List<Claim>> GetUserClaimsAsync(User user)
     {
-        NullCheck(user, objType.user);
+        if (user is null)
+        {
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
+        }
 
         var roles = await _userManager.GetRolesAsync(user);
         if (!roles.Any())
@@ -89,7 +88,10 @@ public class TokenService : ITokenService
 
     public ClaimsPrincipal GetPrincipalFromAccessToken(string? token)
     {
-        NullCheck(token, objType.tokenStr);
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
+        }
 
         JwtSecurityTokenHandler tokenHandler = new();
 
@@ -116,7 +118,10 @@ public class TokenService : ITokenService
 
     public string? GetUserIdFromAccessToken(string accessToken)
     {
-        NullCheck(accessToken, objType.tokenStr);
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
+        }
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtToken = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
@@ -126,7 +131,10 @@ public class TokenService : ITokenService
 
     public async Task<TokenResponseDTO> GenerateTokens(User user)
     {
-        NullCheck(user, objType.user);
+        if (user is null)
+        {
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
+        }
 
         var tokenResponse = new TokenResponseDTO();
         var userClaims = await GetUserClaimsAsync(user);
@@ -159,43 +167,25 @@ public class TokenService : ITokenService
 
     public async Task SetRefreshToken(RefreshTokenDTO newRefreshToken, User user)
     {
-        NullCheck(user, objType.user);
-        NullCheck(newRefreshToken, objType.token);
+        if (user is null)
+        {
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
+        }
+
+        if (newRefreshToken is null)
+        {
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
+        }
 
         var refreshToken = _mapper.Map<RefreshToken>(newRefreshToken);
-        NullCheck(refreshToken, objType.token);
+        if (refreshToken is null)
+        {
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
+        }
 
         refreshToken.UserId = user.Id;
 
         user.RefreshTokens.Add(refreshToken);
         await _userManager.UpdateAsync(user);
-    }
-
-    private void NullCheck(object obj, objType type)
-    {
-        switch (type)
-        {
-            case objType.user:
-                if (obj is null)
-                {
-                    throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
-                }
-
-                break;
-            case objType.token:
-                if (obj is null)
-                {
-                    throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
-                }
-
-                break;
-            case objType.tokenStr:
-                if (string.IsNullOrEmpty(obj.ToString()))
-                {
-                    throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
-                }
-
-                break;
-        }
     }
 }
