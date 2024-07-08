@@ -32,6 +32,8 @@ using Streetcode.BLL.Services.Tokens;
 using Streetcode.WebApi.Events;
 using Streetcode.BLL.Interfaces.URL;
 using Streetcode.BLL.Services.URL;
+using Streetcode.BLL.Services.CookieService.Interfaces;
+using Streetcode.BLL.Services.CookieService.Realizations;
 using Streetcode.DAL.Enums;
 
 
@@ -70,6 +72,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddSingleton<ICookieService, CookieService>();
     }
 
     public static void AddCachingService(this IServiceCollection services, ConfigurationManager configuration)
