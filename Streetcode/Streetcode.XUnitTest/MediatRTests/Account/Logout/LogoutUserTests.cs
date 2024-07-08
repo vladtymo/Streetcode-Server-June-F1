@@ -1,17 +1,16 @@
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Moq;
+using MockQueryable.Moq;
+using Xunit;
+
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.MediatR.Account.Logout;
 using Streetcode.BLL.Resources;
 using Streetcode.BLL.Services.CacheService;
 using Streetcode.DAL.Entities.Users;
-using System.Linq;
-using System.Security.Cryptography;
-using MockQueryable.Moq;
-using Streetcode.BLL.DTO.Users;
-using Xunit;
 using Streetcode.BLL.Services.CookieService.Interfaces;
 
 namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
@@ -59,8 +58,11 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
-            Assert.Equal(errorMsg, result.Errors[0].Message);
+            Assert.Multiple(() =>
+            {
+                Assert.True(result.IsFailed);
+                Assert.Equal(errorMsg, result.Errors[0].Message);
+            });
         }
 
         [Fact]
@@ -119,8 +121,11 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
-            Assert.Equal(errorMsg, result.Errors[0].Message);
+            Assert.Multiple(() =>
+            {
+                Assert.True(result.IsFailed);
+                Assert.Equal(errorMsg, result.Errors[0].Message);
+            });
         }
 
         [Fact]
@@ -180,8 +185,11 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
             var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
-            Assert.Equal(errorMsg, result.Errors[0].Message);
+            Assert.Multiple(() =>
+            {
+                Assert.True(result.IsFailed);
+                Assert.Equal(errorMsg, result.Errors[0].Message);
+            });
         }
         
         [Fact]
@@ -245,6 +253,5 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.Logout
             _userManagerMock.Verify(x => x.UpdateAsync(It.Is<User>(u => u.RefreshTokens.Count == 0)), Times.Once);
             _cacheServiceMock.Verify(x => x.SetBlacklistedTokenAsync("validAccessToken", user.Id.ToString()), Times.Once);
         }
-
     }
 }
