@@ -4,10 +4,8 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Interfaces.Users;
-using Streetcode.BLL.MediatR.Account.Login;
 using Streetcode.BLL.Resources;
 using Streetcode.BLL.Services.CacheService;
 using Streetcode.BLL.Services.CookieService.Interfaces;
@@ -27,7 +25,6 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
         private readonly ILoggerService _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICookieService _cookieService;
-        private readonly TokensConfiguration _tokensConfiguration;
 
         public ChangePasswordHandler(
             UserManager<User> userManager,
@@ -37,8 +34,7 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
             IMapper mapper,
             ILoggerService logger,
             IHttpContextAccessor httpContextAccessor,
-            ICookieService cookieService,
-            TokensConfiguration tokensConfiguration)
+            ICookieService cookieService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -48,7 +44,6 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _cookieService = cookieService;
-            _tokensConfiguration = tokensConfiguration;
         }
 
         public async Task<Result<string>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
@@ -92,14 +87,6 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
             }
 
             await _cookieService.ClearRequestCookiesAsync(_httpContextAccessor.HttpContext);
-
-            var logoutResult = await _userManager.UpdateAsync(user);
-            if (!logoutResult.Succeeded)
-            {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserUpdateFailed, request);
-                _logger.LogError(logoutResult, errorMsg);
-                return Result.Fail(new Error(errorMsg));
-            }
 
             return Result.Ok("Password changed successfully");
         }
