@@ -8,6 +8,7 @@ using Moq;
 using Serilog;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.Resources;
 using Streetcode.BLL.Services.Logging;
 using Streetcode.BLL.Services.Tokens;
 using Streetcode.DAL.Entities.Users;
@@ -134,7 +135,7 @@ public class TokenServiceTests
         var result = _tokenService.GenerateRefreshToken();
 
         // Assert
-        Assert.True(result != null);
+        Assert.NotNull(result);
     }
 
     [Fact]
@@ -144,10 +145,14 @@ public class TokenServiceTests
         var refreshToken = _tokenService.GenerateRefreshToken();
 
         // Act
-        var result = _tokenService.SetRefreshToken(refreshToken, null!);
+        var exception = await Record.ExceptionAsync(() => _tokenService.SetRefreshToken(refreshToken, null!));
 
         // Assert
-        Assert.True(result.IsFaulted);
+        Assert.Multiple(() =>
+        {
+            Assert.IsType<ArgumentNullException>(exception);
+            Assert.Equal(ErrorMessages.UserNotFound, exception.Message);
+        });
     }
 
     [Fact]
@@ -157,10 +162,14 @@ public class TokenServiceTests
         User user = new();
 
         // Act
-        var result = _tokenService.SetRefreshToken(null!, user);
+        var exception = await Record.ExceptionAsync(() => _tokenService.SetRefreshToken(null!, user));
 
         // Assert
-        Assert.True(result.IsFaulted);
+        Assert.Multiple(() =>
+        {
+            Assert.IsType<ArgumentNullException>(exception);
+            Assert.Equal(ErrorMessages.InvalidToken, exception.Message);
+        });
     }
 
     [Fact]
@@ -175,20 +184,22 @@ public class TokenServiceTests
         var result = _tokenService.GenerateTokens(user);
 
         // Assert
-        Assert.True(result != null);
+        Assert.NotNull(result);
     }
 
     [Fact]
-    public async Task GenerateTokens_ShouldReturnFailureResponse_WhenInputInCorrectUser()
+    public async Task GenerateTokens_ShouldReturnFailureResponse_WhenInputNullUser()
     {
         // Arrange
-        TokenResponseDTO tokenResponse = new();
-        _userManagerMock.Setup(um => um.GetRolesAsync(null)).ReturnsAsync(new List<string> { "Admin" });
 
         // Act
-        var result = _tokenService.GenerateTokens(null);
+        var exception = await Record.ExceptionAsync(() => _tokenService.GenerateTokens(null!));
 
         // Assert
-        Assert.True(result.IsFaulted);
+        Assert.Multiple(() =>
+        {
+            Assert.IsType<ArgumentNullException>(exception);
+            Assert.Equal(ErrorMessages.UserNotFound, exception.Message);
+        });
     }
 }
