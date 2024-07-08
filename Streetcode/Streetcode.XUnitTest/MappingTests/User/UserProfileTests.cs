@@ -90,11 +90,11 @@ namespace Streetcode.XUnitTest.MappingTests.UserTests
             };
 
             // Act
-            var deleteResponce = _mapper.Map<DeleteUserResponceDto>(u);
+            var deleteResponce = _mapper.Map<DeleteUserResponseDto>(u);
 
             // Assert
             Assert.Multiple(
-                () => Assert.IsType<DeleteUserResponceDto>(deleteResponce),
+                () => Assert.IsType<DeleteUserResponseDto>(deleteResponce),
                 () => Assert.Equal(deleteResponce.Lastname, u.LastName),
                 () => Assert.Equal(deleteResponce.Firstname, u.FirstName)
                 );

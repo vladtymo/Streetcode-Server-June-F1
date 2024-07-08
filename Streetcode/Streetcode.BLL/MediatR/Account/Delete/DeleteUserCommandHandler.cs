@@ -14,7 +14,7 @@ using Streetcode.DAL.Entities.Users;
 
 namespace Streetcode.BLL.MediatR.Account.Delete
 {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Result<DeleteUserResponceDto>>
+    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Result<DeleteUserResponseDto>>
     {
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
@@ -42,7 +42,7 @@ namespace Streetcode.BLL.MediatR.Account.Delete
             _tokenService = tokenService;
         }
 
-        public async Task<Result<DeleteUserResponceDto>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<DeleteUserResponseDto>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var httpContext = _contextAccessor.HttpContext;
 
@@ -94,7 +94,7 @@ namespace Streetcode.BLL.MediatR.Account.Delete
                 return Result.Fail(new Error(errorMsg));
             }
 
-            return Result.Ok(_mapper.Map<DeleteUserResponceDto>(user));
+            return Result.Ok(_mapper.Map<DeleteUserResponseDto>(user));
         }
     }
 }

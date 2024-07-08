@@ -5,5 +5,5 @@ using Streetcode.BLL.DTO.Users;
 
 namespace Streetcode.BLL.MediatR.Account.Delete
 {
-    public record class DeleteUserCommand() : IValidatableRequest<Result<DeleteUserResponceDto>>;    
+    public record class DeleteUserCommand() : IValidatableRequest<Result<DeleteUserResponseDto>>;    
 }
