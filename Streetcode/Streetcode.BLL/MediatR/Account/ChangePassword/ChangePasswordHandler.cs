@@ -17,9 +17,7 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
 {
     public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Result<string>>
     {
-        private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         private readonly ICacheService _cacheService;
         private readonly ITokenService _tokenService;
         private readonly ILoggerService _logger;
@@ -28,19 +26,15 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
 
         public ChangePasswordHandler(
             UserManager<User> userManager,
-            SignInManager<User> signInManager,
             ICacheService cacheService,
             ITokenService tokenService,
-            IMapper mapper,
             ILoggerService logger,
             IHttpContextAccessor httpContextAccessor,
             ICookieService cookieService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _cacheService = cacheService;
             _tokenService = tokenService;
-            _mapper = mapper;
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _cookieService = cookieService;
