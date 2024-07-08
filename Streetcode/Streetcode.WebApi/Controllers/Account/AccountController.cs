@@ -36,12 +36,11 @@ namespace Streetcode.WebApi.Controllers.Account
             return HandleResult(await Mediator.Send(new LoginUserCommand(loginUser)));
         }
 
-
         [HttpDelete]
         public async Task<IActionResult> Delete()
         {
             return HandleResult(await Mediator.Send(new DeleteUserCommand()));
-        {
+        }
         
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)

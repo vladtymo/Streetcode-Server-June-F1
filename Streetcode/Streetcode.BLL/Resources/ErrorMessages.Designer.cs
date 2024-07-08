@@ -99,10 +99,13 @@ namespace Streetcode.BLL.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Claims doesn&apos;t exist.
         /// </summary>
-        public static string ClaimsNotExist {
-            get {
+        public static string ClaimsNotExist
+        {
+            get
+            {
                 return ResourceManager.GetString("ClaimsNotExist", resourceCulture);
             }
+        }
         ///   Looks up a localized string similar to Cannot map entity.
         /// </summary>
         public static string CanNotMap {
@@ -249,10 +252,13 @@ namespace Streetcode.BLL.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Failed to set Token to the Black List!.
         /// </summary>
-        public static string FailedToSetTokenInBlackList {
-            get {
+        public static string FailedToSetTokenInBlackList
+        {
+            get
+            {
                 return ResourceManager.GetString("FailedToSetTokenInBlackList", resourceCulture);
             }
+        }
         ///   Looks up a localized string similar to Failed to save changes to the database..
         /// </summary>
         public static string FailSaveChangesDB {
@@ -487,36 +493,8 @@ namespace Streetcode.BLL.Resources {
                 return ResourceManager.GetString("TokenExpired", resourceCulture);
             }
         }
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
-        /// </summary>
-        public static string ClaimsNotExist
-        {
-            get
-            {
-                return ResourceManager.GetString("ClaimsNotExist", resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
-        /// </summary>
-        public static string AccessTokenNotFound
-        {
-            get
-            {
-                return ResourceManager.GetString("AccessTokenNotFound", resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
-        /// </summary>
-        public static string RefreshTokenNotFound
-        {
-            get
-            {
-                return ResourceManager.GetString("RefreshTokenNotFound", resourceCulture);
-            }
-        }
+        
+        
         /// <summary>
         ///   Looks up a localized string similar to Fail to Update user.
         /// </summary>
