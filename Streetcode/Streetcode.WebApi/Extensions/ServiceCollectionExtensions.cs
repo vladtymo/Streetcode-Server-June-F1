@@ -30,6 +30,8 @@ using Streetcode.DAL.Entities.Users;
 using Streetcode.BLL.Services.CacheService;
 using Streetcode.BLL.Services.Tokens;
 using Streetcode.WebApi.Events;
+using Streetcode.BLL.Interfaces.URL;
+using Streetcode.BLL.Services.URL;
 
 namespace Streetcode.WebApi.Extensions;
 
@@ -58,6 +60,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBlobService, AzureBlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<ISendVerificationEmail, SendVerificationEmail>();
+        services.AddScoped<IURLGenerator, URLGenerator>();
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInstagramService, InstagramService>();
         services.AddScoped<ITextService, AddTermsToTextService>();
