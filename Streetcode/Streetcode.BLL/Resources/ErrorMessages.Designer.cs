@@ -218,7 +218,18 @@ namespace Streetcode.BLL.Resources {
                 return ResourceManager.GetString("EntityWithStreetcodeTagNotFound", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {1}.
+        /// </summary>
+        public static string ExpiredToken
+        {
+            get
+            {
+                return ResourceManager.GetString("TokenExpired", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Fact with id not found in list of new position.
         /// </summary>

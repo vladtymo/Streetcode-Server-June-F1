@@ -264,4 +264,7 @@
   <data name="UserUpdateFailed" xml:space="preserve">
     <value>Fail to Update user</value>
   </data>
+  <data name="ExpiredToken" xml:space="preserve">
+    <value>TokenExpired</value>
+  </data>
 </root>
