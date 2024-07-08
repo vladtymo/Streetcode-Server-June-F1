@@ -4,5 +4,5 @@ using Streetcode.BLL.DTO.Users;
 
 namespace Streetcode.BLL.MediatR.Account.RestorePassword
 {
-    public record class RestorePasswordRequest(RequestRestorePasswordDto restPassDto) : IValidatableRequest<Result<string>>;  
+    public record class RestorePasswordRequest(RestorePasswordRequestDto restPassDto) : IValidatableRequest<Result<string>>;  
 }
