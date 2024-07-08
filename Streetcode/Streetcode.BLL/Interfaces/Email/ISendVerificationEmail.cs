@@ -4,6 +4,6 @@ namespace Streetcode.BLL.Interfaces.Email
 {
     public interface ISendVerificationEmail
     {
-        public Task SendVerification(string email, HttpContext httpContext);
+        public Task SendVerification(string email);
     }
 }

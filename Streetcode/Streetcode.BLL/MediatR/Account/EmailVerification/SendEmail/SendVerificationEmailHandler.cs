@@ -29,7 +29,7 @@ namespace Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail
         {
             try
             {
-                await _sender.SendVerification(request.email, request.httpContext);
+                await _sender.SendVerification(request.email);
                 return Result.Ok(request.email);
             }
             catch (Exception ex)

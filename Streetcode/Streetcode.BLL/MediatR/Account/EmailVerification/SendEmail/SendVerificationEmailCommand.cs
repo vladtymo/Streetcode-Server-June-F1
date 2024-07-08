@@ -5,6 +5,6 @@ using Streetcode.BLL.Behavior;
 
 namespace Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail
 {
-    public record SendVerificationEmailCommand(string email, HttpContext httpContext)
+    public record SendVerificationEmailCommand(string email)
        : IValidatableRequest<Result<string>>;
 }

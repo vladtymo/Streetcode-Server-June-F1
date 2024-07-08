@@ -17,28 +17,34 @@ namespace Streetcode.BLL.Services.Email
         private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailSender;
         private readonly IURLGenerator _urlGenerator;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public SendVerificationEmail(UserManager<User> userManager, IEmailService emailSender, IURLGenerator urlGenerator)
+        public SendVerificationEmail(
+            UserManager<User> userManager, 
+            IEmailService emailSender, 
+            IURLGenerator urlGenerator, 
+            IHttpContextAccessor contextAccessor)
         {
             _userManager = userManager;
             _emailSender = emailSender;
             _urlGenerator = urlGenerator;
+            _contextAccessor = contextAccessor;
         }
 
-        public async Task SendVerification(string email, HttpContext httpContext)
+        public async Task SendVerification(string email)
         {
-            string url = await CreateUrl(email, httpContext);
+            string url = await CreateUrl(email);
             await SendEmail(email, url);
         }
 
-        private async Task<string> CreateUrl(string email, HttpContext httpContext)
+        private async Task<string> CreateUrl(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user != null)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                return _urlGenerator.Url(ACTION, CONTROLLER, new { userId = user.Id, token }, httpContext);
+                return _urlGenerator.Url(ACTION, CONTROLLER, new { userId = user.Id, token }, _contextAccessor.HttpContext!);
             }
             else
             {
