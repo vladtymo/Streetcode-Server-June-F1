@@ -2,6 +2,7 @@ using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
@@ -21,6 +22,7 @@ public class TokenServiceTests
     private readonly Mock<UserManager<User>> _userManagerMock;
     private readonly TokensConfiguration _tokensConfiguration;
     private readonly BLL.Services.Tokens.TokenService _tokenService;
+    private readonly IMapper _mapper;
     private readonly ILoggerService _logger;
 
     public TokenServiceTests()
@@ -36,7 +38,7 @@ public class TokenServiceTests
             Audience = "StreetcodeClient"
         };
         _logger = new LoggerService(new LoggerConfiguration().CreateLogger());
-        _tokenService = new BLL.Services.Tokens.TokenService(_userManagerMock.Object, _tokensConfiguration, _logger);
+        _tokenService = new BLL.Services.Tokens.TokenService(_userManagerMock.Object, _tokensConfiguration, _logger, _mapper);
     }
 
     [Fact]
