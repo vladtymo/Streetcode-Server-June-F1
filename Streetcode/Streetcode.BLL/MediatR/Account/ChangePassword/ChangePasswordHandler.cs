@@ -77,14 +77,7 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
                 return Result.Fail(new Error(errorMsg));
             }
 
-            if (httpContext!.Request.Cookies.TryGetValue("refreshToken", out var refreshToken) && !string.IsNullOrEmpty(refreshToken))
-            {
-                var refreshTokenEntity = user.RefreshTokens.FirstOrDefault(rt => rt.Token == refreshToken);
-                if (refreshTokenEntity != null)
-                {
-                    user.RefreshTokens.Remove(refreshTokenEntity);
-                }
-            }
+            user.RefreshTokens.Clear();
 
             await _cookieService.ClearRequestCookiesAsync(_httpContextAccessor.HttpContext);
 
