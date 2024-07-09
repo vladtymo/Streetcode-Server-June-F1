@@ -13,6 +13,7 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
 {
     public class ChangePasswordHandler : IRequestHandler<ChangePasswordCommand, Result<string>>
     {
+        private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly ICacheService _cacheService;
         private readonly ITokenService _tokenService;
@@ -26,7 +27,8 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
             ITokenService tokenService,
             ILoggerService logger,
             IHttpContextAccessor httpContextAccessor,
-            ICookieService cookieService)
+            ICookieService cookieService,
+            SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _cacheService = cacheService;
@@ -34,6 +36,7 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _cookieService = cookieService;
+            _signInManager = signInManager;
         }
 
         public async Task<Result<string>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
@@ -78,6 +81,7 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
 
             await _cookieService.ClearRequestCookiesAsync(_httpContextAccessor.HttpContext);
 
+            await _signInManager.SignOutAsync();
             return Result.Ok("Password changed successfully");
         }
     }

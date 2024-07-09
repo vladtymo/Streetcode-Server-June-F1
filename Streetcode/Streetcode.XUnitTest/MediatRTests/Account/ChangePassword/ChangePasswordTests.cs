@@ -22,6 +22,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.ChangePassword
         private readonly ChangePasswordHandler _handler;
         private readonly Mock<ICookieService> _cookieServiceMock;
         private readonly Mock<ICacheService> _cacheServiceMock;
+        private readonly Mock<SignInManager<User>> _signInManagerMock;
 
         public ChangePasswordTests()
         {
@@ -33,6 +34,14 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.ChangePassword
             _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
             _cookieServiceMock = new Mock<ICookieService>();
             _cacheServiceMock = new Mock<ICacheService>();
+            _signInManagerMock = new Mock<SignInManager<User>>(
+                _userManagerMock.Object, 
+                _httpContextAccessorMock.Object, 
+                new Mock<IUserClaimsPrincipalFactory<User>>().Object, 
+                null,
+                null,
+                null,
+                null);
 
             _handler = new ChangePasswordHandler(
                 _userManagerMock.Object,
@@ -40,7 +49,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.ChangePassword
                 _tokenServiceMock.Object,
                 _loggerMock.Object,
                 _httpContextAccessorMock.Object,
-                _cookieServiceMock.Object);
+                _cookieServiceMock.Object,
+                _signInManagerMock.Object);
         }
 
         [Fact]
