@@ -69,14 +69,21 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
                 return Result.Fail(new Error(errorMsg));
             }
 
-            // remove tokens cookies and logout after successfully changing password
-
             var cacheResult = await _cacheService.SetBlacklistedTokenAsync(accessToken, user.Id.ToString());
             if (!cacheResult)
             {
                 var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailedToSetTokenInBlackList, request);
                 _logger.LogError(cacheResult, errorMsg);
                 return Result.Fail(new Error(errorMsg));
+            }
+
+            if (httpContext!.Request.Cookies.TryGetValue("refreshToken", out var refreshToken) && !string.IsNullOrEmpty(refreshToken))
+            {
+                var refreshTokenEntity = user.RefreshTokens.FirstOrDefault(rt => rt.Token == refreshToken);
+                if (refreshTokenEntity != null)
+                {
+                    user.RefreshTokens.Remove(refreshTokenEntity);
+                }
             }
 
             await _cookieService.ClearRequestCookiesAsync(_httpContextAccessor.HttpContext);
