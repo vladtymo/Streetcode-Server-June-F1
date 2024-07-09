@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 
-
 namespace Streetcode.BLL.MediatR.Account.ChangePassword
 {
     public class ChangePasswordDTOValidator : AbstractValidator<ChangePasswordCommand>

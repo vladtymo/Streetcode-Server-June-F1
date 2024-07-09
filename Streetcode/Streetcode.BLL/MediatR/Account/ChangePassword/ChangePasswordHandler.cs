@@ -1,17 +1,13 @@
-﻿using AutoMapper;
-using FluentResults;
+﻿using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.Resources;
 using Streetcode.BLL.Services.CacheService;
 using Streetcode.BLL.Services.CookieService.Interfaces;
-using Streetcode.BLL.Services.Tokens;
 using Streetcode.DAL.Entities.Users;
-
 
 namespace Streetcode.BLL.MediatR.Account.ChangePassword
 {
@@ -52,11 +48,11 @@ namespace Streetcode.BLL.MediatR.Account.ChangePassword
             }
 
             var userId = _tokenService.GetUserIdFromAccessToken(accessToken);
-            var user = await _userManager.Users.Include(u => u.RefreshTokens).FirstOrDefaultAsync(u => u.Id == new Guid(userId));
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (user is null)
             {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.AccessTokenNotFound, request);
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
