@@ -267,4 +267,7 @@
   <data name="ExpiredToken" xml:space="preserve">
     <value>TokenExpired</value>
   </data>
+  <data name="FailToChangePassword" xml:space="preserve">
+    <value>Failed to change password</value>
+  </data>
 </root>
