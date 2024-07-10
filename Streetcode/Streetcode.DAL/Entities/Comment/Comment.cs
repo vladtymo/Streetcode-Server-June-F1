@@ -7,7 +7,7 @@ using Streetcode.DAL.Entities.Base;
 using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Entities.Users;
 
-namespace Streetcode.DAL.Entities.Comment
+namespace Streetcode.DAL.Entities.Comments
 {
     public class Comment : IEntityId<int>
     {
@@ -16,7 +16,7 @@ namespace Streetcode.DAL.Entities.Comment
         public Guid? UserId { get; set; }
         public string? CommentContent { get; set; }
         public DateTime CreatedAt { get; set; }
-        public User User { get; set; }
-        public StreetcodeContent Streetcode { get; set; }
+        public User? User { get; set; }
+        public StreetcodeContent? Streetcode { get; set; }
     }
 }

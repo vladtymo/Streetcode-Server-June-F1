@@ -6,7 +6,7 @@ using Streetcode.BLL.DTO.Comment;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.Resources;
-using Streetcode.DAL.Entities.Comment;
+using Streetcode.DAL.Entities.Comments;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Comments.Create

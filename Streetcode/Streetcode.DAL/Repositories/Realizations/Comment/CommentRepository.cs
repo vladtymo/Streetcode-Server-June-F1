@@ -1,5 +1,5 @@
 ﻿using Repositories.Interfaces;
-using Streetcode.DAL.Entities.Comment;
+using Streetcode.DAL.Entities.Comments;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Realizations.Base;
 

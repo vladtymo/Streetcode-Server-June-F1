@@ -50,8 +50,4 @@
 		<ProjectReference Include="..\Streetcode.DAL\Streetcode.DAL.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="MediatRTests\NewFolder\" />
-	</ItemGroup>
-
 </Project>
