@@ -87,8 +87,10 @@ public class StreetcodeDbContext : IdentityDbContext<User, IdentityRole<Guid>, G
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StreetcodeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
-
-        base.OnConfiguring(optionsBuilder);
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Initial Catalog=StreetcodeDB_Mig_Target;Integrated Security=True");
+        //    base.OnConfiguring(optionsBuilder);
+        //}
     }
 }
