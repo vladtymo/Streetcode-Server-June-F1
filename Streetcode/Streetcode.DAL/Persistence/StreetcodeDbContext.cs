@@ -21,6 +21,7 @@ using Streetcode.DAL.Entities.Toponyms;
 using Streetcode.DAL.Entities.Transactions;
 using Streetcode.DAL.Enums;
 using Streetcode.DAL.Entities.Users;
+using Streetcode.DAL.Entities.Comment;
 
 namespace Streetcode.DAL.Persistence;
 
@@ -72,6 +73,7 @@ public class StreetcodeDbContext : IdentityDbContext<User, IdentityRole<Guid>, G
     public DbSet<HistoricalContextTimeline>? HistoricalContextsTimelines { get; set; }
     public DbSet<StreetcodePartner>? StreetcodePartners { get; set; }
     public DbSet<TeamMemberPositions>? TeamMemberPosition { get; set; }
+    public DbSet<Comment>? Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -83,10 +85,10 @@ public class StreetcodeDbContext : IdentityDbContext<User, IdentityRole<Guid>, G
             typeof(StreetcodeDbContext).Assembly);
     }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Initial Catalog=StreetcodeDB_Mig_Target;Integrated Security=True");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=StreetcodeDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
 
-    //    base.OnConfiguring(optionsBuilder);
-    //}
+        base.OnConfiguring(optionsBuilder);
+    }
 }

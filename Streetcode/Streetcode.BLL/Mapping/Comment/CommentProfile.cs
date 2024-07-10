@@ -1,0 +1,15 @@
+﻿using AutoMapper;
+using Streetcode.BLL.DTO.Comment;
+using Streetcode.DAL.Entities.Comment;
+
+namespace Streetcode.BLL.Mapping.Comments
+{
+    public class CommentProfile: Profile
+    {
+        public CommentProfile()
+        {
+            CreateMap<CommentCreateDTO, Comment>().ReverseMap();
+            CreateMap<CommentDTO, Comment>().ReverseMap();
+        }
+    }
+}
