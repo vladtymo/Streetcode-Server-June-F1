@@ -11,6 +11,7 @@ using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Entities.Toponyms;
 using Streetcode.DAL.Entities.Transactions;
 using Streetcode.DAL.Enums;
+using Streetcode.DAL.Entities.Likes;
 
 namespace Streetcode.DAL.Entities.Streetcode;
 
@@ -81,4 +82,8 @@ public class StreetcodeContent : IEntityId<int>
     public List<StreetcodeArt> StreetcodeArts { get; set; } = new ();
 
     public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; } = new ();
+
+    public List<Like> Likes { get; set; }
+
+    public int LikesCount { get; set; }
 }

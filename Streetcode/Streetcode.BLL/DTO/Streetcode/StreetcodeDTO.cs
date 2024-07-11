@@ -21,5 +21,6 @@ public class StreetcodeDTO
     public IEnumerable<StreetcodeTagDTO>? Tags { get; set; }
     public string Teaser { get; set; } = string.Empty;
     public StreetcodeType StreetcodeType { get; set; }
-    public List<LikeDTO>? Likes { get; set; };
+    public List<LikeDTO>? Likes { get; set; }
+    public int LikesCount { get; set; }
 }
