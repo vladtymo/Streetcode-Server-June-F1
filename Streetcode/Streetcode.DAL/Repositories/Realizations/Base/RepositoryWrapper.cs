@@ -102,10 +102,15 @@ public class RepositoryWrapper : IRepositoryWrapper
 
     private IStreetcodeImageRepository? _streetcodeImageRepository = null;
 
+    private ICommentRepository? _commentRepository = null;
+
     public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext)
     {
         _streetcodeDbContext = streetcodeDbContext;
     }
+
+    public ICommentRepository CommentRepository =>
+          GetRepository(_commentRepository as CommentRepository);
 
     public INewsRepository NewsRepository =>
           GetRepository(_newsRepository as NewsRepository);
