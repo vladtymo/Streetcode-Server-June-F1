@@ -52,7 +52,7 @@ public static class ServiceCollectionExtensions
             options.Password.RequireUppercase = false;
             options.Password.RequiredUniqueChars = 0;
 
-            options.User.RequireUniqueEmail = false;
+            options.User.RequireUniqueEmail = true;
         })
             .AddEntityFrameworkStores<StreetcodeDbContext>()
             .AddDefaultTokenProviders();
