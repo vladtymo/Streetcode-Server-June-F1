@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <Folder Include="MediatR\AdditionalContent\Tag\" />
+    <Folder Include="Services\LikeService\" />
     <Folder Include="Util\Account\" />
   </ItemGroup>
 
