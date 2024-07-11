@@ -4,6 +4,7 @@ using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
 using Streetcode.DAL.Repositories.Interfaces.Analytics;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.DAL.Repositories.Interfaces.Likes;
 using Streetcode.DAL.Repositories.Interfaces.Media.Images;
 using Streetcode.DAL.Repositories.Interfaces.Newss;
 using Streetcode.DAL.Repositories.Interfaces.Partners;
@@ -16,6 +17,7 @@ using Streetcode.DAL.Repositories.Interfaces.Toponyms;
 using Streetcode.DAL.Repositories.Interfaces.Transactions;
 using Streetcode.DAL.Repositories.Realizations.AdditionalContent;
 using Streetcode.DAL.Repositories.Realizations.Analytics;
+using Streetcode.DAL.Repositories.Realizations.Likes;
 using Streetcode.DAL.Repositories.Realizations.Media;
 using Streetcode.DAL.Repositories.Realizations.Media.Images;
 using Streetcode.DAL.Repositories.Realizations.Newss;
@@ -101,6 +103,8 @@ public class RepositoryWrapper : IRepositoryWrapper
     private IStreetcodeToponymRepository? _streetcodeToponymRepository = null;
 
     private IStreetcodeImageRepository? _streetcodeImageRepository = null;
+
+    private ILikeRepository? _likeRepository = null;
 
     public RepositoryWrapper(StreetcodeDbContext streetcodeDbContext)
     {
@@ -208,6 +212,9 @@ public class RepositoryWrapper : IRepositoryWrapper
 
     public IStreetcodeImageRepository StreetcodeImageRepository =>
         GetRepository(_streetcodeImageRepository as StreetcodeImageRepository);
+
+    public ILikeRepository LikeRepository =>
+          GetRepository(_likeRepository as LikeRepository);
 
     public T GetRepository<T>(T? repo)
      where T : IStreetcodeDbContextProvider, new()
