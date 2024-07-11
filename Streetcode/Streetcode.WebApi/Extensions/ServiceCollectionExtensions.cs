@@ -43,7 +43,11 @@ public static class ServiceCollectionExtensions
 {
     public static void AddIdentityService(this IServiceCollection services)
     {
-        services.AddIdentity<User, IdentityRole<Guid>>()
+        services.AddIdentity<User, IdentityRole<Guid>>(opt =>
+        {
+            opt.User.RequireUniqueEmail = true;
+            opt.Password.RequiredLength = 7;
+        })
             .AddEntityFrameworkStores<StreetcodeDbContext>()
             .AddDefaultTokenProviders();
     }

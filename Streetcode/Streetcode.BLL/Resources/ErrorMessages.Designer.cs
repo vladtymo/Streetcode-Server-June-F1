@@ -223,6 +223,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error reseting password for request: {0}.
+        /// </summary>
+        public static string ErrorResetingPassword {
+            get {
+                return ResourceManager.GetString("ErrorResetingPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TokenExpired.
         /// </summary>
         public static string ExpiredToken {
