@@ -275,7 +275,7 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.ToTable("qr_coordinates", "coordinates");
                 });
 
-            modelBuilder.Entity("Streetcode.DAL.Entities.Comments.Comment", b =>
+            modelBuilder.Entity("Streetcode.DAL.Entities.Comment.Comment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -301,7 +301,7 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Feedback.Response", b =>
@@ -1015,7 +1015,7 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.HasIndex("HistoricalContextId");
 
-                    b.ToTable("HistoricalContextsTimelines");
+                    b.ToTable("HistoricalContextsTimelines", (string)null);
                 });
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Timeline.TimelineItem", b =>
@@ -1397,14 +1397,14 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.Navigation("StreetcodeCoordinate");
                 });
 
-            modelBuilder.Entity("Streetcode.DAL.Entities.Comments.Comment", b =>
+            modelBuilder.Entity("Streetcode.DAL.Entities.Comment.Comment", b =>
                 {
                     b.HasOne("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", "Streetcode")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("StreetcodeId");
 
                     b.HasOne("Streetcode.DAL.Entities.Users.User", "User")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("Streetcode");
@@ -1810,8 +1810,6 @@ namespace Streetcode.DAL.Persistence.Migrations
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Coordinates");
 
                     b.Navigation("Facts");
@@ -1866,8 +1864,6 @@ namespace Streetcode.DAL.Persistence.Migrations
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Users.User", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("RefreshTokens");
                 });
 
