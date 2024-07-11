@@ -10,6 +10,7 @@ using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Entities.Toponyms;
 using Streetcode.DAL.Entities.Transactions;
+using Streetcode.DAL.Entities.Comments;
 using Streetcode.DAL.Enums;
 
 namespace Streetcode.DAL.Entities.Streetcode;
@@ -81,4 +82,5 @@ public class StreetcodeContent : IEntityId<int>
     public List<StreetcodeArt> StreetcodeArts { get; set; } = new ();
 
     public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; } = new ();
+    public List<Comment> Comments { get; set; } = new ();
 }
