@@ -4,5 +4,5 @@ using Streetcode.BLL.DTO.Likes;
 
 namespace Streetcode.BLL.MediatR.Likes.PushLike
 {
-    public record PushLikeCommand(int userId, int streetcodeId) : IValidatableRequest<Result<LikeDTO>>;
+    public record PushLikeCommand(Guid userId, int streetcodeId) : IValidatableRequest<Result<LikeDTO>>;
 }
