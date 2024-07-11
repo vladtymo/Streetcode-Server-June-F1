@@ -135,10 +135,6 @@ namespace Streetcode.DAL.Persistence.Configurations.Streetcode
                     st => st.HasOne(s => s.Toponym).WithMany().HasForeignKey(x => x.ToponymId),
                     st => st.HasOne(s => s.Streetcode).WithMany().HasForeignKey(x => x.StreetcodeId))
                 .ToTable("streetcode_toponym", "streetcode");
-
-            builder.HasMany(s => s.Likes)
-                  .WithOne(l => l.Streetcode)
-                  .HasForeignKey(l => l.streetcodeId);
         }
     }
 }

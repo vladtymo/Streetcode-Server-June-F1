@@ -12,7 +12,7 @@ using Streetcode.DAL.Persistence;
 namespace Streetcode.DAL.Persistence.Migrations
 {
     [DbContext(typeof(StreetcodeDbContext))]
-    [Migration("20240711182339_addLikesTable")]
+    [Migration("20240711183713_addLikesTable")]
     partial class addLikesTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
