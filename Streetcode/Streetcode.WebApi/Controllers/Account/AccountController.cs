@@ -7,6 +7,7 @@ using Streetcode.BLL.MediatR.Account.Logout;
 using Streetcode.BLL.MediatR.Account.RefreshToken;
 using Streetcode.BLL.MediatR.Account.Register;
 using Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail;
+using Streetcode.BLL.MediatR.Account.ChangePassword;
 
 namespace Streetcode.WebApi.Controllers.Account
 {
@@ -52,6 +53,12 @@ namespace Streetcode.WebApi.Controllers.Account
         public async Task<IActionResult> SendEmail([FromQuery] string email)
         {
             return HandleResult(await Mediator.Send(new SendVerificationEmailCommand(email)));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO password)
+        {
+            return HandleResult(await Mediator.Send(new ChangePasswordCommand(password)));
         }
     }
 }

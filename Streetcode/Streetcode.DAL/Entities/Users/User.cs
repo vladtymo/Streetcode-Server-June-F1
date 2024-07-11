@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Streetcode.DAL.Entities.Comments;
 
 namespace Streetcode.DAL.Entities.Users
 {
@@ -11,5 +12,6 @@ namespace Streetcode.DAL.Entities.Users
         public string? LastName { get; set; }
 
         public List<RefreshToken> RefreshTokens { get; set; } = new ();
+        public List<Comment> Comments { get; set; } = new ();
     }
 }

@@ -286,6 +286,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to change password.
+        /// </summary>
+        public static string FailToChangePassword {
+            get {
+                return ResourceManager.GetString("FailToChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot convert null to {0}.
         /// </summary>
         public static string FailToConvertNull {
