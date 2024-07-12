@@ -223,6 +223,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TokenExpired.
+        /// </summary>
+        public static string ExpiredToken {
+            get {
+                return ResourceManager.GetString("ExpiredToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fact with id not found in list of new position.
         /// </summary>
         public static string FactNotFoundInListPosition {
@@ -273,6 +282,15 @@ namespace Streetcode.BLL.Resources {
         public static string FailSendEmail {
             get {
                 return ResourceManager.GetString("FailSendEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to change password.
+        /// </summary>
+        public static string FailToChangePassword {
+            get {
+                return ResourceManager.GetString("FailToChangePassword", resourceCulture);
             }
         }
         
@@ -394,11 +412,38 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Password must contain at least one lowercase letter.
         /// </summary>
-        public static string NoCustomError {
+        public static string MustContainLowerCase {
             get {
-                return ResourceManager.GetString("NoCustomError", resourceCulture);
+                return ResourceManager.GetString("MustContainLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one digit (&apos;0&apos;-&apos;9&apos;).
+        /// </summary>
+        public static string MustContainNumber {
+            get {
+                return ResourceManager.GetString("MustContainNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one special symbol.
+        /// </summary>
+        public static string MustContainSpecialSymbol {
+            get {
+                return ResourceManager.GetString("MustContainSpecialSymbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one uppercase letter.
+        /// </summary>
+        public static string MustContainUpperCase {
+            get {
+                return ResourceManager.GetString("MustContainUpperCase", resourceCulture);
             }
         }
         

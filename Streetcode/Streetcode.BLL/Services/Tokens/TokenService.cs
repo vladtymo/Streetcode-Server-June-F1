@@ -3,7 +3,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Streetcode.BLL.Interfaces.Users;
@@ -12,6 +11,7 @@ using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Resources;
 using Streetcode.DAL.Entities.Users;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Streetcode.BLL.Services.Tokens;
 
@@ -20,28 +20,26 @@ public class TokenService : ITokenService
     private readonly UserManager<User> _userManager;
     private readonly TokensConfiguration _tokensConfiguration;
     private readonly ILoggerService _logger;
-    
-    public TokenService(UserManager<User> userManager, TokensConfiguration tokensConfiguration, ILoggerService logger)
+    private readonly IMapper _mapper;
+
+    public TokenService(UserManager<User> userManager, TokensConfiguration tokensConfiguration, ILoggerService logger, IMapper mapper)
     {
         _userManager = userManager;
         _tokensConfiguration = tokensConfiguration;
         _logger = logger;
+        _mapper = mapper;
     }
     
     public string GenerateAccessToken(User user, List<Claim> claims)
     {
         if (user is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound, user);
-            _logger.LogError(user!, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
         }
 
         if (!claims.Any())
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.ClaimsNotExist, claims);
-            _logger.LogError(user!, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(ErrorMessages.ClaimsNotExist);
         }
 
         var expiration = DateTime.UtcNow.AddMinutes(_tokensConfiguration.AccessTokenExpirationMinutes);
@@ -65,17 +63,13 @@ public class TokenService : ITokenService
     {
         if (user is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound);
-            _logger.LogError(user!, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
         }
 
         var roles = await _userManager.GetRolesAsync(user);
         if (!roles.Any())
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.RolesNotFound);
-            _logger.LogError(roles!, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(ErrorMessages.RolesNotFound);
         }
 
         List<Claim> claims = new()
@@ -96,18 +90,14 @@ public class TokenService : ITokenService
     {
         if (string.IsNullOrEmpty(token))
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.InvalidToken);
-            _logger.LogError(token!, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
         }
-        
+
         JwtSecurityTokenHandler tokenHandler = new();
 
         if (!tokenHandler.CanReadToken(token))
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.InvalidToken);
-            _logger.LogError(token, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(ErrorMessages.InvalidToken);
         }
         
         var tokenValidationParameters = new TokenValidationParameters
@@ -128,6 +118,11 @@ public class TokenService : ITokenService
 
     public string? GetUserIdFromAccessToken(string accessToken)
     {
+        if (string.IsNullOrEmpty(accessToken))
+        {
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
+        }
+
         var tokenHandler = new JwtSecurityTokenHandler();
         var jwtToken = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
         var userIdClaim = jwtToken?.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
@@ -136,6 +131,11 @@ public class TokenService : ITokenService
 
     public async Task<TokenResponseDTO> GenerateTokens(User user)
     {
+        if (user is null)
+        {
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
+        }
+
         var tokenResponse = new TokenResponseDTO();
         var userClaims = await GetUserClaimsAsync(user);
         tokenResponse.AccessToken = GenerateAccessToken(user, userClaims);
@@ -167,27 +167,23 @@ public class TokenService : ITokenService
 
     public async Task SetRefreshToken(RefreshTokenDTO newRefreshToken, User user)
     {
-        if (user == null)
+        if (user is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound);
-            _logger.LogError(user, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(null, ErrorMessages.UserNotFound);
         }
 
-        if (newRefreshToken == null)
+        if (newRefreshToken is null)
         {
-            var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.InvalidToken);
-            _logger.LogError(newRefreshToken, errorMsg);
-            throw new ArgumentNullException(errorMsg);
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
         }
 
-        var refreshToken = new RefreshToken
+        var refreshToken = _mapper.Map<RefreshToken>(newRefreshToken);
+        if (refreshToken is null)
         {
-            Token = newRefreshToken.Token,
-            Created = newRefreshToken.Created,
-            Expires = newRefreshToken.Expires,
-            UserId = user.Id,
-        };
+            throw new ArgumentNullException(null, ErrorMessages.InvalidToken);
+        }
+
+        refreshToken.UserId = user.Id;
 
         user.RefreshTokens.Add(refreshToken);
         await _userManager.UpdateAsync(user);
