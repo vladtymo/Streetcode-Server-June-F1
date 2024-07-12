@@ -56,7 +56,7 @@ namespace Streetcode.WebApi.Controllers.Account
             return HandleResult(await Mediator.Send(new SendVerificationEmailCommand(email)));
         }
         
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> RestorePasswordRequest([FromBody] RestorePasswordRequestDto dto)
         {
             return HandleResult(await Mediator.Send(new RestorePasswordRequest(dto)));
