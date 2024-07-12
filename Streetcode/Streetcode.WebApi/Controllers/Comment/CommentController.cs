@@ -2,6 +2,7 @@
 using Streetcode.BLL.DTO.Comment;
 using Streetcode.BLL.MediatR.Comments.Create;
 using Streetcode.BLL.MediatR.Comments.GetAll;
+using Streetcode.BLL.MediatR.Comments.GetByUserId;
 
 namespace Streetcode.WebApi.Controllers.Comment
 {
@@ -17,6 +18,12 @@ namespace Streetcode.WebApi.Controllers.Comment
         public async Task<IActionResult> GetAll()
         {
             return HandleResult(await Mediator.Send(new GetAllCommentsQuery()));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetByUserId([FromQuery] Guid userId)
+        {
+            return HandleResult(await Mediator.Send(new GetCommentsByUserIdQuery(userId)));
         }
     }
 }
