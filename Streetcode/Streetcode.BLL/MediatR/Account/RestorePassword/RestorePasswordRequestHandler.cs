@@ -70,7 +70,7 @@ namespace Streetcode.BLL.MediatR.Account.RestorePassword
                     new 
                     {
                     userId = user.Id, 
-                    restToken = token 
+                    token 
                     },
                     _httpContextAccessor.HttpContext!);
 
