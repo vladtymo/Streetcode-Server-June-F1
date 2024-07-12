@@ -42,17 +42,10 @@ public static class ServiceCollectionExtensions
 {
     public static void AddIdentityService(this IServiceCollection services)
     {
-        services.AddIdentity<User, IdentityRole<Guid>>(options =>
+        services.AddIdentity<User, IdentityRole<Guid>>(opt =>
         {
-            // Disable default identity password requirements
-            options.Password.RequireDigit = false;
-            options.Password.RequiredLength = 1; 
-            options.Password.RequireLowercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequiredUniqueChars = 0;
-
-            options.User.RequireUniqueEmail = true;
+            opt.User.RequireUniqueEmail = true;
+            opt.Password.RequiredLength = 7;
         })
             .AddEntityFrameworkStores<StreetcodeDbContext>()
             .AddDefaultTokenProviders();
