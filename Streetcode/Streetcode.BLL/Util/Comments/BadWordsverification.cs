@@ -1,5 +1,4 @@
 ﻿using mk.profanity;
-using Edi.WordFilter;
 
 namespace Streetcode.BLL.Util.Comments
 {
