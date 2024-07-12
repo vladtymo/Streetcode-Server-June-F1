@@ -62,12 +62,7 @@ namespace Streetcode.WebApi.Controllers.Account
         {
             return HandleResult(await Mediator.Send(new RestorePasswordRequest(dto)));
         }
-
-        [HttpGet]
-        public async Task<IActionResult> RestorePasswordConfirm([FromQuery] string userId, [FromQuery] string token)
-        {
-            return HandleResult(new FluentResults.Result<int>());
-        }
+        
         [HttpPut]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO password)
         {
