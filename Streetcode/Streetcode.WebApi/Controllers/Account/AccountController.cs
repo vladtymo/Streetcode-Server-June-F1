@@ -8,7 +8,6 @@ using Streetcode.BLL.MediatR.Account.Register;
 using Streetcode.BLL.MediatR.Account.Email.ConfirmEmail;
 using Streetcode.BLL.MediatR.Account.Email.SendEmail;
 using Streetcode.BLL.MediatR.Account.RestorePassword;
-using Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail;
 using Streetcode.BLL.MediatR.Account.ChangePassword;
 
 namespace Streetcode.WebApi.Controllers.Account

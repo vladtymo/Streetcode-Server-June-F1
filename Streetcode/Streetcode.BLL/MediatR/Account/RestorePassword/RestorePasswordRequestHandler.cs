@@ -14,8 +14,7 @@ using Streetcode.DAL.Entities.Users;
 namespace Streetcode.BLL.MediatR.Account.RestorePassword
 {
     public class RestorePasswordRequestHandler : IRequestHandler<RestorePasswordRequest, Result<string>>
-    {
-        private readonly IMapper _mapper;
+    {        
         private readonly ILoggerService _loggerService;
         private readonly UserManager<User> _userManager;
         private readonly IEmailService _emailService;
@@ -31,8 +30,7 @@ namespace Streetcode.BLL.MediatR.Account.RestorePassword
             IHttpContextAccessor httpContextAccessor,
             UserManager<User> userManager,
             EmailConfiguration emailConfiguration)
-        {
-            _mapper = mapper;
+        {           
             _loggerService = logger;
             _urlGenerator = uRLGenerator;
             _userManager = userManager;
