@@ -279,4 +279,7 @@
   <data name="FailToChangePassword" xml:space="preserve">
     <value>Failed to change password</value>
   </data>
+  <data name="ErrorResetingPassword" xml:space="preserve">
+    <value>Error reseting password for request: {0}</value>
+  </data>
 </root>
