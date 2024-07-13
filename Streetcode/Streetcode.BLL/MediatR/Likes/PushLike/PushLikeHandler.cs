@@ -33,7 +33,7 @@ namespace Streetcode.BLL.MediatR.Likes.PushLike
 
             if (user is null)
             {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound, request);
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -42,7 +42,7 @@ namespace Streetcode.BLL.MediatR.Likes.PushLike
 
             if(streetcode is null)
             {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.StreetcodeNotExist, request);
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.StreetcodeNotExist);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -68,7 +68,7 @@ namespace Streetcode.BLL.MediatR.Likes.PushLike
             } 
             else
             {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToCreateNewLike, request);
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToCreateNewLike);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

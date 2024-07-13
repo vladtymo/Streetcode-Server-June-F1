@@ -10,6 +10,6 @@ namespace Streetcode.BLL.DTO.Likes
         public UserDTO UserDTO { get; set; }
         public int streetcodeId { get; set; }
         public StreetcodeDTO StreetcodeDTO { get; set; }
-        public DateTime CreationTime { get; set; }
+        public DateTime CreationTime { get; set; } = DateTime.UtcNow;
     }
 }
