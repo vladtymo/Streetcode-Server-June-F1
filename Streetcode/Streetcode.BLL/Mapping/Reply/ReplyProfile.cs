@@ -7,9 +7,6 @@ public class ReplyProfile : Profile
 {
     public ReplyProfile()
     {
-        CreateMap<ReplyCreateDTO, DAL.Entities.Comments.Reply>()
-            .ForMember(dest => dest.CommentContent, opt => opt.MapFrom(src => src.CommentContent))
-            .ForMember(dest => dest.StreetcodeId, opt => opt.MapFrom(src => src.StreetcodeId))
-            .ForMember(dest => dest.ParentId, opt => opt.MapFrom(src => src.ParentId));
+        CreateMap<ReplyCreateDTO, DAL.Entities.Comments.Reply>().ReverseMap();
     }
 }
