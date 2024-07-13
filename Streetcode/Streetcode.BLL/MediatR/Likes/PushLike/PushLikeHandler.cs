@@ -68,7 +68,7 @@ namespace Streetcode.BLL.MediatR.Likes.PushLike
             } 
             else
             {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToCreateA, request);
+                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.FailToCreateNewLike, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
