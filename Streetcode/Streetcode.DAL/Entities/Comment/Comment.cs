@@ -14,9 +14,10 @@ namespace Streetcode.DAL.Entities.Comments
         public int Id { get; set; }
         public int? StreetcodeId { get; set; }
         public Guid? UserId { get; set; }
-        public string? CommentContent { get; set; }
+        public string CommentContent { get; set; }
         public DateTime CreatedAt { get; set; }
         public User? User { get; set; }
         public StreetcodeContent? Streetcode { get; set; }
+        public List<Reply> Replies { get; set; } = new();
     }
 }

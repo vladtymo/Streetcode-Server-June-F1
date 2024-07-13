@@ -7,6 +7,7 @@ using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
+using Streetcode.DAL.Entities.Comments;
 using Streetcode.DAL.Entities.Feedback;
 using Streetcode.DAL.Entities.Media;
 using Streetcode.DAL.Entities.Media.Images;
@@ -102,6 +103,7 @@ namespace Streetcode.WebApi.Extensions
                 var blobService = app.Services.GetRequiredService<IBlobService>();
                 string initialDataImagePath = "../Streetcode.DAL/InitialData/images.json";
                 string initialDataAudioPath = "../Streetcode.DAL/InitialData/audios.json";
+                await SeedIdentityDataAsync(scope.ServiceProvider);
                 if (!dbContext.Images.Any())
                 {
                     string imageJson = File.ReadAllText(initialDataImagePath, Encoding.UTF8);
@@ -1466,9 +1468,30 @@ namespace Streetcode.WebApi.Extensions
                     }
 
                     await dbContext.SaveChangesAsync();
-                }
+                    if (!dbContext.Comments.Any())
+                    {
+                        var comment = new Comment()
+                        {
+                            CommentContent = "Some sort of text",
+                            UserId = Guid.Parse("4eb10d27-a950-45ef-9ebe-f730a07ce5e9"),
+                            CreatedAt = DateTime.UtcNow,
+                            StreetcodeId = 1
+                        };
+                        dbContext.Comments.Add(comment);
+                        await dbContext.SaveChangesAsync();
 
-                await SeedIdentityDataAsync(scope.ServiceProvider);
+                        var reply = new Reply()
+                        {
+                            CommentContent = "Replies",
+                            UserId = Guid.Parse("4eb10d27-a950-45ef-9ebe-f730a07ce5e9"),
+                            CreatedAt = DateTime.UtcNow,
+                            StreetcodeId = 1,
+                            ParentId = 1,
+                        };
+                        dbContext.Comments.Add(reply);
+                        await dbContext.SaveChangesAsync();
+                    }        
+                }
             }
         }
     }
