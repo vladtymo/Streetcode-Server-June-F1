@@ -331,6 +331,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create/add/remove like.
+        /// </summary>
+        public static string FailToCreateNewLike {
+            get {
+                return ResourceManager.GetString("FailToCreateNewLike", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to delete a {0}.
         /// </summary>
         public static string FailToDeleteA {
