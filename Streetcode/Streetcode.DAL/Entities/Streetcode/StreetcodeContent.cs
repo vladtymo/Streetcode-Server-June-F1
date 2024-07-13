@@ -10,6 +10,7 @@ using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Entities.Toponyms;
 using Streetcode.DAL.Entities.Transactions;
+using Streetcode.DAL.Entities.Comments;
 using Streetcode.DAL.Enums;
 using Streetcode.DAL.Entities.Likes;
 
@@ -86,4 +87,6 @@ public class StreetcodeContent : IEntityId<int>
     public List<Like> Likes { get; set; }
 
     public int LikesCount { get; set; }
+    
+    public List<Comment> Comments { get; set; } = new ();
 }

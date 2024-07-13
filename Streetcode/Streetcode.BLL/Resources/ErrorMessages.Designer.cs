@@ -223,6 +223,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error reseting password for request: {0}.
+        /// </summary>
+        public static string ErrorResetingPassword {
+            get {
+                return ResourceManager.GetString("ErrorResetingPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TokenExpired.
         /// </summary>
         public static string ExpiredToken {
@@ -412,11 +421,38 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Password must contain at least one lowercase letter.
         /// </summary>
-        public static string NoCustomError {
+        public static string MustContainLowerCase {
             get {
-                return ResourceManager.GetString("NoCustomError", resourceCulture);
+                return ResourceManager.GetString("MustContainLowerCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one digit (&apos;0&apos;-&apos;9&apos;).
+        /// </summary>
+        public static string MustContainNumber {
+            get {
+                return ResourceManager.GetString("MustContainNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one special symbol.
+        /// </summary>
+        public static string MustContainSpecialSymbol {
+            get {
+                return ResourceManager.GetString("MustContainSpecialSymbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one uppercase letter.
+        /// </summary>
+        public static string MustContainUpperCase {
+            get {
+                return ResourceManager.GetString("MustContainUpperCase", resourceCulture);
             }
         }
         
