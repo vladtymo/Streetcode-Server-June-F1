@@ -28,13 +28,6 @@ namespace Streetcode.BLL.MediatR.Comments.GetByUserId
             var comments = await _repositoryWrapper
                .CommentRepository.GetAllWithSpecAsync(new CommentsByUserIdSpec(request.UserId));
 
-            if (comments is null)
-            {
-                var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, request);
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(errorMsg);
-            }
-
             return Result.Ok(_mapper.Map<IEnumerable<CommentDTO>>(comments));
         }
     }

@@ -86,23 +86,5 @@ namespace Streetcode.XUnitTest.MediatRTests.Comments
            () => Assert.True(result.IsSuccess),
            () => Assert.Equal(_mappedList, result.Value));
         }
-
-        [Fact]
-        public async Task Handle_Should_ReturnErrorMessage_WhenRepositoryReturnsNull()
-        {
-            // Arrange
-            _mockRepositoryWrapper.Setup(repo => repo.CommentRepository
-                .GetAllWithSpecAsync(It.IsAny<CommentsByUserIdSpec>()))
-                .ReturnsAsync((IEnumerable<Comment>)null!);
-
-            // Act
-            var expectedErrorMessage = MessageResourceContext.GetMessage(ErrorMessages.EntityNotFound, _query);
-            var result = await _handler.Handle(_query, CancellationToken.None);
-
-            // Assert
-            Assert.Multiple(
-           () => Assert.True(result.IsFailed),
-           () => Assert.Equal(expectedErrorMessage, result.Errors.FirstOrDefault()?.Message));
-        }
     }
 }
