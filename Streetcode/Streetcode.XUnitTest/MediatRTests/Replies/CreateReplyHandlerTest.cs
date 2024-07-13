@@ -32,9 +32,8 @@ public class CreateReplyHandlerTest
                 _handler = new CreateReplyHandler( _mockRepositoryWrapper.Object, _mockMapper.Object,_mockLogger.Object, _mockHttpContextAccessor.Object,_mockTokenService.Object );
                 _command = new CreateReplyCommand(new ReplyCreateDTO());
             }
-            
-            [Fact]
-            public async Task Handle_NewReplyIsNull_ReturnsFailResult()
+
+            public async Task Handle_Should_ReturnFailResult_WhenReplyIsNull()
             {
                 // Arrange
                 _mockMapper.Setup(m => m.Map<Reply>(It.IsAny<ReplyCreateDTO>())).Returns((Reply)null!);
@@ -48,7 +47,7 @@ public class CreateReplyHandlerTest
             }
             
             [Fact]
-            public async Task Handle_AccessTokenIsMissing_ReturnsFailResult()
+            public async Task Handle_Should_ReturnFailResult_WhenAccessTokenIsMissing()
             {
                 // Arrange
                 _mockMapper.Setup(m => m.Map<Reply>(It.IsAny<ReplyCreateDTO>())).Returns(new Reply());
@@ -69,7 +68,7 @@ public class CreateReplyHandlerTest
             }
             
             [Fact]
-            public async Task Handle_SaveChangesFails_ReturnsFailResult()
+            public async Task Handle_Should_ReturnFailResult_WhenSaveChangesFails()
             {
                 // Arrange
                 var reply = new Reply();
@@ -99,7 +98,7 @@ public class CreateReplyHandlerTest
             }
             
             [Fact]
-            public async Task Handle_ValidRequest_ReturnsSuccessResult()
+            public async Task Handle_Should_ReturnSuccessResult_WhenValidRequest()
             {
                 // Arrange
                 var reply = new Reply();

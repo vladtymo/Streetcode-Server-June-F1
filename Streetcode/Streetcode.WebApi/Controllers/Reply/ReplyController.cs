@@ -7,7 +7,7 @@ namespace Streetcode.WebApi.Controllers.Reply;
 
 public class ReplyController : BaseApiController
 {
-    // [Authorize]
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ReplyCreateDTO reply)
     {
