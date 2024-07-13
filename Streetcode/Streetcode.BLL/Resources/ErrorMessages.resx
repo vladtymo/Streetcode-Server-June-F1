@@ -183,8 +183,8 @@
   <data name="InvalidPaginationParameters" xml:space="preserve">
     <value>Amount and page must be greater than zero</value>
   </data>
-  <data name="NoCustomError" xml:space="preserve">
-    <value />
+  <data name="MustContainNumber" xml:space="preserve">
+    <value>Password must contain at least one digit ('0'-'9')</value>
   </data>
   <data name="StreetcodeAlreadyExist" xml:space="preserve">
     <value>Cannot add records because such streetcode already exists</value>
@@ -267,7 +267,19 @@
   <data name="ExpiredToken" xml:space="preserve">
     <value>TokenExpired</value>
   </data>
+  <data name="MustContainLowerCase" xml:space="preserve">
+    <value>Password must contain at least one lowercase letter</value>
+  </data>
+  <data name="MustContainSpecialSymbol" xml:space="preserve">
+    <value>Password must contain at least one special symbol</value>
+  </data>
+  <data name="MustContainUpperCase" xml:space="preserve">
+    <value>Password must contain at least one uppercase letter</value>
+  </data>
   <data name="FailToChangePassword" xml:space="preserve">
     <value>Failed to change password</value>
+  </data>
+  <data name="ErrorResetingPassword" xml:space="preserve">
+    <value>Error reseting password for request: {0}</value>
   </data>
 </root>
