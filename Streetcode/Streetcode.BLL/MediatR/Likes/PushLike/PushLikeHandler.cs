@@ -28,23 +28,17 @@ namespace Streetcode.BLL.MediatR.Likes.PushLike
 
         public async Task<Result<LikeDTO>> Handle(PushLikeCommand request, CancellationToken cancellationToken)
         {
-            var user = _userManager.FindByIdAsync(request.userId.ToString());
+            var user = await _userManager.FindByIdAsync(request.pushLike.UserId.ToString());
+            var streetcode = await _wrapper.StreetcodeRepository.GetFirstOrDefaultAsync(u => u.Id == request.pushLike.streetcodeId);
 
-            if(user is null)
+            if (user is null)
             {
                 var errorMsg = MessageResourceContext.GetMessage(ErrorMessages.UserNotFound, request);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
-            var like = new Like
-            {
-                UserId = request.userId,
-                streetcodeId = request.streetcodeId,
-                CreationTime = DateTime.UtcNow,
-            };
-
-            var streetcode = await _wrapper.StreetcodeRepository.GetFirstOrDefaultAsync(u => u.Id == request.streetcodeId);
+            var like = _mapper.Map<Like>(request.pushLike);
 
             if(streetcode is null)
             {
@@ -53,7 +47,7 @@ namespace Streetcode.BLL.MediatR.Likes.PushLike
                 return Result.Fail(new Error(errorMsg));
             }
 
-            var isLikeExist = await _wrapper.LikeRepository.GetFirstOrDefaultAsync(u => u.UserId == request.userId && u.streetcodeId == request.streetcodeId);
+            var isLikeExist = await _wrapper.LikeRepository.GetFirstOrDefaultAsync(u => u.UserId == request.pushLike.UserId && u.streetcodeId == request.pushLike.streetcodeId);
             if (isLikeExist == null)
             {
                 _wrapper.LikeRepository.Create(like);

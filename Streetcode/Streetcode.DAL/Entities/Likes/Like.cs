@@ -10,6 +10,6 @@ namespace Streetcode.DAL.Entities.Likes
         public User User { get; set; }
         public int streetcodeId { get; set; }
         public StreetcodeContent Streetcode { get; set; }
-        public DateTime CreationTime { get; set; }
+        public DateTime CreationTime { get; set; } = DateTime.UtcNow;
     }
 }

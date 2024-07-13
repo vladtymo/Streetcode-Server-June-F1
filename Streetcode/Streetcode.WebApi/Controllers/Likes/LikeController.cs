@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Streetcode.BLL.MediatR.Instagram.GetAll;
+using Streetcode.BLL.DTO.Likes;
 using Streetcode.BLL.MediatR.Likes.PushLike;
-
+    
 namespace Streetcode.WebApi.Controllers.Likes
 {
     public class LikeController : BaseApiController
     {
         [HttpPost]
-        public async Task<IActionResult> PushLike([FromBody] PushLikeCommand command)
+        public async Task<IActionResult> PushLike([FromBody] PushLikeDTO pushLike)
         {
-            return HandleResult(await Mediator.Send(new PushLikeCommand(command.userId, command.streetcodeId)));
+            return HandleResult(await Mediator.Send(new PushLikeCommand(pushLike)));
         }
     }
 }

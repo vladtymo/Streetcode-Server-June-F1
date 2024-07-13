@@ -9,6 +9,8 @@ namespace Streetcode.BLL.Mapping.Likes
         public LikeProfile()
         {
             CreateMap<Like, LikeDTO>().ReverseMap();
+            CreateMap<PushLikeDTO, LikeDTO>().ReverseMap();
+            CreateMap<PushLikeDTO, Like>().ReverseMap();
         }
     }
 }
