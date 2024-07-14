@@ -291,14 +291,13 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
+
                     b.Property<DateTime>("EditedAt")
                         .HasColumnType("datetime2");
-=======
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
->>>>>>> origin/dev
 
                     b.Property<int?>("StreetcodeId")
                         .HasColumnType("int");
@@ -312,13 +311,9 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-<<<<<<< HEAD
-                    b.ToTable("Comments");
-=======
                     b.ToTable("Comments", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Comment");
->>>>>>> origin/dev
                 });
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Feedback.Response", b =>
@@ -1459,13 +1454,6 @@ namespace Streetcode.DAL.Persistence.Migrations
                 {
                     b.HasOne("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", "Streetcode")
                         .WithMany("Comments")
-<<<<<<< HEAD
-                        .HasForeignKey("StreetcodeId");
-
-                    b.HasOne("Streetcode.DAL.Entities.Users.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId");
-=======
                         .HasForeignKey("StreetcodeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -1473,7 +1461,6 @@ namespace Streetcode.DAL.Persistence.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
->>>>>>> origin/dev
 
                     b.Navigation("Streetcode");
 
