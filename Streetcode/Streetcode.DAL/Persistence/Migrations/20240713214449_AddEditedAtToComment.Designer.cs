@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Streetcode.DAL.Persistence;
 
@@ -11,9 +12,10 @@ using Streetcode.DAL.Persistence;
 namespace Streetcode.DAL.Persistence.Migrations
 {
     [DbContext(typeof(StreetcodeDbContext))]
-    partial class StreetcodeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240713214449_AddEditedAtToComment")]
+    partial class AddEditedAtToComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,20 +286,13 @@ namespace Streetcode.DAL.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CommentContent")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-
                     b.Property<DateTime>("EditedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("StreetcodeId")
                         .HasColumnType("int");
@@ -311,9 +306,7 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Feedback.Response", b =>
@@ -1310,18 +1303,6 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.HasDiscriminator().HasValue("coordinate_toponym");
                 });
 
-            modelBuilder.Entity("Streetcode.DAL.Entities.Comments.Reply", b =>
-                {
-                    b.HasBaseType("Streetcode.DAL.Entities.Comments.Comment");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("ParentId");
-
-                    b.HasDiscriminator().HasValue("Reply");
-                });
-
             modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.Types.EventStreetcode", b =>
                 {
                     b.HasBaseType("Streetcode.DAL.Entities.Streetcode.StreetcodeContent");
@@ -1454,13 +1435,11 @@ namespace Streetcode.DAL.Persistence.Migrations
                 {
                     b.HasOne("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", "Streetcode")
                         .WithMany("Comments")
-                        .HasForeignKey("StreetcodeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("StreetcodeId");
 
                     b.HasOne("Streetcode.DAL.Entities.Users.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Streetcode");
 
@@ -1840,24 +1819,9 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.Navigation("Toponym");
                 });
 
-            modelBuilder.Entity("Streetcode.DAL.Entities.Comments.Reply", b =>
-                {
-                    b.HasOne("Streetcode.DAL.Entities.Comments.Comment", "ParentComment")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ParentComment");
-                });
-
             modelBuilder.Entity("Streetcode.DAL.Entities.AdditionalContent.Tag", b =>
                 {
                     b.Navigation("StreetcodeTagIndices");
-                });
-
-            modelBuilder.Entity("Streetcode.DAL.Entities.Comments.Comment", b =>
-                {
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Media.Audio", b =>
