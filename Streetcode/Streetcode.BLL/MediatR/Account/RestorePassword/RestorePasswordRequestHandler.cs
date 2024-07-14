@@ -8,6 +8,7 @@ using Streetcode.BLL.Interfaces.Email;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Interfaces.URL;
 using Streetcode.BLL.Resources;
+using Streetcode.BLL.Services.URL;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.DAL.Entities.Users;
 
@@ -21,15 +22,16 @@ namespace Streetcode.BLL.MediatR.Account.RestorePassword
         private readonly EmailConfiguration _emailConfiguration;
         private readonly IURLGenerator _urlGenerator;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ResetPasswordConfiguration _resetPassConfigurtion;        
 
-        public RestorePasswordRequestHandler(
-            IMapper mapper,
+        public RestorePasswordRequestHandler(            
             ILoggerService logger,
             IEmailService emailService,
             IURLGenerator uRLGenerator,
             IHttpContextAccessor httpContextAccessor,
             UserManager<User> userManager,
-            EmailConfiguration emailConfiguration)
+            EmailConfiguration emailConfiguration,
+            ResetPasswordConfiguration resetPasswordConfiguration)
         {           
             _loggerService = logger;
             _urlGenerator = uRLGenerator;
@@ -37,6 +39,7 @@ namespace Streetcode.BLL.MediatR.Account.RestorePassword
             _emailService = emailService;
             _emailConfiguration = emailConfiguration;
             _httpContextAccessor = httpContextAccessor;
+            _resetPassConfigurtion = resetPasswordConfiguration;
         }
 
         public async Task<Result<string>> Handle(RestorePasswordRequest request, CancellationToken cancellationToken)
@@ -64,29 +67,33 @@ namespace Streetcode.BLL.MediatR.Account.RestorePassword
                 return Result.Fail(error);
             }
 
+            Dictionary<string, object> key_value = new Dictionary<string, object>
+            {
+                { "userId", user.Id },
+                { "token", token }
+            };
+
             var url = _urlGenerator.Url(
-                    "RestorePassword",
-                    "Account",
-                    new 
-                    {
-                    userId = user.Id, 
-                    token 
-                    },
+                    _resetPassConfigurtion.RestorePassUrl!,
+                    key_value,
                     _httpContextAccessor.HttpContext!);
 
             Message msg = new Message(
-                new List<string>() { request.restPassDto.Email },
+                new List<string>() { request.restPassDto.Email! },
                 _emailConfiguration.From,
                 "Streetcode Restore Password Request",
-                "You have requested the restore password action.\n" +
-                "Please use this link for Password Reset: \n" +
-                $"{url}\n\t <b>If you don't request Password Restore, than do nothing and check your Accout!</b>");
+                "<div>Ви запросили відновлення паролю до вашого акаунту." +
+                "Перейдіть за цим посиланням:</div>" +
+                $"<div> <a href=\"{url}\">Відновити пароль!</a> </div>" +
+                $"<div> <b>Якщо ви не відправляли запит на зміну паролю, то не переходьте за посиланням, перевірте свій АКАУНТ!</b></div>");
 
             bool success = await _emailService.SendEmailAsync(msg);
 
             if (!success)
             {
-                
+                var error = ErrorMessages.FailSendEmail;
+                _loggerService.LogError(request, error);
+                return Result.Fail(error);
             }
 
             return Result.Ok("Email for restoring password was sent successfuly.");
