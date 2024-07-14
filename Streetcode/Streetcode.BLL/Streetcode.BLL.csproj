@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.5.1" />
     <PackageReference Include="Microsoft.IdentityModel.Abstractions" Version="6.30.0" />
+    <PackageReference Include="mk.profanity" Version="1.0.1" />
     <PackageReference Include="Moq.EntityFrameworkCore" Version="6.0.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="NLog" Version="5.1.0" />
@@ -43,6 +44,7 @@
 
   <ItemGroup>
     <Folder Include="MediatR\AdditionalContent\Tag\" />
+    <Folder Include="Services\LikeService\" />
     <Folder Include="Util\Account\" />
   </ItemGroup>
 

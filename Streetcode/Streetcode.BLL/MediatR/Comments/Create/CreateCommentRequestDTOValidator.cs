@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Streetcode.BLL.Util.Comments;
 
 namespace Streetcode.BLL.MediatR.Comments.Create
 {
@@ -8,6 +9,7 @@ namespace Streetcode.BLL.MediatR.Comments.Create
         {
             RuleFor(x => x.comment.StreetcodeId).NotEmpty().GreaterThan(0);
             RuleFor(x => x.comment.CommentContent).NotEmpty().MaximumLength(300);
+            RuleFor(x => x.comment.CommentContent).NotEmpty().Must(BadWordsVerification.NotContainBadWords);
         }
     }
 }

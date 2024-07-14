@@ -21,6 +21,7 @@ using Streetcode.DAL.Entities.Toponyms;
 using Streetcode.DAL.Entities.Transactions;
 using Streetcode.DAL.Enums;
 using Streetcode.DAL.Entities.Users;
+using Streetcode.DAL.Entities.Likes;
 using Streetcode.DAL.Entities.Comments;
 
 namespace Streetcode.DAL.Persistence;
@@ -73,6 +74,7 @@ public class StreetcodeDbContext : IdentityDbContext<User, IdentityRole<Guid>, G
     public DbSet<HistoricalContextTimeline>? HistoricalContextsTimelines { get; set; }
     public DbSet<StreetcodePartner>? StreetcodePartners { get; set; }
     public DbSet<TeamMemberPositions>? TeamMemberPosition { get; set; }
+    public DbSet<Like>? Likes { get; set; }
     public DbSet<Comment>? Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
