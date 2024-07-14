@@ -8,7 +8,6 @@ using Streetcode.BLL.MediatR.Comments.Update;
 
 namespace Streetcode.WebApi.Controllers.Comment
 {
-    [Authorize]
     public class CommentController : BaseApiController
     {
         [Authorize]
@@ -30,6 +29,7 @@ namespace Streetcode.WebApi.Controllers.Comment
             return HandleResult(await Mediator.Send(new GetCommentsByUserIdQuery(userId)));
         }
 
+        [Authorize]
         [HttpPatch]
         public async Task<IActionResult> UpdateComment([FromBody] EditCommentDto dto)
         {
