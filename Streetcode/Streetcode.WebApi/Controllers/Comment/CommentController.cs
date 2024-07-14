@@ -25,5 +25,11 @@ namespace Streetcode.WebApi.Controllers.Comment
         {
             return HandleResult(await Mediator.Send(new GetCommentsByUserIdQuery(userId)));
         }
+
+        [HttpGet("{streetcodeId:int}")]
+        public async Task<IActionResult> GetAllByStreetcodeId([FromRoute] int streetcodeId)
+        {
+            return HandleResult(await Mediator.Send(new GetAllCommentsByStreetcodeIdQuery(streetcodeId)));
+        }
     }
 }
