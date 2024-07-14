@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Comment;
 using Streetcode.BLL.MediatR.Comments.Create;
 using Streetcode.BLL.MediatR.Comments.GetAll;
 using Streetcode.BLL.MediatR.Comments.GetByUserId;
+using Streetcode.BLL.MediatR.Comments.Update;
 
 namespace Streetcode.WebApi.Controllers.Comment
 {
+    [Authorize]
     public class CommentController : BaseApiController
     {
         [HttpPost]
@@ -24,6 +27,12 @@ namespace Streetcode.WebApi.Controllers.Comment
         public async Task<IActionResult> GetByUserId([FromQuery] Guid userId)
         {
             return HandleResult(await Mediator.Send(new GetCommentsByUserIdQuery(userId)));
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateComment([FromBody] EditCommentDto dto)
+        {
+            return HandleResult(await Mediator.Send(new UpdateCommentCommand(dto)));
         }
     }
 }
