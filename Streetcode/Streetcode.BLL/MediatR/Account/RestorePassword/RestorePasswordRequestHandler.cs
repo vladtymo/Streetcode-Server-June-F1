@@ -45,8 +45,7 @@ namespace Streetcode.BLL.MediatR.Account.RestorePassword
         public async Task<Result<string>> Handle(RestorePasswordRequest request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.restPassDto.Email);
-
-            // User not found request for pass change aborted
+            
             if (user == null)
             {
                 var error = string.Format(ErrorMessages.UserWithEmailNotFound, request.restPassDto.Email);
