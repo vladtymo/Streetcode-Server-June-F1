@@ -11,6 +11,7 @@ namespace Streetcode.WebApi.Controllers.Comment
     [Authorize]
     public class CommentController : BaseApiController
     {
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CommentCreateDTO comment)
         {
@@ -29,10 +30,17 @@ namespace Streetcode.WebApi.Controllers.Comment
             return HandleResult(await Mediator.Send(new GetCommentsByUserIdQuery(userId)));
         }
 
+<<<<<<< HEAD
         [HttpPatch]
         public async Task<IActionResult> UpdateComment([FromBody] EditCommentDto dto)
         {
             return HandleResult(await Mediator.Send(new UpdateCommentCommand(dto)));
+=======
+        [HttpGet("{streetcodeId:int}")]
+        public async Task<IActionResult> GetAllByStreetcodeId([FromRoute] int streetcodeId)
+        {
+            return HandleResult(await Mediator.Send(new GetAllCommentsByStreetcodeIdQuery(streetcodeId)));
+>>>>>>> origin/dev
         }
     }
 }

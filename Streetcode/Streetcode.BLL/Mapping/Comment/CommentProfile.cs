@@ -4,7 +4,7 @@ using Streetcode.DAL.Entities.Comments;
 
 namespace Streetcode.BLL.Mapping.Comments
 {
-    public class CommentProfile: Profile
+    public class CommentProfile : Profile
     {
         public CommentProfile()
         {

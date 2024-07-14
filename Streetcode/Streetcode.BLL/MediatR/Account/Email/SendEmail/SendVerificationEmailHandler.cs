@@ -11,7 +11,7 @@ using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Services.Email;
 using Streetcode.DAL.Entities.Users;
 
-namespace Streetcode.BLL.MediatR.Account.EmailVerification.SendEmail
+namespace Streetcode.BLL.MediatR.Account.Email.SendEmail
 {
     public class SendVerificationEmailHandler : IRequestHandler<SendVerificationEmailCommand, Result<string>>
     {

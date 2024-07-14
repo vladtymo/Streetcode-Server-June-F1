@@ -367,6 +367,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occured while restore password token generation.
+        /// </summary>
+        public static string FailToGenRestorePassToken {
+            get {
+                return ResourceManager.GetString("FailToGenRestorePassToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot map streetcode to shortDTO.
         /// </summary>
         public static string FailToMap {
@@ -588,6 +597,15 @@ namespace Streetcode.BLL.Resources {
         public static string UserUpdateFailed {
             get {
                 return ResourceManager.GetString("UserUpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User with {0} not found.
+        /// </summary>
+        public static string UserWithEmailNotFound {
+            get {
+                return ResourceManager.GetString("UserWithEmailNotFound", resourceCulture);
             }
         }
         

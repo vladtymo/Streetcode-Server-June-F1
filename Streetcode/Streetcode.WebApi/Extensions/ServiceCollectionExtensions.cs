@@ -40,22 +40,27 @@ namespace Streetcode.WebApi.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static void AddResetPasswordUrlConfiguration(this IServiceCollection services, IConfiguration config)
+    {
+        var resPassConfig = config.GetSection("ResetPasswordConfiguration").Get<ResetPasswordConfiguration>();
+        if (resPassConfig is null)
+        {
+            throw new Exception("Fail to get ResetPasswordConfiguration!") 
+            { HelpLink = "Check appsettingss.json file." };
+        }
+
+        services.AddSingleton(resPassConfig);
+    }
+
     public static void AddIdentityService(this IServiceCollection services)
     {
-        services.AddIdentity<User, IdentityRole<Guid>>(options =>
+        services.AddIdentity<User, IdentityRole<Guid>>(opt =>
         {
-            // Disable default identity password requirements
-            options.Password.RequireDigit = false;
-            options.Password.RequiredLength = 1; 
-            options.Password.RequireLowercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequiredUniqueChars = 0;
-
-            options.User.RequireUniqueEmail = true;
+            opt.User.RequireUniqueEmail = true;
+            opt.Password.RequiredLength = 7;
         })
             .AddEntityFrameworkStores<StreetcodeDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders();        
     }
     
     public static void AddRepositoryServices(this IServiceCollection services)
