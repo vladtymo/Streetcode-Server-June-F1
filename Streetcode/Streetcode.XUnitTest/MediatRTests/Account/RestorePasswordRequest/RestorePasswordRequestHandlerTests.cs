@@ -99,7 +99,8 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.RestorePasswordRequestTests
             _userManagerMock.Setup(um => um.GeneratePasswordResetTokenAsync(It.IsAny<User>()))
                 .ReturnsAsync(() => { return "SomeToken"; });
 
-            _urlGenMock.Setup(ug => ug.Url(It.IsAny<string>(),
+            _urlGenMock.Setup(ug => ug.Url(
+                It.IsAny<string>(),
                 It.IsAny<Dictionary<string, object>>(), It.IsAny<HttpContext>()))
                 .Returns("someUrl");
 
@@ -125,8 +126,10 @@ namespace Streetcode.XUnitTest.MediatRTests.Account.RestorePasswordRequestTests
             _userManagerMock.Setup(um => um.GeneratePasswordResetTokenAsync(It.IsAny<User>()))
                 .ReturnsAsync(() => { return "SomeToken"; });
 
-            _urlGenMock.Setup(ug => ug.Url(It.IsAny<string>(),
-                It.IsAny<Dictionary<string, object>>(), It.IsAny<HttpContext>()))
+            _urlGenMock.Setup(ug => ug.Url(
+                It.IsAny<string>(),
+                It.IsAny<Dictionary<string, object>>(), 
+                It.IsAny<HttpContext>()))
                 .Returns("someUrl");
 
             _emailServiceMock.Setup(e => e.SendEmailAsync(It.IsAny<Message>()))
