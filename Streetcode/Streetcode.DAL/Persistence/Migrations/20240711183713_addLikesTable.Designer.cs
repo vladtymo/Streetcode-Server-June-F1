@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Streetcode.DAL.Persistence;
 
@@ -11,9 +12,10 @@ using Streetcode.DAL.Persistence;
 namespace Streetcode.DAL.Persistence.Migrations
 {
     [DbContext(typeof(StreetcodeDbContext))]
-    partial class StreetcodeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240711183713_addLikesTable")]
+    partial class addLikesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -273,35 +275,6 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.HasIndex("StreetcodeId");
 
                     b.ToTable("qr_coordinates", "coordinates");
-                });
-
-            modelBuilder.Entity("Streetcode.DAL.Entities.Comment.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CommentContent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("StreetcodeId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StreetcodeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Feedback.Response", b =>
@@ -1044,7 +1017,7 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.HasIndex("HistoricalContextId");
 
-                    b.ToTable("HistoricalContextsTimelines", (string)null);
+                    b.ToTable("HistoricalContextsTimelines");
                 });
 
             modelBuilder.Entity("Streetcode.DAL.Entities.Timeline.TimelineItem", b =>
@@ -1425,7 +1398,7 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.Navigation("StreetcodeCoordinate");
                 });
-                
+
             modelBuilder.Entity("Streetcode.DAL.Entities.Likes.Like", b =>
                 {
                     b.HasOne("Streetcode.DAL.Entities.Users.User", "User")
@@ -1439,23 +1412,12 @@ namespace Streetcode.DAL.Persistence.Migrations
                         .HasForeignKey("streetcodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                        
+
                     b.Navigation("Streetcode");
+
                     b.Navigation("User");
                 });
-                
-            modelBuilder.Entity("Streetcode.DAL.Entities.Comment.Comment", b =>
-                {
-                    b.HasOne("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", "Streetcode")
-                        .WithMany()
-                        .HasForeignKey("StreetcodeId");
-                    b.HasOne("Streetcode.DAL.Entities.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                    b.Navigation("Streetcode");
-                    b.Navigation("User");
-                });
-                      
+
             modelBuilder.Entity("Streetcode.DAL.Entities.Media.Images.Art", b =>
                 {
                     b.HasOne("Streetcode.DAL.Entities.Media.Images.Image", "Image")
