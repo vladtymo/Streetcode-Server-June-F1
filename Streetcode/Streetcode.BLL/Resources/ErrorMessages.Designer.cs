@@ -223,6 +223,15 @@ namespace Streetcode.BLL.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error reseting password for request: {0}.
+        /// </summary>
+        public static string ErrorResetingPassword {
+            get {
+                return ResourceManager.GetString("ErrorResetingPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TokenExpired.
         /// </summary>
         public static string ExpiredToken {
@@ -318,6 +327,15 @@ namespace Streetcode.BLL.Resources {
         public static string FailToCreateAn {
             get {
                 return ResourceManager.GetString("FailToCreateAn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create/add/remove like.
+        /// </summary>
+        public static string FailToCreateNewLike {
+            get {
+                return ResourceManager.GetString("FailToCreateNewLike", resourceCulture);
             }
         }
         
