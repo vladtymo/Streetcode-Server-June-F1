@@ -2,7 +2,6 @@ name: SonarCloud
 on:
   push:
     branches:
-      - main    # long-lived main branch
       - dev # long-lived development branch
   pull_request:
     types: [opened, synchronize, reopened]
@@ -45,7 +44,7 @@ jobs:
       - name: SonarScanner Analysis
         id: sonar
         run: |
-          dotnet sonarscanner begin /k:"project-studying-dotnet_Streetcode-Server-June" /o:"project-studying-dotnet" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml"
+          dotnet sonarscanner begin /k:"vladtymo/Streetcode-Server-June-F1" /o:"vladtymo" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml"
           dotnet build ./Streetcode/Streetcode.sln --configuration Release
           dotnet test ./Streetcode/Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --no-build --verbosity normal
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
